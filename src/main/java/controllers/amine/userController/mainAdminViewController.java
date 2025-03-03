@@ -1,4 +1,4 @@
-package org.example.mdintech.Controllers.amine.userController;
+package controllers.amine.userController;
 
 
 import javafx.event.ActionEvent;
@@ -9,7 +9,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.stage.Stage;
-import org.example.mdintech.Singleton.loggedInUser;
+import Singleton.loggedInUser;
 
 import java.io.IOException;
 
@@ -39,7 +39,7 @@ public class mainAdminViewController {
 
     @FXML
     private void goToHomeView() {
-        loadView("/org/example/mdintech/main-admin-view.fxml");
+        loadView("/main-admin-view.fxml");
     }
 
     @FXML

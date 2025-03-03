@@ -1,6 +1,6 @@
-package services;
+package services.Rahim;
 
-import entities.BlogPost;
+import entities.Rahim.BlogPost;
 import utils.MyDatabase;
 
 import java.sql.*;

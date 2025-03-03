@@ -1,5 +1,6 @@
-package controllers;
+package controllers.Rahim;
 
+import entities.amine.User;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -14,9 +15,8 @@ import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.util.Callback;
-import entities.Facture;
-import entities.User;
-import services.FactureServices;
+import entities.Rahim.Facture;
+import services.Rahim.FactureServices;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -158,7 +158,7 @@ public class UserController {
 
     private void openPaymentWindow(Facture facture) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/Payment.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/Rahim/Payment.fxml"));
             Parent root = loader.load();
 
             PaymentController controller = loader.getController();
@@ -181,7 +181,7 @@ public class UserController {
 
     private void loadUserFactures() {
         try {
-            factureData.setAll(factureService.getFacturesByUser(currentUser.getCin()));
+            factureData.setAll(factureService.getFacturesByUser(Integer.toString(currentUser.getCIN())));
             ObservableList<Facture> unpaidData = FXCollections.observableArrayList();
             ObservableList<Facture> paidData = FXCollections.observableArrayList();
             for (Facture f : factureData) {
@@ -226,7 +226,7 @@ public class UserController {
     }
     @FXML
     private void loadBlogPosts() throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/blog_posts.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/Rahim/blog_posts.fxml"));
         Parent root = loader.load();
         Stage stage = (Stage) unpaidList.getScene().getWindow();
         stage.setScene(new Scene(root));

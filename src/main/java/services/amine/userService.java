@@ -1,10 +1,10 @@
-package org.example.mdintech.service.amine;
+package services.amine;
 
 
-import org.example.mdintech.entities.amine.User;
-import org.example.mdintech.Singleton.dbConnection;
-import org.example.mdintech.utils.amine.PasswordVerification;
-import org.example.mdintech.utils.UserRole;
+import entities.amine.User;
+import Singleton.dbConnection;
+import utils.amine.PasswordVerification;
+import utils.UserRole;
 
 import java.sql.*;
 import java.util.ArrayList;

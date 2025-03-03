@@ -1,4 +1,4 @@
-package org.example.mdintech.Controllers.amine.parkingController;
+package controllers.amine.parkingController;
 
 
 import javafx.collections.FXCollections;
@@ -13,9 +13,9 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
-import org.example.mdintech.entities.amine.ParkingModule.Parking;
-import org.example.mdintech.service.amine.ParkingModule.ParkingService;
-import org.example.mdintech.utils.amine.navigation;
+import entities.amine.ParkingModule.Parking;
+import services.amine.ParkingModule.ParkingService;
+import utils.amine.navigation;
 
 import java.io.IOException;
 import java.util.List;
@@ -75,6 +75,6 @@ public class DisplayParkingsViewController {
         }
     }
     public void handleBackButton(ActionEvent event) throws IOException {
-        navigation.switchScene(event, "/org/example/mdintech/main-admin-view.fxml");
+        navigation.switchScene(event, "/main-admin-view.fxml");
     }
 }

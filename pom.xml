@@ -135,6 +135,7 @@
             <artifactId>bootstrapfx-core</artifactId>
             <version>0.4.0</version>
         </dependency>
+
     </dependencies>
 
     <build>
@@ -161,7 +162,7 @@
                         <id>default-cli</id>
                         <configuration>
                             <!-- Ajustez la classe principale si nécessaire -->
-                            <mainClass>org.example.mdintech/org.example.mdintech.HelloApplication</mainClass>
+                            <mainClass>HelloApplication</mainClass>
                             <launcher>app</launcher>
                             <jlinkZipName>app</jlinkZipName>
                             <jlinkImageName>app</jlinkImageName>

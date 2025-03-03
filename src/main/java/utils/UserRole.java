@@ -1,4 +1,4 @@
-package org.example.mdintech.utils;
+package utils;
 
 public enum UserRole {
     ADMIN,

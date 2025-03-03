@@ -1,4 +1,4 @@
-package org.example.mdintech.Controllers.amine;
+package controllers.amine;
 
 
 import javafx.event.ActionEvent;
@@ -10,10 +10,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.PasswordField;
 import javafx.stage.Stage;
-import org.example.mdintech.Singleton.loggedInUser;
-import org.example.mdintech.entities.amine.User;
-import org.example.mdintech.service.amine.userService;
-import org.example.mdintech.utils.UserRole;
+import services.amine.userService;
 
 import java.io.IOException;
 

@@ -1,5 +1,3 @@
-package org.example.mdintech;
-
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 

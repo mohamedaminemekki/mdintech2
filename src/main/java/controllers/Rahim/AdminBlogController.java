@@ -1,4 +1,4 @@
-package controllers;
+package controllers.Rahim;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -9,8 +9,8 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
-import entities.BlogPost;
-import services.BlogServices;
+import entities.Rahim.BlogPost;
+import services.Rahim.BlogServices;
 
 import java.io.File;
 import java.io.IOException;
@@ -149,7 +149,7 @@ public class AdminBlogController {
 
     @FXML
     private void loadBlogManagement() throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/admin_blog.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/Rahim/admin_blog.fxml"));
         Parent root = loader.load();
         Stage stage = (Stage) postsContainer.getScene().getWindow();
         stage.setScene(new Scene(root));

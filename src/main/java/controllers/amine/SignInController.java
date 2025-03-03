@@ -1,4 +1,4 @@
-package org.example.mdintech.Controllers.amine;
+package controllers.amine;
 
 
 import javafx.event.ActionEvent;
@@ -12,12 +12,12 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import org.example.mdintech.entities.amine.User;
-import org.example.mdintech.service.amine.NotificationModule.mailNotificationService;
-import org.example.mdintech.utils.amine.PasswordVerification;
-import org.example.mdintech.utils.UserRole;
-import org.example.mdintech.service.amine.userService;
-import org.example.mdintech.utils.amine.navigation;
+import entities.amine.User;
+import services.amine.NotificationModule.mailNotificationService;
+import utils.amine.PasswordVerification;
+import utils.UserRole;
+import services.amine.userService;
+import utils.amine.navigation;
 
 import java.io.File;
 import java.io.IOException;
@@ -85,7 +85,7 @@ public class SignInController {
             userService.save(newUser);
             showAlert("Success", "User registered successfully!");
 
-            navigation.switchScene(event, "/org/example/mdintech/userModule/login-view.fxml");
+            navigation.switchScene(event, "/amine/userModule/login-view.fxml");
 
         } catch (NumberFormatException e) {
             showAlert("Error", "CIN must be a valid number!");
@@ -141,7 +141,7 @@ public class SignInController {
         alert.showAndWait();
     }
     public void handleBackButton(ActionEvent event) throws IOException {
-        navigation.switchScene(event, "/org/example/mdintech/userModule/login-view.fxml");
+        navigation.switchScene(event, "/amine/userModule/login-view.fxml");
     }
 
     @FXML

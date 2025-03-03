@@ -12,7 +12,7 @@ import java.io.IOException;
 public class Main extends Application {
     @Override
     public void start(Stage stage) throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/Login.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/Rahim/Login.fxml"));
         Parent root = loader.load();
         stage.setScene(new Scene(root));
         stage.setTitle("Authentification SONEDE");

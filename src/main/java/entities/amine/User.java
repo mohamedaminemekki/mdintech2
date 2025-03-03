@@ -1,6 +1,6 @@
-package org.example.mdintech.entities.amine;
+package entities.amine;
 
-import org.example.mdintech.utils.UserRole;
+import utils.UserRole;
 
 import java.util.Date;
 
@@ -141,6 +141,10 @@ public class User {
 
     public int getCIN() {
         return CIN;
+    }
+
+    public void setCIN(int CIN) {
+        this.CIN = CIN;
     }
 
     @Override

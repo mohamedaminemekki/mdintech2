@@ -1,4 +1,4 @@
-package controllers;
+package controllers.Rahim;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -18,7 +18,7 @@ public class MainLayoutController {
 
     private void loadUserInterface() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/UserInterface.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/Rahim/UserInterface.fxml"));
             Parent userInterface = loader.load();
             userController = loader.getController();
             mainContainer.setCenter(userInterface);

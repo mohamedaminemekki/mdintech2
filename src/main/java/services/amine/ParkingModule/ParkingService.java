@@ -1,9 +1,9 @@
-package org.example.mdintech.service.amine.ParkingModule;
+package services.amine.ParkingModule;
 
 
-import org.example.mdintech.Singleton.dbConnection;
-import org.example.mdintech.entities.amine.ParkingModule.Parking;
-import org.example.mdintech.service.amine.Iservice;
+import Singleton.dbConnection;
+import entities.amine.ParkingModule.Parking;
+import services.amine.Iservice;
 
 import java.sql.*;
 import java.util.ArrayList;

@@ -1,4 +1,4 @@
-package org.example.mdintech.service.amine;
+package services.amine;
 
 import java.util.List;
 

@@ -1,4 +1,4 @@
-package controllers;
+package controllers.Rahim;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -13,8 +13,8 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.util.Callback;
-import entities.Facture;
-import services.FactureServices;
+import entities.Rahim.Facture;
+import services.Rahim.FactureServices;
 import org.kordamp.ikonli.fontawesome.FontAwesome;
 import org.kordamp.ikonli.javafx.FontIcon;
 
@@ -249,7 +249,7 @@ public class FactureController {
     }
 
     private void styleDialog(Dialog<?> dialog, String title, FontAwesome icon) {
-        URL cssResource = getClass().getResource("/dialogs.css");
+        URL cssResource = getClass().getResource("/Rahim/dialogs.css");
         if (cssResource != null) {
             dialog.getDialogPane().getStylesheets().add(cssResource.toExternalForm());
         } else {
@@ -270,7 +270,7 @@ public class FactureController {
 
         dialog.getDialogPane().setHeader(header);
         dialog.getDialogPane().getStylesheets().add(
-                getClass().getResource("/dialogs.css").toExternalForm()
+                getClass().getResource("/Rahim/dialogs.css").toExternalForm()
         );
     }
 
@@ -471,7 +471,7 @@ public class FactureController {
     }
     @FXML
     private void loadBlogManagement() throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/admin_blog.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/Rahim/admin_blog.fxml"));
         Parent root = loader.load();
         Stage stage = (Stage) factureList.getScene().getWindow();
         stage.setScene(new Scene(root));

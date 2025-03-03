@@ -1,4 +1,4 @@
-package org.example.mdintech.utils.amine;
+package utils.amine;
 
 
 import com.google.api.client.auth.oauth2.TokenResponse;

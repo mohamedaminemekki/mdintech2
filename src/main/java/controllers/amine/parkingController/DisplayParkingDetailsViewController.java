@@ -1,4 +1,4 @@
-package org.example.mdintech.Controllers.amine.parkingController;
+package controllers.amine.parkingController;
 
 
 import javafx.event.ActionEvent;
@@ -6,10 +6,10 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
-import org.example.mdintech.entities.amine.ParkingModule.Parking;
-import org.example.mdintech.entities.amine.ParkingModule.ParkingTicket;
-import org.example.mdintech.service.amine.ParkingModule.ParkingTicketService;
-import org.example.mdintech.utils.amine.navigation;
+import entities.amine.ParkingModule.Parking;
+import entities.amine.ParkingModule.ParkingTicket;
+import services.amine.ParkingModule.ParkingTicketService;
+import utils.amine.navigation;
 
 import java.io.IOException;
 import java.net.URL;

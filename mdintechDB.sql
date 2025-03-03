@@ -38,3 +38,41 @@ CREATE TABLE parking_ticket (
                                 FOREIGN KEY (Parking_ID) REFERENCES parking(ID) ON DELETE CASCADE,
                                 FOREIGN KEY (Parking_Slot_ID) REFERENCES parking_slot(SlotID) ON DELETE CASCADE
 );
+
+CREATE TABLE `posts` (
+                         `id` int(11) NOT NULL,
+                         `title` varchar(255) DEFAULT NULL,
+                         `content` text NOT NULL,
+                         `author_cin` varchar(255) DEFAULT NULL,
+                         `created_at` datetime NOT NULL,
+                         `image_url` varchar(255) DEFAULT NULL,
+                         `category` varchar(50) DEFAULT NULL
+)
+CREATE TABLE `recu` (
+                        `id` int(11) NOT NULL,
+                        `facture_id` int(11) DEFAULT NULL,
+                        `date_paiement` date DEFAULT NULL,
+                        `montant` decimal(10,2) DEFAULT NULL
+)
+CREATE TABLE `facture` (
+                           `id` int(11) NOT NULL,
+                           `date_facture` date NOT NULL,
+                           `date_limite_paiement` date NOT NULL,
+                           `prix_fact` float NOT NULL,
+                           `type_facture` varchar(50) NOT NULL,
+                           `state` tinyint(1) DEFAULT 0,
+                           `date_paiement` date DEFAULT NULL,
+                           `user_cin` char(8) NOT NULL
+)
+CREATE TABLE `likes` (
+                         `user_cin` varchar(20) NOT NULL,
+                         `post_id` int(11) NOT NULL,
+                         `created_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+)
+CREATE TABLE `comments` (
+                            `id` int(11) NOT NULL,
+                            `post_id` int(11) NOT NULL,
+                            `author_cin` varchar(20) NOT NULL,
+                            `content` text DEFAULT NULL,
+                            `created_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+)

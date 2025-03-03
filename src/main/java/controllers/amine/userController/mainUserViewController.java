@@ -1,4 +1,4 @@
-package org.example.mdintech.Controllers.amine.userController;
+package controllers.amine.userController;
 
 
 import javafx.event.ActionEvent;
@@ -9,7 +9,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.stage.Stage;
-import org.example.mdintech.Singleton.loggedInUser;
+import Singleton.loggedInUser;
 
 import java.io.IOException;
 
@@ -39,17 +39,17 @@ public class mainUserViewController {
 
     @FXML
     private void goToHomeView() {
-        loadView("/org/example/mdintech/views/userViews/homeView.fxml");
+        loadView("/amine/userViews/homeView.fxml");
     }
 
     @FXML
     private void goToParkings() {
-        loadView("/org/example/mdintech/userModule/parking/display-parkings.fxml");
+        loadView("/userModule/parking/display-parkings.fxml");
     }
 
     @FXML
     private void goToParkingTickets() {
-        loadView("/org/example/mdintech/userModule/parking/display-tickets.fxml");
+        loadView("/userModule/parking/display-tickets.fxml");
     }
 
     public void goToUpdatePorfile(ActionEvent actionEvent) {loadView("/org/example/mdintech/userModule/update-user-view.fxml");}
@@ -58,4 +58,9 @@ public class mainUserViewController {
         loggedInUser.clearSession();
         loadView("/org/example/mdintech/userModule/login-view.fxml");
     }
+    @FXML
+    private void goToUserInterface() {
+        loadView("/Rahim/UserInterface.fxml");
+    }
+
 }

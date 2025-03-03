@@ -1,6 +1,6 @@
-package services;
+package services.Rahim;
 
-import entities.Facture;
+import entities.Rahim.Facture;
 import utils.MyDatabase;
 
 import java.sql.*;

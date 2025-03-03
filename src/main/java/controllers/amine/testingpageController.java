@@ -1,12 +1,12 @@
-package org.example.mdintech.Controllers.amine;
+package controllers.amine;
 
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
-import org.example.mdintech.entities.amine.User;
-import org.example.mdintech.utils.UserRole;
-import org.example.mdintech.service.amine.userService;
+import entities.amine.User;
+import utils.UserRole;
+import services.amine.userService;
 
 import java.util.Date;
 

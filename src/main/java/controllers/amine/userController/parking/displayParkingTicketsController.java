@@ -1,4 +1,4 @@
-package org.example.mdintech.Controllers.amine.userController.parking;
+package controllers.amine.userController.parking;
 
 
 import javafx.event.ActionEvent;
@@ -6,16 +6,14 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
-import org.example.mdintech.service.amine.ParkingModule.ParkingService;
-import org.example.mdintech.service.amine.ParkingModule.ParkingTicketService;
-import org.example.mdintech.entities.amine.ParkingModule.ParkingTicket;
-import org.example.mdintech.entities.amine.ParkingModule.Parking;
-import org.example.mdintech.Singleton.loggedInUser;
-import org.example.mdintech.utils.amine.navigation;
+import services.amine.ParkingModule.ParkingService;
+import services.amine.ParkingModule.ParkingTicketService;
+import entities.amine.ParkingModule.ParkingTicket;
+import entities.amine.ParkingModule.Parking;
+import Singleton.loggedInUser;
+import utils.amine.navigation;
 
 import java.io.IOException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -191,7 +189,7 @@ public class displayParkingTicketsController {
         alert.show();
     }
     public void handleBackButton(ActionEvent event) throws IOException {
-        navigation.switchScene(event, "/org/example/mdintech/main-user-view.fxml");
+        navigation.switchScene(event, "/main-user-view.fxml");
     }
 
 }

@@ -1,4 +1,4 @@
-package org.example.mdintech.Controllers.amine.userController;
+package controllers.amine.userController;
 
 
 import javafx.event.ActionEvent;
@@ -7,11 +7,11 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
-import org.example.mdintech.Singleton.loggedInUser;
-import org.example.mdintech.entities.amine.User;
-import org.example.mdintech.service.amine.userService;
-import org.example.mdintech.utils.amine.PasswordVerification;
-import org.example.mdintech.utils.amine.navigation;
+import Singleton.loggedInUser;
+import entities.amine.User;
+import services.amine.userService;
+import utils.amine.PasswordVerification;
+import utils.amine.navigation;
 
 import java.io.IOException;
 
@@ -146,14 +146,14 @@ public class updateuserController {
 
             statusLabel.setText("User updated successfully!");
             passwordField.clear();
-            navigation.switchScene(event, "/org/example/mdintech/main-user-view.fxml");
+            navigation.switchScene(event, "/main-user-view.fxml");
         } catch (Exception e) {
             statusLabel.setText("Update failed: " + e.getMessage());
         }
     }
 
     public void handleBackButton(ActionEvent event) throws IOException {
-        navigation.switchScene(event, "/org/example/mdintech/main-user-view.fxml");
+        navigation.switchScene(event, "/main-user-view.fxml");
     }
 }
 

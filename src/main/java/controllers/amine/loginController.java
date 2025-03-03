@@ -1,9 +1,7 @@
-package org.example.mdintech.Controllers.amine;
+package controllers.amine;
 
 
-import com.google.api.client.auth.oauth2.Credential;
 import com.google.api.client.googleapis.auth.oauth2.GoogleAuthorizationCodeFlow;
-import com.google.api.client.googleapis.auth.oauth2.GoogleTokenResponse;
 import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.gson.GsonFactory;
 import io.github.cdimascio.dotenv.Dotenv;
@@ -15,13 +13,13 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
-import org.example.mdintech.Singleton.loggedInUser;
-import org.example.mdintech.entities.amine.User;
-import org.example.mdintech.service.amine.NotificationModule.mailNotificationService;
-import org.example.mdintech.service.amine.userService;
-import org.example.mdintech.utils.amine.GoogleCallbackServer;
-import org.example.mdintech.utils.UserRole;
-import org.example.mdintech.utils.amine.VerificationCodeStorage;
+import Singleton.loggedInUser;
+import entities.amine.User;
+import services.amine.NotificationModule.mailNotificationService;
+import services.amine.userService;
+import utils.amine.GoogleCallbackServer;
+import utils.UserRole;
+import utils.amine.VerificationCodeStorage;
 
 import java.io.IOException;
 import java.util.Collections;
@@ -51,7 +49,7 @@ public class loginController {
     public void gotoSignIn(ActionEvent event) {
         try {
             // Load the FXML file
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/example/mdintech/userModule/sign-in-view.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/amine/userModule/sign-in-view.fxml"));
             Parent signInRoot = loader.load();
 
             // Get the current stage (window)
@@ -74,9 +72,9 @@ public class loginController {
         if (user != null) {
             loggedInUser.initializeSession((user));
             if (user.getRole() == UserRole.ADMIN) {
-                goToDashboard(event, "/org/example/mdintech/main-admin-view.fxml");
+                goToDashboard(event, "/main-admin-view.fxml");
             } else if (user.getRole() == UserRole.USER) {
-                goToDashboard(event, "/org/example/mdintech/main-user-view.fxml");
+                goToDashboard(event, "/main-user-view.fxml");
             }
         }else{
             showAlert("User Not Found ","no credentials are matching the ones you gave us !!!!! .????");

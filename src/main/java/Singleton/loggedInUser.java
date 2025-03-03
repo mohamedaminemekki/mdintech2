@@ -1,32 +1,32 @@
-package org.example.mdintech.Singleton;
+    package Singleton;
 
 
-import org.example.mdintech.entities.amine.User;
+    import entities.amine.User;
 
-public class loggedInUser {
-    private static loggedInUser instance;
-    private User loggedUser;
+    public class loggedInUser {
+        private static loggedInUser instance;
+        private User loggedUser;
 
-    private loggedInUser(User user) {
-        this.loggedUser = user;
-    }
+        private loggedInUser(User user) {
+            this.loggedUser = user;
+        }
 
-    public static void initializeSession(User user) {
-        if (instance == null) {
-            instance = new loggedInUser(user);
+        public static void initializeSession(User user) {
+            if (instance == null) {
+                instance = new loggedInUser(user);
+            }
+        }
+
+        public static loggedInUser getInstance() {
+            return instance;
+        }
+
+        public User getLoggedUser() {
+            return loggedUser;
+        }
+
+        public static void clearSession() {
+            instance = null;
         }
     }
-
-    public static loggedInUser getInstance() {
-        return instance;
-    }
-
-    public User getLoggedUser() {
-        return loggedUser;
-    }
-
-    public static void clearSession() {
-        instance = null;
-    }
-}
 

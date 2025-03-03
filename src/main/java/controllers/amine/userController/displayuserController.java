@@ -1,4 +1,4 @@
-package org.example.mdintech.Controllers.amine.userController;
+package controllers.amine.userController;
 
 
 import javafx.collections.FXCollections;
@@ -9,9 +9,9 @@ import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.util.Callback;
-import org.example.mdintech.entities.amine.User;
-import org.example.mdintech.service.amine.userService;
-import org.example.mdintech.utils.amine.navigation;
+import entities.amine.User;
+import services.amine.userService;
+import utils.amine.navigation;
 
 import java.io.IOException;
 import java.util.List;
@@ -125,7 +125,7 @@ public class displayuserController {
         alert.showAndWait();
     }
     public void handleBackButton(ActionEvent event) throws IOException {
-        navigation.switchScene(event, "/org/example/mdintech/main-admin-view.fxml");
+        navigation.switchScene(event, "/main-admin-view.fxml");
     }
 
     private Integer parseInteger(String value) {

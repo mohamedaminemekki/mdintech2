@@ -19,6 +19,11 @@
             <MenuItem fx:id="Logout" text="logout" onAction="#logout" />
 
         </Menu>
+        <Menu text="Navigation">
+            <MenuItem fx:id="goToUserInterface" text="Home" onAction="#goToUserInterface" />
+
+        </Menu>
+
     </MenuBar>
 
 </AnchorPane>

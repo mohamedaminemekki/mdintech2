@@ -1,4 +1,4 @@
-package controllers;
+package controllers.Rahim;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -18,7 +18,7 @@ public class NavBarController {
     @FXML
     private void navigateToFactures() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/UserInterface.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/Rahim/UserInterface.fxml"));
             Parent facturesRoot = loader.load();
             UserController UserController = loader.getController();
             UserController.showUnpaid();
@@ -34,7 +34,7 @@ public class NavBarController {
     @FXML
     private void navigateToHistorique() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/UserInterface.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/Rahim/UserInterface.fxml"));
             Parent facturesRoot = loader.load();
             UserController UserController = loader.getController();
             UserController.showPaid();
@@ -50,7 +50,7 @@ public class NavBarController {
     @FXML
     private void navigateToBlog() {
         try {
-            Parent blogRoot = FXMLLoader.load(getClass().getResource("/blog_posts.fxml"));
+            Parent blogRoot = FXMLLoader.load(getClass().getResource("/Rahim/blog_posts.fxml"));
             BorderPane mainLayout = getMainLayout();
             if (mainLayout != null) {
                 mainLayout.setCenter(blogRoot);
@@ -63,7 +63,7 @@ public class NavBarController {
     @FXML
     private void logout() {
         try {
-            Parent loginRoot = FXMLLoader.load(getClass().getResource("/Login.fxml"));
+            Parent loginRoot = FXMLLoader.load(getClass().getResource("/Rahim/Login.fxml"));
             Stage stage = (Stage) navContainer.getScene().getWindow();
             stage.setScene(new Scene(loginRoot));
         } catch (IOException e) {

@@ -1,4 +1,4 @@
-package org.example.mdintech.utils.amine;
+package utils.amine;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
@@ -6,8 +6,8 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import org.example.mdintech.Controllers.amine.parkingController.DisplayParkingDetailsViewController;
-import org.example.mdintech.entities.amine.ParkingModule.Parking;
+import controllers.amine.parkingController.DisplayParkingDetailsViewController;
+import entities.amine.ParkingModule.Parking;
 
 import java.io.IOException;
 

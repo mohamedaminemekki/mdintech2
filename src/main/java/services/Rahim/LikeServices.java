@@ -1,7 +1,7 @@
-package services;
+package services.Rahim;
 
-import entities.Like;
-import entities.User;
+import entities.Rahim.Like;
+import entities.amine.User;
 import utils.MyDatabase;
 
 import java.sql.*;
@@ -66,9 +66,9 @@ public class LikeServices {
             ResultSet rs = ps.executeQuery();
             while(rs.next()){
                 User user = new User();
-                user.setCin(rs.getString("cin"));
-                user.setNom(rs.getString("nom")); // ou username selon votre table
-                user.setAvatarUrl(rs.getString("avatar_url"));
+                user.setCIN(Integer.parseInt(rs.getString("cin")));
+                user.setName(rs.getString("nom")); // ou username selon votre table
+                user.setPathtopic(rs.getString("avatar_url"));
                 users.add(user);
             }
         }

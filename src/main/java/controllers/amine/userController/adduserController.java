@@ -1,4 +1,4 @@
-package org.example.mdintech.Controllers.amine.userController;
+package controllers.amine.userController;
 
 public class adduserController {
 }

@@ -1,4 +1,4 @@
-package org.example.mdintech.Controllers.amine.parkingController;
+package controllers.amine.parkingController;
 
 
 import javafx.fxml.FXML;
@@ -6,9 +6,9 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.event.ActionEvent;
-import org.example.mdintech.entities.amine.ParkingModule.Parking;
-import org.example.mdintech.service.amine.ParkingModule.ParkingService;
-import org.example.mdintech.utils.amine.navigation;
+import entities.amine.ParkingModule.Parking;
+import services.amine.ParkingModule.ParkingService;
+import utils.amine.navigation;
 
 import java.io.IOException;
 
@@ -61,7 +61,7 @@ public class AddParkingViewController {
         if (success) {
             showAlert("Success", "Parking added successfully!");
             clearFields();
-            navigation.switchScene(event, "/org/example/mdintech/main-admin-view.fxml");
+            navigation.switchScene(event, "/main-admin-view.fxml");
 
         } else {
             showAlert("Error", "Failed to add parking. Please try again.");
@@ -83,6 +83,6 @@ public class AddParkingViewController {
     }
 
     public void handleBackButton(ActionEvent event) throws IOException {
-        navigation.switchScene(event, "/org/example/mdintech/main-admin-view.fxml");
+        navigation.switchScene(event, "/main-admin-view.fxml");
     }
 }

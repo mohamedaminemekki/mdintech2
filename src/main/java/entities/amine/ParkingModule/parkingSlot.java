@@ -1,4 +1,4 @@
-package org.example.mdintech.entities.amine.ParkingModule;
+package entities.amine.ParkingModule;
 
 public class parkingSlot {
 

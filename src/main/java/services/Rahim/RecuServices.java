@@ -1,6 +1,6 @@
-package services;
+package services.Rahim;
 
-import entities.Recu;
+import entities.Rahim.Recu;
 import utils.MyDatabase;
 import java.sql.*;
 

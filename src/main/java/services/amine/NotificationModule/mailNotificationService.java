@@ -1,4 +1,4 @@
-package org.example.mdintech.service.amine.NotificationModule;
+package services.amine.NotificationModule;
 
 
 import jakarta.mail.*;

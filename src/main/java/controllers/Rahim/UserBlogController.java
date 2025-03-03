@@ -1,6 +1,8 @@
-package controllers;
+package controllers.Rahim;
 
-import entities.Comment;
+import Singleton.loggedInUser;
+import entities.Rahim.Comment;
+import entities.amine.User;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
@@ -14,10 +16,8 @@ import javafx.scene.layout.*;
 import javafx.scene.shape.Circle;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import entities.BlogPost;
-import entities.SessionManager;
-import entities.User;
-import services.*;
+import entities.Rahim.BlogPost;
+import services.Rahim.*;
 
 import java.io.File;
 import java.io.IOException;
@@ -29,6 +29,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
+import java.util.Random;
 
 public class UserBlogController {
 
@@ -78,10 +79,10 @@ public class UserBlogController {
     }
 
     private void loadUserAvatar() {
-        User currentUser = SessionManager.getCurrentUser();
-        if (currentUser != null && currentUser.getAvatarUrl() != null && !currentUser.getAvatarUrl().isEmpty()) {
+        User currentUser = loggedInUser.getInstance().getLoggedUser();
+        if (currentUser != null && currentUser.getPathtopic() != null && !currentUser.getPathtopic().isEmpty()) {
             try {
-                Image avatar = new Image(new File(currentUser.getAvatarUrl()).toURI().toString());
+                Image avatar = new Image(new File(currentUser.getPathtopic()).toURI().toString());
                 userAvatar.setImage(avatar);
             } catch (Exception e) {
                 loadDefaultAvatar();
@@ -162,11 +163,13 @@ public class UserBlogController {
             return;
         }
         BlogPost post = new BlogPost();
-        post.setAuthorAvatarUrl(SessionManager.getCurrentUser().getAvatarUrl());
+        // Utilisation du singleton loggedInUser
+        User currentUser = loggedInUser.getInstance().getLoggedUser();
+        post.setAuthorAvatarUrl(currentUser.getPathtopic());
         post.setTitle(postTitle.getText());
         post.setContent(postContent.getText());
-        post.setAuthor(SessionManager.getCurrentUser().getNom());
-        post.setAuthor_cin(SessionManager.getCurrentUser().getCin());
+        post.setAuthor(currentUser.getName());
+        post.setAuthor_cin(Integer.toString(currentUser.getCIN())) ;
         post.setImageUrl(imagePath);
         post.setCategory(categoryCombo.getValue());
         post.setCreatedAt(LocalDateTime.now());
@@ -248,7 +251,8 @@ public class UserBlogController {
 
         // Bouton options si l'utilisateur est l'auteur
         Node optionsButton = null;
-        if (SessionManager.getCurrentUser().getCin().equals(post.getAuthorCin())) {
+        // Remplacement de SessionManager par loggedInUser
+        if (Integer.toString(loggedInUser.getInstance().getLoggedUser().getCIN()).equals(post.getAuthorCin())) {
             Button btnOptions = new Button("⋮");
             btnOptions.getStyleClass().add("options-button");
             ContextMenu contextMenu = new ContextMenu();
@@ -296,7 +300,7 @@ public class UserBlogController {
                         sb.append("Aucun like");
                     } else {
                         for (User u : likedUsers) {
-                            sb.append(u.getNom()).append("\n");
+                            sb.append(u.getName()).append("\n");
                         }
                     }
                     likeTooltip.setText(sb.toString());
@@ -315,13 +319,13 @@ public class UserBlogController {
                         HBox userItem = new HBox(5);
                         ImageView userAvatar = new ImageView();
                         try {
-                            userAvatar.setImage(new Image(new File(u.getAvatarUrl()).toURI().toString()));
+                            userAvatar.setImage(new Image(new File(u.getPathtopic()).toURI().toString()));
                         } catch (Exception ex) {
                             userAvatar.setImage(new Image("https://fr.vecteezy.com/art-vectoriel/1840618-image-profil-icon-male-icon-human-or-people-sign-and-symbol-vector"));
                         }
                         userAvatar.setFitWidth(20);
                         userAvatar.setFitHeight(20);
-                        Label nameLabel = new Label(u.getNom());
+                        Label nameLabel = new Label(u.getName());
                         userItem.getChildren().addAll(userAvatar, nameLabel);
                         CustomMenuItem menuItem = new CustomMenuItem(userItem, false);
                         usersMenu.getItems().add(menuItem);
@@ -455,7 +459,8 @@ public class UserBlogController {
 
     private void handleLike(BlogPost post) {
         try {
-            likeService.toggleLike(SessionManager.getCurrentUser().getCin(), post.getId());
+            // Remplacement de SessionManager par loggedInUser
+            likeService.toggleLike(Integer.toString(loggedInUser.getInstance().getLoggedUser().getCIN()), post.getId());
             refreshPost(post.getId());
         } catch (Exception e) {
             showAlert("Erreur", "Échec de l'action : " + e.getMessage());
@@ -493,13 +498,15 @@ public class UserBlogController {
         Optional<String> result = dialog.showAndWait();
         result.ifPresent(comment -> {
             try {
-                commentService.addComment(post.getId(), SessionManager.getCurrentUser().getCin(), comment);
+                // Remplacement de SessionManager par loggedInUser
+                commentService.addComment(post.getId(), Integer.toString(loggedInUser.getInstance().getLoggedUser().getCIN()), comment);
                 refreshPost(post.getId());
             } catch (Exception e) {
                 showAlert("Erreur", "Impossible d'ajouter le commentaire");
             }
         });
     }
+
     private void addCommentIfAppropriate(BlogPost post, String commentText) {
         ContentFilterService filterService = new ContentFilterService();
         try {
@@ -507,7 +514,8 @@ public class UserBlogController {
             if (filterService.isTextToxic(commentText, filteredJson)) {
                 showAlert("Commentaire refusé", "Votre commentaire contient des termes inappropriés.");
             } else {
-                commentService.addComment(post.getId(), SessionManager.getCurrentUser().getCin(), commentText);
+                // Remplacement de SessionManager par loggedInUser
+                commentService.addComment(post.getId(), Integer.toString(loggedInUser.getInstance().getLoggedUser().getCIN()), commentText);
                 refreshPost(post.getId());
             }
         } catch (Exception e) {
@@ -515,7 +523,6 @@ public class UserBlogController {
             e.printStackTrace();
         }
     }
-
 
     private VBox createCommentCard(Comment comment) {
         VBox commentBox = new VBox(5);
@@ -618,7 +625,7 @@ public class UserBlogController {
 
     @FXML
     private void loadBlogPosts() throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/blog_posts.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/Rahim/blog_posts.fxml"));
         Parent root = loader.load();
         Stage stage = (Stage) feedContainer.getScene().getWindow();
         stage.setScene(new Scene(root));

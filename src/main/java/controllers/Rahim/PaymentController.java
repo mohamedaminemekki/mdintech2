@@ -1,4 +1,4 @@
-package controllers;
+package controllers.Rahim;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -6,8 +6,8 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
-import entities.Facture;
-import services.FactureServices;
+import entities.Rahim.Facture;
+import services.Rahim.FactureServices;
 
 import java.io.IOException;
 import java.time.LocalDate;
@@ -77,7 +77,7 @@ public class PaymentController {
 
     private void generateReceipt() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/Receipt.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/Rahim/Receipt.fxml"));
             Parent root = loader.load(); // Load doit être appelé avant getController()
 
             ReceiptController controller = loader.getController();

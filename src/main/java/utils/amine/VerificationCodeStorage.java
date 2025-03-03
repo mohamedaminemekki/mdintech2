@@ -1,4 +1,4 @@
-package org.example.mdintech.utils.amine;
+package utils.amine;
 
 
 import java.util.HashMap;

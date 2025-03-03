@@ -1,7 +1,7 @@
-package services;
+package services.Rahim;
 
 import utils.MyDatabase;
-import entities.Comment;
+import entities.Rahim.Comment;
 
 import java.sql.*;
 import java.time.LocalDateTime;

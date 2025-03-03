@@ -1,4 +1,4 @@
-package org.example.mdintech.utils.amine;
+package utils.amine;
 
 
 import org.apache.commons.validator.routines.RegexValidator;

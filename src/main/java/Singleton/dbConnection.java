@@ -1,4 +1,4 @@
-package org.example.mdintech.Singleton;
+package Singleton;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -9,7 +9,7 @@ public class dbConnection {
     private Connection connection;
     private final String dbPort = "3306";
     private final String host = "localhost";
-    private final String dbName = "mdintech";
+    private final String dbName = "pidev3a33";
     private final String url = "jdbc:mysql://" + host + ":" + dbPort + "/" + dbName +
             "?autoReconnect=true&useSSL=false"; // Added auto-reconnect
     private final String user = "root";

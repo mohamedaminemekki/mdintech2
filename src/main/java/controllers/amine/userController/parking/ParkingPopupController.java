@@ -1,4 +1,4 @@
-package org.example.mdintech.Controllers.amine.userController.parking;
+package controllers.amine.userController.parking;
 
 
 import javafx.fxml.FXML;
@@ -7,11 +7,11 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.stage.Stage;
-import org.example.mdintech.entities.amine.ParkingModule.Parking;
-import org.example.mdintech.entities.amine.ParkingModule.ParkingTicket;
-import org.example.mdintech.service.amine.ParkingModule.ParkingSlotService;
-import org.example.mdintech.service.amine.ParkingModule.ParkingTicketService;
-import org.example.mdintech.Singleton.loggedInUser;
+import entities.amine.ParkingModule.Parking;
+import entities.amine.ParkingModule.ParkingTicket;
+import services.amine.ParkingModule.ParkingSlotService;
+import services.amine.ParkingModule.ParkingTicketService;
+import Singleton.loggedInUser;
 
 import java.sql.Date;
 import java.sql.Timestamp;
