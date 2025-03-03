@@ -35,5 +35,9 @@ build/
 .vscode/
 
 ### Mac OS ###
+<<<<<<< HEAD
 .DS_Store.env
 .env
+=======
+.DS_Store
+>>>>>>> Rahim
