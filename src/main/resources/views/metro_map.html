@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <style>
+        #map { height: 100vh; }
+        .metro-popup { min-width: 250px; }
+        .metro-button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+<div id="map"></div>
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+<script>
+    var map = L.map('map').setView([36.8065, 10.1815], 13);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+
+    function addMetroMarker(cityName, lat, lng) {
+        const marker = L.marker([lat, lng], {
+            icon: L.icon({
+                iconUrl: 'https://cdn-icons-png.flaticon.com/512/167/167755.png',
+                iconSize: [32, 32]
+            })
+        }).addTo(map);
+
+        marker.bindPopup(`
+                <div class="metro-popup">
+                    <h3>${cityName}</h3>
+                    <button class="metro-button"
+                            onclick="window.javaBridge.showCityTrips('${cityName}')">
+                        Voir les trajets
+                    </button>
+                </div>
+            `);
+    }
+
+    // Exposer la fonction au scope global
+    window.addMetroMarker = addMetroMarker;
+</script>
+</body>
+</html>

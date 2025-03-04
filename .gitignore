@@ -36,8 +36,12 @@ build/
 
 ### Mac OS ###
 <<<<<<< HEAD
+.DS_Store
+=======
+<<<<<<< HEAD
 .DS_Store.env
 .env
 =======
 .DS_Store
 >>>>>>> Rahim
+>>>>>>> origin/dev

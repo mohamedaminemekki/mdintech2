@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.shape.*?>
+<?import javafx.scene.effect.*?>
+<?import javafx.scene.paint.*?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml" fx:controller="controllers.mariem.ReservationListController">
+    <top>
+        <VBox spacing="10" style="-fx-padding: 15px; -fx-background-color: #2196F3;">
+            <Label text="Mes Réservations" style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: white;"/>
+            <HBox spacing="10" alignment="CENTER_LEFT">
+                <TextField fx:id="searchField" promptText="Rechercher une réservation..." style="-fx-pref-width: 300px; -fx-font-size: 14px; -fx-background-radius: 5px;"/>
+                <ComboBox fx:id="filterComboBox" promptText="Filtrer par statut" style="-fx-pref-width: 150px; -fx-font-size: 14px; -fx-background-radius: 5px;"/>
+            </HBox>
+        </VBox>
+    </top>
+    <center>
+        <ScrollPane style="-fx-background-color: transparent;">
+            <VBox fx:id="reservationContainer" spacing="10" style="-fx-padding: 10px;"/>
+
+        </ScrollPane>
+    </center>
+</BorderPane>
