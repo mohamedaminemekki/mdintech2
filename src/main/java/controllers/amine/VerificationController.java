@@ -11,6 +11,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import utils.amine.VerificationCodeStorage;
+import utils.amine.navigation;
 
 import java.io.IOException;
 
@@ -40,7 +41,7 @@ public class VerificationController {
 
     private void goToResetPasswordPage(ActionEvent event, String email) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/example/mdintech/userModule/reset-password-view.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/amine/userModule/reset-password-view.fxml"));
             Parent resetRoot = loader.load();
 
             ResetPasswordController controller = loader.getController();
@@ -60,6 +61,9 @@ public class VerificationController {
         alert.setHeaderText(null);
         alert.setContentText(message);
         alert.showAndWait();
+    }
+    public void handleBackButton(ActionEvent event) throws IOException {
+        navigation.switchScene(event, "/amine/userModule/login-view.fxml");
     }
 }
 

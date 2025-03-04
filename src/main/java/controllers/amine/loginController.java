@@ -139,7 +139,7 @@ public class loginController {
     }
     private void goToVerificationPage(ActionEvent event, String email) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/example/mdintech/userModule/verify-code-view.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/amine/userModule/verify-code-view.fxml"));
             Parent verificationRoot = loader.load();
 
             VerificationController controller = loader.getController();

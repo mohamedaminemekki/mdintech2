@@ -60,6 +60,13 @@
 .button:hover {
     -fx-opacity: 0.9;
 }
+.back-button {
+    -fx-pref-width: 50px;  /* Set a smaller width */
+    -fx-pref-height: 30px; /* Set a smaller height */
+    -fx-padding: 5px;      /* Reduce padding */
+    -fx-background-radius: 5px;
+    -fx-border-radius: 5px;
+}
 
 /* Hyperlinks */
 .hyperlink {
@@ -72,3 +79,33 @@
     -fx-underline: true;
 }
 
+.image-container {
+    -fx-alignment: center;
+    -fx-background-radius: 10px;
+    -fx-border-radius: 10px;
+    -fx-cursor: hand;
+}
+
+/* Hover overlay effect */
+.hover-overlay {
+    -fx-fill: black;
+    -fx-opacity: 0;
+    -fx-transition: opacity 0.3s ease-in-out;
+}
+
+/* Hover text */
+.hover-text {
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-opacity: 0;
+    -fx-transition: opacity 0.3s ease-in-out;
+}
+
+/* Show text and overlay on hover */
+.image-container:hover > .hover-overlay {
+    -fx-opacity: 0.6;
+}
+
+.image-container:hover > .hover-text {
+    -fx-opacity: 1;
+}

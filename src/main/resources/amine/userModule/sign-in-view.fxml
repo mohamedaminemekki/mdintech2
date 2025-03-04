@@ -8,32 +8,47 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane prefHeight="550.0" prefWidth="500.0"
-            style="-fx-background-color: #f4f4f4; -fx-padding: 20px;"
-            xmlns:fx="http://javafx.com/fxml/1"
-            xmlns="http://javafx.com/javafx/23.0.1"
-            fx:controller="controllers.amine.SignInController">
+<?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.control.DatePicker?>
 
-    <VBox alignment="CENTER" layoutX="50.0" layoutY="100.0" prefWidth="400.0" spacing="15"
-          style="-fx-background-color: #ffffff; -fx-padding: 30px; -fx-border-radius: 10px; -fx-background-radius: 10px; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 10, 0, 0, 4);">
+<?import javafx.scene.control.ScrollPane?>
+<ScrollPane fx:id="scrollPane" fitToWidth="true" fitToHeight="true" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.amine.SignInController">
+    <AnchorPane prefHeight="772.0"
+                prefWidth="724.0"
+                stylesheets="@style.css" >
 
-        <Label text="Sign In" style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #333;" />
+        <VBox alignment="CENTER" layoutX="162.0" layoutY="120.0" prefWidth="400.0" spacing="15" style="-fx-background-color: #ffffff; -fx-padding: 30px; -fx-border-radius: 10px; -fx-background-radius: 10px; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 10, 0, 0, 4);">
 
-        <ImageView fx:id="profileImageView" fitWidth="100" fitHeight="100" preserveRatio="true" />
-        <Button text="Choose Image" onAction="#handleChooseImage" styleClass="image-button"/>
+            <Label style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #333;" text="Sign In" />
 
-        <TextField fx:id="cinField" promptText="CIN" styleClass="text-field"/>
-        <TextField fx:id="nameField" promptText="Name" styleClass="text-field"/>
-        <TextField fx:id="emailField" promptText="Email" styleClass="text-field"/>
-        <PasswordField fx:id="passwordField" promptText="Password" styleClass="text-field"/>
-        <Label fx:id="passwordStrengthLabel" text="" style="-fx-text-fill: red;"/>
-        <TextField fx:id="phoneField" promptText="Phone" styleClass="text-field"/>
-        <TextField fx:id="addressField" promptText="Address" styleClass="text-field"/>
-        <TextField fx:id="cityField" promptText="City" styleClass="text-field"/>
-        <TextField fx:id="stateField" promptText="State" styleClass="text-field"/>
+            <StackPane fx:id="imageContainer" styleClass="image-container" onMouseClicked="#handleChooseImage">
+                <ImageView fx:id="profileImageView" fitWidth="120" fitHeight="120" preserveRatio="true" />
+                <Rectangle width="120" height="120" arcWidth="10" arcHeight="10" opacity="0.0" styleClass="hover-overlay"/>
+                <Label text="Upload Your Image" styleClass="hover-text"/>
+            </StackPane>
 
-        <Button fx:id="signInButton" text="Sign In" onAction="#handleSignIn" styleClass="primary-button"/>
-    </VBox>
 
-    <Button layoutX="10" layoutY="10" onAction="#handleBackButton" text="← Back" styleClass="back-button" />
-</AnchorPane>
+            <TextField fx:id="cinField" promptText="CIN" styleClass="text-field" />
+            <TextField fx:id="nameField" promptText="Name" styleClass="text-field" />
+            <DatePicker fx:id="birthdayPicker" promptText="Birthday" styleClass="text-field" />
+            <TextField fx:id="emailField" promptText="Email" styleClass="text-field" />
+            <PasswordField fx:id="passwordField" promptText="Password" styleClass="text-field" />
+            <TextField fx:id="phoneField" promptText="Phone" styleClass="text-field" />
+            <TextField fx:id="addressField" promptText="Address" styleClass="text-field" />
+            <TextField fx:id="cityField" promptText="City" styleClass="text-field" />
+
+            <Button fx:id="signInButton" onAction="#handleSignIn" styleClass="primary-button" text="Sign In" />
+        </VBox>
+
+        <Button layoutX="10" layoutY="10" onAction="#handleBackButton" styleClass="back-button" prefWidth="50" prefHeight="30">
+            <graphic>
+                <ImageView fitWidth="16" fitHeight="16">
+                    <Image url="@../images/retournericon.png" />
+                </ImageView>
+            </graphic>
+        </Button>
+
+    </AnchorPane>
+</ScrollPane>

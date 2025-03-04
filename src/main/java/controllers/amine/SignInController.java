@@ -23,6 +23,8 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.Date;
 import java.util.Optional;
 import java.util.Random;
@@ -30,7 +32,7 @@ import java.util.Random;
 public class SignInController {
 
     @FXML
-    private TextField nameField, cinField, emailField, phoneField, addressField, cityField, stateField;
+    private TextField nameField, cinField, emailField, phoneField, addressField, cityField;
 
     @FXML
     private PasswordField passwordField;
@@ -46,11 +48,37 @@ public class SignInController {
 
     private File selectedImageFile;
 
+    @FXML
+    private DatePicker birthdayPicker;
+
+    @FXML
+    private ScrollPane scrollPane;
 
     private final userService userService = new userService(); // Service for saving users
 
     @FXML
-    private void handleSignIn(ActionEvent event) { // Add ActionEvent parameter
+    public void initialize() {
+        // Set the initial image
+        String imagePath = "C:\\Users\\amine\\Desktop\\mdintech\\src\\main\\resources\\amine\\images\\defaultprofile.png"; // Replace with your image path
+        File file = new File(imagePath);
+
+        // Check if the file exists
+        if (file.exists()) {
+            // Convert the file path to a URL
+            String imageUrl = file.toURI().toString();
+            Image image = new Image(imageUrl);
+            profileImageView.setImage(image);
+        } else {
+            System.err.println("Image file not found: " + imagePath);
+        }
+
+        birthdayPicker.setValue(LocalDate.now().minusYears(15));
+        scrollPane.setVvalue(0); // Vertical scroll position (0 = top, 1 = bottom)
+        scrollPane.setHvalue(0); // Horizontal scroll position (0 = left, 1 = right)
+    }
+
+    @FXML
+    private void handleSignIn(ActionEvent event) {
         try {
             String name = nameField.getText();
             int cin = Integer.parseInt(cinField.getText());
@@ -59,9 +87,14 @@ public class SignInController {
             String phone = phoneField.getText();
             String address = addressField.getText();
             String city = cityField.getText();
-            String state = stateField.getText();
             UserRole role = UserRole.USER;
-            Date birthday=new Date(System.currentTimeMillis());
+
+            LocalDate localDate = birthdayPicker.getValue();
+            if (localDate == null) {
+                showAlert("Error", "Please select a valid birthday.");
+                return;
+            }
+            Date birthday = Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
 
             if (!PasswordVerification.isStrongPassword(password)) {
                 showAlert("Weak Password", "Password must be at least 8 characters long, contain at least one uppercase letter, " +
@@ -69,8 +102,12 @@ public class SignInController {
                 return;
             }
 
-            String profileImagePath = selectedImageFile != null ? selectedImageFile.getAbsolutePath() : "default.png";
+            // Save only relative image path in the database
+            String profileImagePath = (selectedImageFile != null)
+                    ? "profile_images/" + selectedImageFile.getName()
+                    : "profile_images/default.png";
 
+            // Email verification
             String verificationCode = generateVerificationCode();
             mailNotificationService mailService = new mailNotificationService();
             mailService.sendEmail(email, "Verification Code", "Your verification code is: " + verificationCode);
@@ -81,8 +118,10 @@ public class SignInController {
                 return;
             }
 
-            User newUser = new User(name, cin, email, password, role, phone, address, city, state,profileImagePath,birthday);
+            // Save user in the database
+            User newUser = new User(name, cin, email, password, role, phone, address, city, "Tunisia", profileImagePath, birthday);
             userService.save(newUser);
+
             showAlert("Success", "User registered successfully!");
 
             navigation.switchScene(event, "/amine/userModule/login-view.fxml");
@@ -102,7 +141,7 @@ public class SignInController {
         dialog.setContentText("Enter the code:");
 
         Optional<String> result = dialog.showAndWait();
-        return result.orElse(null); // Returns null if the user cancels
+        return result.orElse(null);
     }
 
 
@@ -155,19 +194,25 @@ public class SignInController {
         File file = fileChooser.showOpenDialog(null);
         if (file != null) {
             try {
-                String destinationDir = "C:\\Users\\amine\\Desktop\\PIDEV\\Mdintech\\assets\\ProfileImages";
+                // Define the XAMPP htdocs image folder
+                String destinationDir = "C:\\xampp\\htdocs\\profile_images";
                 File destFolder = new File(destinationDir);
 
                 if (!destFolder.exists()) {
-                    destFolder.mkdirs();
+                    destFolder.mkdirs(); // Create directory if it doesn't exist
                 }
 
-                File destFile = new File(destFolder, file.getName());
+                // Create a unique filename to prevent conflicts
+                String uniqueFileName = System.currentTimeMillis() + "_" + file.getName();
+                File destFile = new File(destFolder, uniqueFileName);
 
+                // Copy the file to the destination
                 Files.copy(file.toPath(), destFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
 
+                // Store only the relative path for database
                 selectedImageFile = destFile;
 
+                // Display the image in the UI
                 Image image = new Image(destFile.toURI().toString());
                 profileImageView.setImage(image);
 
