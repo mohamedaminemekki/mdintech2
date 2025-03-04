@@ -1,0 +1,73 @@
+/* styles.css */
+.root {
+    -fx-background-color: #ffffff;
+    -fx-font-family: "Arial";
+}
+
+/* Title Styling */
+.title-label {
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #333;
+}
+
+/* Subtitle Styling */
+.subtitle-label {
+    -fx-font-size: 14px;
+    -fx-text-fill: #666;
+    -fx-wrap-text: true;
+    -fx-max-width: 300px;
+}
+
+/* Input Label Styling */
+.input-label {
+    -fx-font-size: 14px;
+    -fx-text-fill: #333;
+}
+
+/* Input Fields */
+.text-field, .password-field {
+    -fx-pref-width: 300px;
+    -fx-padding: 10px;
+    -fx-border-radius: 5px;
+    -fx-border-color: #ccc;
+    -fx-background-radius: 5px;
+    -fx-font-size: 14px;
+}
+
+/* Buttons */
+.button {
+    -fx-pref-width: 300px;
+    -fx-padding: 12px;
+    -fx-background-radius: 5px;
+    -fx-border-radius: 5px;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+}
+
+/* Default Login Button */
+#loginButton {
+    -fx-background-color: #007bff;
+}
+
+/* Google Login Button */
+.google-button {
+    -fx-background-color: #db4a39;
+}
+
+/* Hover Effects */
+.button:hover {
+    -fx-opacity: 0.9;
+}
+
+/* Hyperlinks */
+.hyperlink {
+    -fx-text-fill: #007bff;
+    -fx-font-size: 12px;
+    -fx-underline: false;
+}
+
+.hyperlink:hover {
+    -fx-underline: true;
+}
