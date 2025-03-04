@@ -28,7 +28,7 @@ module mdintech {
     opens controllers.amine.userController to javafx.fxml;
     opens  controllers.amine.parkingController to javafx.fxml;
     opens controllers.amine.userController.parking  to javafx.fxml;
-
+    opens entities.amine.ParkingModule to javafx.base;
 
 
     // Export the main package

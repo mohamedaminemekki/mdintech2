@@ -36,6 +36,7 @@ public class ParkingPopupController {
     private final ParkingTicketService ticketService = new ParkingTicketService();
 
     public void initialize() {
+
         // Populate hours (0-23)
         for (int i = 0; i < 24; i++) {
             hourComboBox.getItems().add(i);
@@ -111,5 +112,9 @@ public class ParkingPopupController {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setContentText(message);
         alert.show();
+    }
+    @FXML
+    private void closePopup() {
+        ((Stage) confirmButton.getScene().getWindow()).close();
     }
 }

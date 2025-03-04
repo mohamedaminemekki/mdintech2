@@ -5,9 +5,8 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ListView;
-import javafx.scene.control.SelectionMode;
+import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import entities.amine.ParkingModule.Parking;
@@ -22,31 +21,39 @@ public class displayparkingsController {
 
     @FXML
     private ListView<String> parkingListView;
+    @FXML
+    private TableView<Parking> parkingTableView;
+
+    @FXML
+    private TableColumn<Parking, String> nameColumn;
+
+    @FXML
+    private TableColumn<Parking, String> locationColumn;
 
     private final ParkingService parkingService = new ParkingService();
     private final ParkingSlotService parkingSlotService = new ParkingSlotService();
 
     @FXML
     public void initialize() {
+        setupTable();
         loadParkings();
-        parkingListView.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
+    }
+    private void setupTable() {
+        nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
+        locationColumn.setCellValueFactory(new PropertyValueFactory<>("localisation"));
 
-        // Handle parking selection
-        parkingListView.setOnMouseClicked(event -> {
+        parkingTableView.setOnMouseClicked(event -> {
             if (event.getClickCount() == 2) {
-                String selectedItem = parkingListView.getSelectionModel().getSelectedItem();
-                if (selectedItem != null) {
-                    openParkingPopup(selectedItem); // Pass the full list view item
+                Parking selectedParking = parkingTableView.getSelectionModel().getSelectedItem();
+                if (selectedParking != null) {
+                    openParkingPopup(selectedParking.getName() + " - " + selectedParking.getLocalisation());
                 }
             }
         });
     }
-
     private void loadParkings() {
         List<Parking> parkings = parkingService.findAll();
-        for (Parking parking : parkings) {
-            parkingListView.getItems().add(parking.getName() + " - " + parking.getLocalisation());
-        }
+        parkingTableView.getItems().setAll(parkings);
     }
 
     private void openParkingPopup(String listViewItem) {
@@ -60,7 +67,7 @@ public class displayparkingsController {
                 return;
             }
 
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/example/mdintech/userModule/parking/ParkingPopup.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/amine/userModule/parking/ParkingPopup.fxml"));
             Stage stage = new Stage();
             stage.setScene(new Scene(loader.load()));
             stage.initModality(Modality.APPLICATION_MODAL);

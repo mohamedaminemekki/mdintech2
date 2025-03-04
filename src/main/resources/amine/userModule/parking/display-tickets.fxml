@@ -5,11 +5,33 @@
 <?import javafx.geometry.*?>
 
 <AnchorPane xmlns:fx="http://javafx.com/fxml"
-            fx:controller="controllers.amine.userController.parking.displayParkingTicketsController">
-    <Button layoutX="10" layoutY="10" onAction="#handleBackButton" text="← Back" />
+            fx:controller="controllers.amine.userController.parking.displayParkingTicketsController"
+            style="-fx-background-color: #f4f4f4;"
+            stylesheets="@style.css"
+            >
 
-    <ListView fx:id="activeTicketsListView" layoutX="20" layoutY="20" prefHeight="150" prefWidth="560" onMouseClicked="#handleTicketClick"/>
+    <!-- Back Button -->
+    <Button fx:id="backButton"
+            text="← Back"
+            onAction="#handleBackButton"
+            layoutX="20" layoutY="10"
+            styleClass="back-button"/>
 
-    <ListView fx:id="allTicketsListView" layoutX="20" layoutY="200" prefHeight="150" prefWidth="560"/>
+    <!-- Main VBox Container for Layout -->
+    <VBox layoutX="20" layoutY="50" spacing="15" alignment="TOP_CENTER" prefWidth="600">
+
+        <!-- Active Tickets Section -->
+        <VBox spacing="5" styleClass="ticket-container">
+            <Label text="🟢 Active Parking Tickets" styleClass="section-title"/>
+            <ListView fx:id="activeTicketsListView" prefHeight="150" onMouseClicked="#handleTicketClick"/>
+        </VBox>
+
+        <!-- All Tickets Section -->
+        <VBox spacing="5" styleClass="ticket-container">
+            <Label text="📜 All Parking Tickets" styleClass="section-title"/>
+            <ListView fx:id="allTicketsListView" prefHeight="150"/>
+        </VBox>
+
+    </VBox>
 
 </AnchorPane>

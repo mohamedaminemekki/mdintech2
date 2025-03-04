@@ -39,24 +39,24 @@ public class mainUserViewController {
 
     @FXML
     private void goToHomeView() {
-        loadView("/amine/userViews/homeView.fxml");
+        loadView("/main-user-view.fxml");
     }
 
     @FXML
     private void goToParkings() {
-        loadView("/userModule/parking/display-parkings.fxml");
+        loadView("/amine/userModule/parking/display-parkings.fxml");
     }
 
     @FXML
     private void goToParkingTickets() {
-        loadView("/userModule/parking/display-tickets.fxml");
+        loadView("/amine/userModule/parking/display-tickets.fxml");
     }
 
-    public void goToUpdatePorfile(ActionEvent actionEvent) {loadView("/org/example/mdintech/userModule/update-user-view.fxml");}
+    public void goToUpdatePorfile(ActionEvent actionEvent) {loadView("/amine/userModule/update-user-view.fxml");}
 
     public void logout(ActionEvent actionEvent) {
         loggedInUser.clearSession();
-        loadView("/org/example/mdintech/userModule/login-view.fxml");
+        loadView("/amine/userModule/login-view.fxml");
     }
     @FXML
     private void goToUserInterface() {

@@ -3,6 +3,7 @@ package controllers.amine.userController.parking;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.geometry.Insets;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
@@ -108,38 +109,38 @@ public class displayParkingTicketsController {
     }
 
     private void showUpdateExpiryDateDialog(ParkingTicket ticket) {
-        System.out.println(ticket.getId());
         Dialog<Void> dialog = new Dialog<>();
         dialog.setTitle("Update Expiration Date");
+        dialog.setHeaderText("Modify the expiration date and time for the selected ticket.");
 
-        // Set button types
+        // Define buttons
         ButtonType saveButtonType = new ButtonType("Save", ButtonBar.ButtonData.OK_DONE);
-        dialog.getDialogPane().getButtonTypes().addAll(saveButtonType, ButtonType.CANCEL);
+        ButtonType cancelButtonType = new ButtonType("Cancel", ButtonBar.ButtonData.CANCEL_CLOSE);
+        dialog.getDialogPane().getButtonTypes().addAll(saveButtonType, cancelButtonType);
 
-        // Extract issuing and expiration dates
-        Date issuingDate = ticket.getIssuingDate();
-        LocalDateTime issuingDateTime = issuingDate.toInstant().atZone(java.time.ZoneId.systemDefault()).toLocalDateTime();
+        // Convert issuing & expiration dates
+        LocalDateTime issuingDateTime = ticket.getIssuingDate().toInstant().atZone(java.time.ZoneId.systemDefault()).toLocalDateTime();
+        LocalDateTime defaultExpirationDateTime = ticket.getExpirationDate().toInstant().atZone(java.time.ZoneId.systemDefault()).toLocalDateTime();
 
-        Date expirationDate = ticket.getExpirationDate();
-        LocalDateTime defaultExpirationDateTime = expirationDate.toInstant().atZone(java.time.ZoneId.systemDefault()).toLocalDateTime();
-
-
+        // Create UI elements
         DatePicker expirationDatePicker = new DatePicker(defaultExpirationDateTime.toLocalDate());
         ComboBox<Integer> hourComboBox = new ComboBox<>();
         ComboBox<Integer> minuteComboBox = new ComboBox<>();
 
-        // Populate hour (0-23) and minutes (0, 15, 30, 45)
+        // Populate time selectors
         for (int i = 0; i < 24; i++) hourComboBox.getItems().add(i);
         for (int i = 0; i < 60; i += 15) minuteComboBox.getItems().add(i);
 
-        // Set default values for time from issuing date (+1 hour)
+        // Set default values
         hourComboBox.setValue(defaultExpirationDateTime.getHour());
         minuteComboBox.setValue((defaultExpirationDateTime.getMinute() / 15) * 15);
 
-        // Arrange elements in layout
+        // Layout setup
         GridPane grid = new GridPane();
         grid.setHgap(10);
         grid.setVgap(10);
+        grid.setPadding(new Insets(10, 10, 10, 10));
+
         grid.add(new Label("Expiration Date:"), 0, 0);
         grid.add(expirationDatePicker, 1, 0);
         grid.add(new Label("Hour:"), 0, 1);
@@ -149,7 +150,7 @@ public class displayParkingTicketsController {
 
         dialog.getDialogPane().setContent(grid);
 
-        // Validation and processing
+        // Handling user input
         dialog.setResultConverter(dialogButton -> {
             if (dialogButton == saveButtonType) {
                 LocalDate selectedDate = expirationDatePicker.getValue();
@@ -157,25 +158,22 @@ public class displayParkingTicketsController {
                 Integer selectedMinute = minuteComboBox.getValue();
 
                 if (selectedDate == null || selectedHour == null || selectedMinute == null) {
-                    showAlert("Please select a valid date and time!");
+                    showAlert("Please select a valid date and time.");
                     return null;
                 }
 
-                // Construct expiration datetime
                 LocalDateTime selectedDateTime = LocalDateTime.of(selectedDate, LocalTime.of(selectedHour, selectedMinute));
 
-                // Validate if the new expiration date is at least 1 hour after issuing date
+                // Ensure expiration is at least 1 hour after issuing date
                 if (selectedDateTime.isBefore(issuingDateTime.plusHours(1))) {
-                    showAlert("The expiration time must be at least one hour after the issuing time!");
+                    showAlert("Expiration time must be at least 1 hour after issuing time.");
                     return null;
                 }
 
-                // Convert LocalDateTime to Date
-                Date newExpirationDate = java.sql.Timestamp.valueOf(selectedDateTime);
-                ticket.setExpirationDate(newExpirationDate);
+                // Update ticket expiration
+                ticket.setExpirationDate(java.sql.Timestamp.valueOf(selectedDateTime));
                 ticketService.update(ticket);
                 updateTicketInLists(ticket);
-
             }
             return null;
         });
@@ -183,11 +181,15 @@ public class displayParkingTicketsController {
         dialog.showAndWait();
     }
 
+    // Improved alert method
     private void showAlert(String message) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        Alert alert = new Alert(Alert.AlertType.WARNING);
+        alert.setTitle("Invalid Input");
+        alert.setHeaderText(null);
         alert.setContentText(message);
-        alert.show();
+        alert.showAndWait();
     }
+
     public void handleBackButton(ActionEvent event) throws IOException {
         navigation.switchScene(event, "/main-user-view.fxml");
     }

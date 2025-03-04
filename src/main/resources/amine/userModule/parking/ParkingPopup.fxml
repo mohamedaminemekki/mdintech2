@@ -1,22 +1,44 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.geometry.*?>
 
 <AnchorPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
             fx:controller="controllers.amine.userController.parking.ParkingPopupController"
-            prefHeight="200.0" prefWidth="300.0">
-    <VBox spacing="10" alignment="CENTER">
-        <Label text="Select Expiration Date:"/>
-        <DatePicker fx:id="expirationDatePicker"/>
-        <ComboBox fx:id="hourComboBox"/>
-        <ComboBox fx:id="minuteComboBox"/>
+            prefHeight="300.0" prefWidth="400.0"
+            stylesheets="@style.css"
+            style="-fx-background-color: rgba(255, 255, 255, 0.85); -fx-background-radius: 15; -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 10, 0, 0, 4);">
 
-        <Button fx:id="confirmButton" text="Confirm" onAction="#confirmReservation"/>
+    <VBox alignment="CENTER" spacing="15" layoutX="20" layoutY="20">
+        <!-- Title with close button -->
+        <HBox alignment="CENTER_RIGHT">
+            <Label text="Reserve Parking Spot" style="-fx-font-size: 18px; -fx-font-weight: bold;"/>
+            <Button text="X" onAction="#closePopup"
+                    style="-fx-background-color: transparent; -fx-text-fill: red; -fx-font-size: 14px;"/>
+        </HBox>
+
+        <Separator />
+
+        <Label text="Select Expiration Date:" style="-fx-font-size: 14px;"/>
+        <DatePicker fx:id="expirationDatePicker" style="-fx-pref-width: 200px;"/>
+
+        <HBox spacing="10" alignment="CENTER">
+            <VBox>
+                <Label text="Hour" style="-fx-font-size: 14px;"/>
+                <ComboBox fx:id="hourComboBox" style="-fx-pref-width: 80px;"/>
+            </VBox>
+            <VBox>
+                <Label text="Minutes" style="-fx-font-size: 14px;"/>
+                <ComboBox fx:id="minuteComboBox" style="-fx-pref-width: 80px;"/>
+            </VBox>
+        </HBox>
+
+        <Separator />
+
+        <Button fx:id="confirmButton" text="Confirm Reservation" onAction="#confirmReservation"
+                styleClass="confirm-button"/>
     </VBox>
-</AnchorPane>
 
+</AnchorPane>
