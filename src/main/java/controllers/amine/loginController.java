@@ -22,17 +22,17 @@ import utils.UserRole;
 import utils.amine.VerificationCodeStorage;
 
 import java.io.IOException;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
-import java.util.Random;
+import java.util.*;
 
 public class loginController {
     static Dotenv dotenv = Dotenv.load();
     private static final String CLIENT_ID = dotenv.get("CLIENT_ID");
     private static final String CLIENT_SECRET = dotenv.get("CLIENT_SECRET");
     private static final String REDIRECT_URI = "http://localhost:8081/callback";
-    private static final List<String> SCOPES = Collections.singletonList("https://www.googleapis.com/auth/userinfo.profile");
+    private static final List<String> SCOPES = Arrays.asList(
+            "https://www.googleapis.com/auth/userinfo.profile",
+            "https://www.googleapis.com/auth/userinfo.email"
+    );
 
     @FXML
     private TextField emailField;
@@ -177,61 +177,4 @@ public class loginController {
             showAlert("Login Error", "Failed to initiate Google login.");
         }
     }
-//    @FXML
-//    private void handleGoogleLogin(ActionEvent event) {
-//        // Initialize Google OAuth flow
-//        GoogleAuthorizationCodeFlow flow = new GoogleAuthorizationCodeFlow.Builder(
-//                new NetHttpTransport(),
-//                GsonFactory.getDefaultInstance(),
-//                CLIENT_ID,
-//                CLIENT_SECRET,
-//                SCOPES)
-//                .setAccessType("offline")
-//                .build();
-//
-//        // Generate the authorization URL
-//        String authorizationUrl = flow.newAuthorizationUrl()
-//                .setRedirectUri(REDIRECT_URI)
-//                .build();
-//
-//        // Open the authorization URL in a WebView
-//        WebView webView = new WebView();
-//        WebEngine webEngine = webView.getEngine();
-//        webEngine.load(authorizationUrl);
-//
-//        Stage stage = new Stage();
-//        stage.setScene(new javafx.scene.Scene(webView, 600, 400));
-//        stage.show();
-//
-//        // Handle the callback
-//        webEngine.locationProperty().addListener((observable, oldValue, newValue) -> {
-//            if (newValue != null && newValue.startsWith(REDIRECT_URI)) {
-//                String code = newValue.split("code=")[1].split("&")[0];
-//                try {
-//                    // Exchange the authorization code for tokens
-//                    GoogleTokenResponse tokenResponse = flow.newTokenRequest(code)
-//                            .setRedirectUri(REDIRECT_URI)
-//                            .execute();
-//
-//                    Credential credential = flow.createAndStoreCredential(tokenResponse, null);
-//
-//                    // Fetch user info
-//                    String userInfoUrl = "https://www.googleapis.com/oauth2/v1/userinfo?access_token=" + credential.getAccessToken();
-//                    String userInfo = new NetHttpTransport().createRequestFactory()
-//                            .buildGetRequest(new com.google.api.client.http.GenericUrl(userInfoUrl))
-//                            .execute()
-//                            .parseAsString();
-//
-//                    System.out.println("User Info: " + userInfo);
-//
-//                    // Close the WebView window
-//                    stage.close();
-//
-//                    // TODO: Save user info to your database or create a session
-//                } catch (IOException e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//        });
-//    }
 }

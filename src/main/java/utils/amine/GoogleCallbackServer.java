@@ -9,13 +9,25 @@ import com.google.api.client.http.HttpTransport;
 import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.gson.GsonFactory;
+import entities.amine.User;
 import io.github.cdimascio.dotenv.Dotenv;
 import com.sun.net.httpserver.HttpServer;
 import com.sun.net.httpserver.HttpExchange;
+import javafx.geometry.Insets;
+import javafx.scene.control.*;
+import javafx.scene.layout.GridPane;
+import javafx.util.Pair;
+import org.json.JSONObject;
+import services.amine.userService;
+import services.mariem.UserService;
+import utils.UserRole;
+import javafx.application.Platform;
+
 
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.InetSocketAddress;
+import java.util.Optional;
 import java.util.concurrent.Executors;
 
 public class GoogleCallbackServer {
@@ -23,6 +35,8 @@ public class GoogleCallbackServer {
     private static final String REDIRECT_URI = "http://localhost:8081/callback";
     private static final HttpTransport HTTP_TRANSPORT = new NetHttpTransport();
     private static final JsonFactory JSON_FACTORY = GsonFactory.getDefaultInstance();
+    static userService us = new userService();
+
 
     public static void startServer() throws IOException {
         HttpServer server = HttpServer.create(new InetSocketAddress(8081), 0);
@@ -50,8 +64,23 @@ public class GoogleCallbackServer {
                     System.out.println("Access Token: " + accessToken);
 
                     // Fetch user info using access token
-                    String userInfo = getUserInfo(accessToken);
-                    System.out.println("User Info: " + userInfo);
+                    String rawResponse = getUserInfo(accessToken);
+                    String userInfo = rawResponse.trim(); // Trim the response
+                    System.out.println("Raw User Info: " + userInfo);
+
+                    // Parse the user info JSON
+                    JSONObject userInfoJson = new JSONObject(userInfo); // Use the correct variable
+                    System.out.println("Parsed User Info: " + userInfoJson.toString(2));
+                    String email = userInfoJson.getString("email");
+
+
+                    if (userExists(email)) {
+                        // User exists, redirect to the desired page
+                        //redirectToPage("/dashboard"); // Replace with your redirect logic
+                    } else {
+                        // User does not exist, show a pop-up to collect additional information
+                        showUserRegistrationPopup(userInfoJson);
+                    }
 
                     response = "User Info: " + userInfo;
 
@@ -75,8 +104,101 @@ public class GoogleCallbackServer {
     private static String getUserInfo(String accessToken) throws IOException {
         HttpRequestFactory requestFactory = HTTP_TRANSPORT.createRequestFactory();
         HttpRequest request = requestFactory.buildGetRequest(new com.google.api.client.http.GenericUrl(
-                "https://www.googleapis.com/oauth2/v1/userinfo?access_token=" + accessToken));
+                "https://www.googleapis.com/oauth2/v3/userinfo?access_token=" + accessToken));
         HttpResponse response = request.execute();
-        return response.parseAsString(); // Returns JSON with user info
+        return response.parseAsString();
+    }
+
+    private static boolean userExists(String email) {
+        userService userService = new userService();
+        User user = userService.findByEmail(email);
+        return user != null;
+    }
+
+    private static void showUserRegistrationPopup(JSONObject userInfo) {
+        // Use Platform.runLater to ensure the UI code runs on the JavaFX Application Thread
+        Platform.runLater(() -> {
+            // Create a pop-up dialog with fields for CIN, phone, and address
+            Dialog<Pair<String, String>> dialog = new Dialog<>();
+            dialog.setTitle("Complete Registration");
+            dialog.setHeaderText("Please provide additional information to complete your registration.");
+
+            // Set the button types
+            ButtonType registerButtonType = new ButtonType("Register", ButtonBar.ButtonData.OK_DONE);
+            dialog.getDialogPane().getButtonTypes().addAll(registerButtonType, ButtonType.CANCEL);
+
+            // Create the form fields
+            GridPane grid = new GridPane();
+            grid.setHgap(10);
+            grid.setVgap(10);
+            grid.setPadding(new Insets(20, 150, 10, 10));
+
+            TextField cinField = new TextField();
+            cinField.setPromptText("CIN");
+            TextField phoneField = new TextField();
+            phoneField.setPromptText("Phone");
+            TextField addressField = new TextField();
+            addressField.setPromptText("Address");
+            TextField cityField = new TextField();
+            cityField.setPromptText("City");
+            TextField stateField = new TextField();
+            stateField.setPromptText("State");
+
+            grid.add(new Label("CIN:"), 0, 0);
+            grid.add(cinField, 1, 0);
+            grid.add(new Label("Phone:"), 0, 1);
+            grid.add(phoneField, 1, 1);
+            grid.add(new Label("Address:"), 0, 2);
+            grid.add(addressField, 1, 2);
+            grid.add(new Label("City:"), 0, 3);
+            grid.add(cityField, 1, 3);
+            grid.add(new Label("State:"), 0, 4);
+            grid.add(stateField, 1, 4);
+
+            dialog.getDialogPane().setContent(grid);
+
+            // Convert the result to a User object when the register button is clicked
+            dialog.setResultConverter(dialogButton -> {
+                if (dialogButton == registerButtonType) {
+                    return new Pair<>(cinField.getText(), phoneField.getText());
+                }
+                return null;
+            });
+
+            Optional<Pair<String, String>> result = dialog.showAndWait();
+
+            result.ifPresent(cinPhonePair -> {
+                // Create a new user with the information from the OAuth2 response and the pop-up
+                String name = userInfo.getString("given_name") + " " + userInfo.getString("family_name");
+                String email = userInfo.getString("email");
+                int cin = Integer.parseInt(cinPhonePair.getKey());
+                String phone = cinPhonePair.getValue();
+                String address = addressField.getText();
+                String city = cityField.getText();
+                String state = stateField.getText();
+
+                // Create a new User object
+                User newUser = new User(
+                        name,
+                        cin,
+                        email,
+                        "defaultPassword", // You can generate a random password or leave it empty
+                        UserRole.USER, // Default role
+                        phone,
+                        address,
+                        city,
+                        state,
+                        false, // Default status
+                        userInfo.getString("picture"), // Path topic (if applicable)
+                        null // Birthday (if applicable)
+                );
+
+                // Save the new user to the database
+                us.save(newUser);
+
+                // Redirect to the desired page
+                //redirectToPage("/dashboard"); // Replace with your redirect logic
+            });
+        });
     }
 }
