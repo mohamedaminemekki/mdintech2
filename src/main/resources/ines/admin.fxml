@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Pos?> <!-- Importer le Pos pour l'alignement -->
+
+<BorderPane xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="controllers.ines.AdminController"
+            prefWidth="900" prefHeight="600"
+            stylesheets="@styles.css">
+
+    <!-- Barre de navigation à gauche -->
+    <left>
+        <VBox prefHeight="600" prefWidth="200" spacing="15" style="-fx-background-color: #2C3E50; -fx-padding: 20;">
+            <Button text="📦 Transport" style="-fx-background-color: #2C3E50; -fx-text-fill: white;"/>
+            <Button text="🧾 Factures" style="-fx-background-color: #2C3E50; -fx-text-fill: white;"/>
+            <Button text="👤 User" style="-fx-background-color: #2C3E50; -fx-text-fill: white;"/>
+            <Button text="🛒 Market" style="-fx-background-color: #2C3E50; -fx-text-fill: white;"/>
+            <Button text="🚗 Parking" style="-fx-background-color: #2C3E50; -fx-text-fill: white;"/>
+            <Button text="⚠️ Réclamation" style="-fx-background-color: #2C3E50; -fx-text-fill: white;"/>
+        </VBox>
+    </left>
+
+    <!-- Contenu principal -->
+    <center>
+        <VBox prefHeight="600" prefWidth="700" spacing="20" style="-fx-padding: 30;">
+            <Label text="🛠️ Interface Admin"
+                   style="-fx-font-size: 28px; -fx-font-weight: bold; -fx-text-fill: #34495E;"/>
+
+            <ListView fx:id="serviceListView" prefWidth="800" prefHeight="650"
+                      style="-fx-background-color: #ECF0F1; -fx-border-color: #BDC3C7;"/>
+
+            <!-- Utilisation de HBox pour centrer les boutons -->
+            <HBox spacing="20" alignment="CENTER" style="-fx-padding: 20;">
+                <Button fx:id="addServiceButton" text="➕ Ajouter Service"
+                        style="-fx-background-color: #27AE60; -fx-text-fill: white; -fx-font-size: 14px;"/>
+                <Button fx:id="doctorListButton" text="👨‍⚕️ Liste Médecins"
+                        style="-fx-background-color: #2980B9; -fx-text-fill: white; -fx-font-size: 14px;"/>
+                <Button fx:id="appointmentListButton" text="📅 Liste Rendez-vous"
+                        style="-fx-background-color: #E67E22; -fx-text-fill: white; -fx-font-size: 14px;"/>
+                <Button fx:id="statsButton" text="📊 Statistique des rendez-vous"
+                        style="-fx-background-color: #8E44AD; -fx-text-fill: white; -fx-font-size: 14px;"/>
+                <Button fx:id="calendarButton" text="Ouvrir Google Calendar" onAction="#openGoogleCalendar"
+                        style="-fx-background-color: #16A085; -fx-text-fill: white; -fx-font-size: 14px;"/>
+                <!-- Nouveaux boutons -->
+                <Button fx:id="modifyServiceButton" text="✏️ Modifier Service" onAction="#handleModifyService"
+                        style="-fx-background-color: #3498DB; -fx-text-fill: white; -fx-font-size: 14px;"/>
+                <Button fx:id="deleteServiceButton" text="🗑️ Supprimer Service" onAction="#handleDeleteService"
+                        style="-fx-background-color: #E74C3C; -fx-text-fill: white; -fx-font-size: 14px;"/>
+
+
+            </HBox>
+        </VBox>
+    </center>
+
+</BorderPane>

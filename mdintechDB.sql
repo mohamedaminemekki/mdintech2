@@ -76,3 +76,99 @@ CREATE TABLE `comments` (
                             `content` text DEFAULT NULL,
                             `created_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 )
+
+
+--transport
+
+
+-- 2. Table badges
+CREATE TABLE `badges` (
+                          `id` INT(11) NOT NULL AUTO_INCREMENT,
+    -- Remplacement de user_id par user_cin
+                          `user_cin` INT(11) DEFAULT NULL,
+                          `badge_level` INT(11) DEFAULT 1,
+                          `badge_type` VARCHAR(50) DEFAULT NULL,
+                          PRIMARY KEY (`id`),
+                          CONSTRAINT `badges_fk_users` FOREIGN KEY (`user_cin`) REFERENCES `users` (`CIN`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- 3. Table cities (pour stocker des localisations géographiques)
+CREATE TABLE `cities` (
+                          `name` VARCHAR(100) NOT NULL,
+                          `latitude` DOUBLE NOT NULL,
+                          `longitude` DOUBLE NOT NULL,
+                          PRIMARY KEY (`name`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- 4. Table payments
+CREATE TABLE `payments` (
+                            `payment_id` INT(11) NOT NULL AUTO_INCREMENT,
+                            `amount` DECIMAL(10,2) NOT NULL,
+                            `method` ENUM('credit_card','paypal','cash') NOT NULL,
+                            `payment_date` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                            `reservation_id` INT(11) NOT NULL,
+    -- Remplacement de user_id par user_cin
+                            `user_cin` INT(11) NOT NULL,
+                            PRIMARY KEY (`payment_id`),
+                            KEY `reservation_id` (`reservation_id`),
+                            CONSTRAINT `payments_fk_users` FOREIGN KEY (`user_cin`) REFERENCES `users` (`CIN`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- 5. Table reservations
+CREATE TABLE `reservations` (
+                                `id` INT(11) NOT NULL AUTO_INCREMENT,
+    -- Remplacement de user_id par user_cin
+                                `user_cin` INT(11) NOT NULL,
+                                `trip_id` INT(11) NOT NULL,
+                                `reservation_time` DATETIME DEFAULT NULL,
+                                `status` VARCHAR(20) DEFAULT 'Pending',
+                                `transport_id` INT(11) NOT NULL,
+                                `seat_number` INT(11) NOT NULL,
+                                `payment_status` VARCHAR(20) DEFAULT 'Pending',
+                                `seat_type` VARCHAR(20) DEFAULT 'Standard',
+                                PRIMARY KEY (`id`),
+                                KEY `transport_id` (`transport_id`),
+                                KEY `fk_reservation_trip` (`trip_id`),
+                                CONSTRAINT `reservations_fk_users` FOREIGN KEY (`user_cin`) REFERENCES `users` (`CIN`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- 6. Table transport_types
+CREATE TABLE `transport_types` (
+                                   `transport_id` INT(50) NOT NULL AUTO_INCREMENT,
+                                   `name` VARCHAR(50) NOT NULL,
+                                   `description` TEXT DEFAULT NULL,
+                                   `capacity` INT(11) NOT NULL,
+                                   PRIMARY KEY (`transport_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- 7. Table trips
+CREATE TABLE `trips` (
+                         `id` INT(100) NOT NULL AUTO_INCREMENT,
+                         `departure` VARCHAR(100) NOT NULL,
+                         `destination` VARCHAR(100) NOT NULL,
+                         `departure_time` DATETIME NOT NULL,
+                         `arrival_time` DATETIME NOT NULL,
+                         `price` DECIMAL(10,2) NOT NULL,
+                         `transport_id` INT(50) NOT NULL,
+                         `transport_name` VARCHAR(255) DEFAULT NULL,
+                         `date` DATE DEFAULT NULL,
+                         `distance` DOUBLE NOT NULL DEFAULT 0,
+                         `capacity` INT(11) NOT NULL DEFAULT 50,
+                         PRIMARY KEY (`id`),
+                         UNIQUE KEY `id` (`id`),
+                         KEY `trips_ibfk_1` (`transport_id`),
+                         CONSTRAINT `trips_fk_transport_types` FOREIGN KEY (`transport_id`) REFERENCES `transport_types` (`transport_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- 8. Table villes
+CREATE TABLE `villes` (
+                          `id` INT(11) NOT NULL AUTO_INCREMENT,
+                          `nom` VARCHAR(100) NOT NULL,
+                          `histoire` TEXT DEFAULT NULL,
+                          `anecdotes` TEXT DEFAULT NULL,
+                          `activites` TEXT DEFAULT NULL,
+                          `gastronomie` TEXT DEFAULT NULL,
+                          `nature` TEXT DEFAULT NULL,
+                          `histoire_interactive` TEXT DEFAULT NULL,
+                          PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

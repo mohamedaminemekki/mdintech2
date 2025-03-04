@@ -1,7 +1,6 @@
 package services.Rahim;
 
 import entities.Rahim.BlogPost;
-import utils.MyDatabase;
 
 import java.sql.*;
 import java.util.ArrayList;
