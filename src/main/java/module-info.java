@@ -1,6 +1,5 @@
 module mdintech {
     requires javafx.fxml;
-    requires java.sql;
     requires spring.security.crypto;
     requires jakarta.mail;
     requires java.dotenv;
@@ -10,17 +9,22 @@ module mdintech {
     requires com.google.api.client.json.gson;
     requires com.google.api.client.auth;
 
-    requires javafx.controls;
-    requires java.desktop;
     requires org.apache.httpcomponents.httpcore;
     requires jdk.httpserver;
     requires org.kordamp.ikonli.fontawesome;
     requires org.kordamp.ikonli.javafx;
     requires org.json;
+    requires javafx.web;
+    requires com.google.zxing;
+    requires com.google.zxing.javase;
+    requires java.net.http;
+    requires com.google.gson;
+    requires java.sql;
+    requires java.desktop;
     // requires javafx.web;
 
     // Open the Controller package to javafx.fxml for reflection
-    opens controllers to javafx.fxml;
+    opens controllers.amine to javafx.fxml;
     opens controllers.amine.userController to javafx.fxml;
     opens  controllers.amine.parkingController to javafx.fxml;
     opens controllers.amine.userController.parking  to javafx.fxml;
