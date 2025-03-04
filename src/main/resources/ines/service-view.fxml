@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.ComboBox?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml/1"
+            xmlns="http://javafx.com/javafx/23.0.1"
+            fx:controller="controllers.ines.ServiceController"
+            style="-fx-font-family: 'Segoe UI', sans-serif;">
+
+    <!-- En-tête : Dégradé, titre et image immersive -->
+    <top>
+        <StackPane prefHeight="320" style="-fx-background-color: linear-gradient(to right, #2c3e50, #3498db); -fx-padding: 15;">
+            <VBox alignment="CENTER" spacing="15">
+                <Label text="Choisissez le service hospitalier désiré"
+                       style="-fx-font-size: 32px; -fx-font-weight: bold; -fx-text-fill: white; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.6), 4,0.5,0,2);"/>
+                <ImageView fitWidth="900" fitHeight="250" preserveRatio="false">
+                    <image>
+                        <Image url="@/ines/images/img.jpg"/>
+                    </image>
+                </ImageView>
+            </VBox>
+        </StackPane>
+    </top>
+
+    <!-- Contenu central : Recherche, liste et boutons d'action -->
+    <center>
+        <VBox alignment="CENTER" spacing="25" style="-fx-background-color: #f0f3f4; -fx-padding: 30;">
+            <!-- Barre de recherche modernisée -->
+            <HBox spacing="15" alignment="CENTER">
+                <Label text="Rechercher un service:"
+                       style="-fx-font-size: 18px; -fx-text-fill: #2c3e50;"/>
+                <TextField fx:id="searchField" onKeyReleased="#onSearch"
+                           promptText="Tapez ici..."
+                           style="-fx-font-size: 16px; -fx-background-color: white; -fx-border-color: #bdc3c7; -fx-border-radius: 8; -fx-background-radius: 8; -fx-padding: 8 12; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 3,0.5,0,1);"
+                           prefWidth="250"/>
+            </HBox>
+
+            <!-- Liste des services stylisée -->
+            <ListView fx:id="serviceListView" prefHeight="400" prefWidth="800"
+                      style="-fx-background-color: white; -fx-border-color: #bdc3c7; -fx-border-radius: 8; -fx-background-radius: 8; -fx-font-size: 16px; -fx-padding: 10;"/>
+
+
+
+
+            <!-- Boutons d'action avec effets visuels -->
+            <HBox spacing="30" alignment="CENTER">
+                <Button fx:id="btnMesRendezVous" onAction="#openMesRendezVous"
+                        text="Mes Rendez-vous"
+                        style="-fx-background-color: linear-gradient(to right, #27ae60, #2ecc71); -fx-text-fill: white; -fx-font-size: 18px; -fx-padding: 12 40; -fx-border-radius: 8; -fx-background-radius: 8; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 4,0.5,0,2); -fx-cursor: hand;"/>
+                <!-- Affichage du message ou de l'option de sélection du service -->
+                <ComboBox fx:id="comboService" promptText="Sélectionnez un service" />
+                <Button fx:id="btnBesoinLit" onAction="#onBesoinLitClicked"
+                        text="Besoins de lit"
+                        style="-fx-background-color: #e67e22; -fx-text-fill: white; -fx-font-size: 18px; -fx-padding: 12 40; -fx-border-radius: 8; -fx-background-radius: 8; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 4,0.5,0,2); -fx-cursor: hand;"/>
+            </HBox>
+        </VBox>
+    </center>
+
+    <!-- Pied de page avec informations et design épuré -->
+    <bottom>
+        <HBox alignment="CENTER" spacing="10" style="-fx-background-color: #2c3e50; -fx-padding: 10;">
+            <Label text="© 2025 Hôpital Innovant. Tous droits réservés."
+                   style="-fx-text-fill: white; -fx-font-size: 14px;"/>
+        </HBox>
+    </bottom>
+</BorderPane>

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.chart.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.paint.Color?>
+<?import javafx.geometry.Pos?>
+
+<VBox xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="controllers.ines.StatsController"
+      spacing="20" alignment="CENTER"
+      style="-fx-padding: 30; -fx-background-color: #F5F5F5; -fx-border-radius: 15; -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.2), 10, 0.0, 0, 0);">
+
+    <!-- Titre avec style moderne -->
+    <Label text="📊 Statistiques des Rendez-vous par Service"
+           style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #4CAF50; -fx-padding: 10;" />
+
+    <!-- BarChart avec un titre personnalisé -->
+    <BarChart fx:id="barChart" title="Nombre de Rendez-vous par Service"
+              style="-fx-background-color: white; -fx-border-radius: 10; -fx-padding: 10;">
+        <xAxis>
+            <CategoryAxis fx:id="xAxis" label="Services" style="-fx-font-size: 14px; -fx-text-fill: #3E3E3E;"/>
+        </xAxis>
+        <yAxis>
+            <NumberAxis fx:id="yAxis" label="Nombre de Rendez-vous" style="-fx-font-size: 14px; -fx-text-fill: #3E3E3E;"/>
+        </yAxis>
+    </BarChart>
+</VBox>

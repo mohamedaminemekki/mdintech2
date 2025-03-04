@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.effect.DropShadow?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+
+<AnchorPane xmlns:fx="http://javafx.com/fxml" fx:controller="controllers.ines.RendezvousViewController">
+    <!-- Conteneur principal -->
+    <VBox alignment="CENTER" spacing="20" style="-fx-background-color: #ECF0F1; -fx-padding: 30;"
+          AnchorPane.topAnchor="0.0" AnchorPane.bottomAnchor="0.0"
+          AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+
+        <!-- Section supérieure avec le titre -->
+        <VBox alignment="CENTER" spacing="10" prefHeight="150"
+              style="-fx-background-color: linear-gradient(to right, #2980B9, #6DD5FA); -fx-padding: 20; -fx-border-radius: 10; -fx-background-radius: 10;">
+            <Label text="Mes Rendez-vous"
+                   style="-fx-font-size: 30px; -fx-font-weight: bold; -fx-text-fill: white;
+                          -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.6), 4, 0.5, 0, 2);"/>
+        </VBox>
+
+        <!-- Liste des rendez-vous avec effet d'ombre pour le relief -->
+        <ListView fx:id="appointmentsListView" prefHeight="400" prefWidth="750"
+                  style="-fx-background-color: white; -fx-border-color: transparent; -fx-font-size: 16px; -fx-padding: 10;">
+            <effect>
+                <DropShadow radius="8" spread="0.2" offsetY="4" offsetX="0" color="rgba(0,0,0,0.2)"/>
+            </effect>
+        </ListView>
+
+        <!-- Bouton Retour au design moderne -->
+        <Button fx:id="btnRetour" text="Retour" onAction="#onRetour"
+                style="-fx-background-color: #E74C3C; -fx-text-fill: white; -fx-font-size: 18px; -fx-padding: 12 40;
+                       -fx-border-radius: 8; -fx-background-radius: 8; -fx-cursor: hand;
+                       -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 4, 0.5, 0, 2);"/>
+    </VBox>
+</AnchorPane>

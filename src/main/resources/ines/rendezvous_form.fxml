@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Text?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Spinner?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.effect.DropShadow?>
+<?import javafx.scene.paint.Color?>
+<?import javafx.scene.text.Font?>
+
+<VBox xmlns:fx="http://javafx.com/fxml" fx:controller="controllers.ines.RendezVousController" spacing="20" style="-fx-padding: 30; -fx-background-color: linear-gradient(to bottom, #f4f4f4, #e0e0e0);">
+
+    <!-- Titre de la page -->
+    <Text text="Prendre un Rendez-vous" style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-fill: #007bff; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 10, 0, 2, 2);"/>
+
+    <!-- Sélection de la salle -->
+    <Label text="Sélectionner la salle" style="-fx-font-size: 16px; -fx-text-fill: #333333;"/>
+    <ComboBox fx:id="salleComboBox" prefWidth="250" style="-fx-background-color: white; -fx-border-color: #007bff; -fx-border-radius: 5px; -fx-border-width: 2px; -fx-font-size: 14px; -fx-padding: 5px;"/>
+
+    <!-- Sélection de la date -->
+    <Label text="Choisir la date du rendez-vous" style="-fx-font-size: 16px; -fx-text-fill: #333333;"/>
+    <DatePicker fx:id="datePicker" prefWidth="250" style="-fx-background-color: white; -fx-border-color: #007bff; -fx-border-radius: 5px; -fx-border-width: 2px; -fx-font-size: 14px; -fx-padding: 5px;"/>
+
+    <!-- Champ de texte pour l'heure -->
+    <Label text="Choisir l'heure du rendez-vous" style="-fx-font-size: 16px; -fx-text-fill: #333333;"/>
+    <HBox spacing="10">
+        <Spinner fx:id="heureSpinner" prefWidth="100" style="-fx-background-color: white; -fx-border-color: #007bff; -fx-border-radius: 5px; -fx-border-width: 2px; -fx-font-size: 14px; -fx-padding: 5px;"/>
+        <Label text=":" style="-fx-font-size: 16px; -fx-text-fill: #333333;"/>
+        <Spinner fx:id="minuteSpinner" prefWidth="100" style="-fx-background-color: white; -fx-border-color: #007bff; -fx-border-radius: 5px; -fx-border-width: 2px; -fx-font-size: 14px; -fx-padding: 5px;"/>
+    </HBox>
+
+    <!-- Bouton pour confirmer le rendez-vous -->
+    <Button fx:id="confirmButton" text="Confirmer le rendez-vous" onAction="#handleConfirmRendezVous"
+            style="-fx-background-color: #007bff; -fx-text-fill: white; -fx-font-size: 16px; -fx-font-weight: bold; -fx-padding: 10px 20px; -fx-border-radius: 5px; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 10, 0, 2, 2);"
+            />
+
+</VBox>
