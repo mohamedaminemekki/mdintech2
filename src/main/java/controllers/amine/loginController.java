@@ -31,7 +31,7 @@ public class loginController {
     static Dotenv dotenv = Dotenv.load();
     private static final String CLIENT_ID = dotenv.get("CLIENT_ID");
     private static final String CLIENT_SECRET = dotenv.get("CLIENT_SECRET");
-    private static final String REDIRECT_URI = "http://localhost:8080/callback";
+    private static final String REDIRECT_URI = "http://localhost:8081/callback";
     private static final List<String> SCOPES = Collections.singletonList("https://www.googleapis.com/auth/userinfo.profile");
 
     @FXML
