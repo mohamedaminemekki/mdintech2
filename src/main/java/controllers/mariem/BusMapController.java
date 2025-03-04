@@ -4,7 +4,6 @@ import javafx.concurrent.Worker;
 import javafx.fxml.FXML;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.web.WebView;
-
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
