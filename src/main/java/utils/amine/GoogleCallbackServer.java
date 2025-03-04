@@ -44,12 +44,14 @@ public class GoogleCallbackServer {
     static userService us = new userService();
     private static navigation nav = new navigation(); // Instance of the navigation class
     private static ActionEvent event; // Store the ActionEvent
+    private static HttpServer server; // Store the HttpServer instance
 
     public static void setEvent(ActionEvent event) {
         GoogleCallbackServer.event = event;
     }
+
     public static void startServer() throws IOException {
-        HttpServer server = HttpServer.create(new InetSocketAddress(8081), 0);
+        server = HttpServer.create(new InetSocketAddress(8081), 0); // Initialize the server
 
         server.createContext("/callback", exchange -> {
             String query = exchange.getRequestURI().getQuery();
@@ -85,11 +87,11 @@ public class GoogleCallbackServer {
                     userService userService = new userService();
                     User user = userService.findByEmail(email);
 
-                    if (user !=null) {
+                    if (user != null) {
                         loggedInUser.initializeSession(user);
                         Platform.runLater(() -> {
                             try {
-
+                                stopServer(); // Stop the server before switching scenes
                                 nav.switchScene(event, "/main-user-view.fxml");
                             } catch (IOException e) {
                                 e.printStackTrace();
@@ -119,6 +121,13 @@ public class GoogleCallbackServer {
         System.out.println("Server started at http://localhost:8081/callback");
     }
 
+    private static void stopServer() {
+        if (server != null) {
+            server.stop(0); // Stop the server with a delay of 0 seconds
+            System.out.println("Server stopped.");
+        }
+    }
+
     private static String getUserInfo(String accessToken) throws IOException {
         HttpRequestFactory requestFactory = HTTP_TRANSPORT.createRequestFactory();
         HttpRequest request = requestFactory.buildGetRequest(new com.google.api.client.http.GenericUrl(
@@ -127,9 +136,7 @@ public class GoogleCallbackServer {
         return response.parseAsString();
     }
 
-
     private static void showUserRegistrationPopup(JSONObject userInfo) {
-        // Use Platform.runLater to ensure the UI code runs on the JavaFX Application Thread
         Platform.runLater(() -> {
             // Create a pop-up dialog with fields for CIN, phone, and address
             Dialog<Pair<String, String>> dialog = new Dialog<>();
@@ -207,10 +214,11 @@ public class GoogleCallbackServer {
                 );
 
                 // Save the new user to the database
-                us.save(newUser);
+                us.saveGoogle(newUser);
 
-                // Redirect to the desired page
+                // Stop the server and redirect to the desired page
                 try {
+                    stopServer(); // Stop the server before switching scenes
                     loggedInUser.initializeSession(newUser);
                     nav.switchScene(event, "/main-user-view.fxml");
                 } catch (IOException e) {
@@ -219,6 +227,4 @@ public class GoogleCallbackServer {
             });
         });
     }
-
-
 }
