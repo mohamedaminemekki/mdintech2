@@ -1,5 +1,6 @@
 package utils.amine;
 
+import Singleton.loggedInUser;
 import com.google.api.client.auth.oauth2.TokenResponse;
 import com.google.api.client.googleapis.auth.oauth2.GoogleAuthorizationCodeTokenRequest;
 import com.google.api.client.http.HttpRequest;
@@ -81,12 +82,14 @@ public class GoogleCallbackServer {
                     JSONObject userInfoJson = new JSONObject(userInfo); // Use the correct variable
                     System.out.println("Parsed User Info: " + userInfoJson.toString(2));
                     String email = userInfoJson.getString("email");
+                    userService userService = new userService();
+                    User user = userService.findByEmail(email);
 
-                    if (userExists(email)) {
-                        // User exists, redirect to the desired page
+                    if (user !=null) {
+                        loggedInUser.initializeSession(user);
                         Platform.runLater(() -> {
                             try {
-                                // Use the navigation class to switch scenes
+
                                 nav.switchScene(event, "/main-user-view.fxml");
                             } catch (IOException e) {
                                 e.printStackTrace();
@@ -124,11 +127,6 @@ public class GoogleCallbackServer {
         return response.parseAsString();
     }
 
-    private static boolean userExists(String email) {
-        userService userService = new userService();
-        User user = userService.findByEmail(email);
-        return user != null;
-    }
 
     private static void showUserRegistrationPopup(JSONObject userInfo) {
         // Use Platform.runLater to ensure the UI code runs on the JavaFX Application Thread
@@ -213,6 +211,7 @@ public class GoogleCallbackServer {
 
                 // Redirect to the desired page
                 try {
+                    loggedInUser.initializeSession(newUser);
                     nav.switchScene(event, "/main-user-view.fxml");
                 } catch (IOException e) {
                     e.printStackTrace();
