@@ -11,6 +11,13 @@ target/
 *.iws
 *.iml
 *.ipr
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+.env
+>>>>>>> a433f676d98f8ade75838ac595396a41f00c44e7
+>>>>>>> tasnim
 
 ### Eclipse ###
 .apt_generated
@@ -36,6 +43,7 @@ build/
 
 ### Mac OS ###
 <<<<<<< HEAD
+<<<<<<< HEAD
 .DS_Store
 =======
 <<<<<<< HEAD
@@ -45,3 +53,6 @@ build/
 .DS_Store
 >>>>>>> Rahim
 >>>>>>> origin/dev
+=======
+.DS_Store
+>>>>>>> tasnim
