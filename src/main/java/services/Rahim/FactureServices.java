@@ -1,7 +1,7 @@
 package services.Rahim;
 
 import entities.Rahim.Facture;
-import utils.MyDatabase;
+import utils.MyDataBase;
 
 import java.sql.*;
 import java.time.LocalDate;
@@ -13,7 +13,7 @@ public class FactureServices implements IService<Facture> {
     private final Connection con;
 
     public FactureServices() {
-        con = MyDatabase.getInstance().getCon();
+        con = MyDataBase.getInstance().getCon();
     }
 
     @Override

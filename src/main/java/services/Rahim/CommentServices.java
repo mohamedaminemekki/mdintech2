@@ -1,6 +1,6 @@
 package services.Rahim;
 
-import utils.MyDatabase;
+import utils.MyDataBase;
 import entities.Rahim.Comment;
 
 import java.sql.*;
@@ -10,7 +10,7 @@ import java.util.List;
 
 
 public class CommentServices {
-        private final Connection con = MyDatabase.getInstance().getCon();
+        private final Connection con = MyDataBase.getInstance().getCon();
         public List<Comment> getCommentsForPost(int postId) throws SQLException {
             List<Comment> comments = new ArrayList<>();
             String query = "SELECT * FROM comments WHERE post_id = ?";

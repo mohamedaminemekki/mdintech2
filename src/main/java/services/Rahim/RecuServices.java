@@ -1,7 +1,7 @@
 package services.Rahim;
 
 import entities.Rahim.Recu;
-import utils.MyDatabase;
+import utils.MyDataBase;
 import java.sql.*;
 
 public class RecuServices {
@@ -9,7 +9,7 @@ public class RecuServices {
     private final Connection con;
 
     public RecuServices() {
-        con = MyDatabase.getInstance().getCon();
+        con = MyDataBase.getInstance().getCon();
     }
 
     public void addRecu(Recu recu) throws SQLException {

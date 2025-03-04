@@ -1,14 +1,14 @@
 package services.Rahim;
 
 import entities.Rahim.BlogPost;
-import utils.MyDatabase;
+import utils.MyDataBase;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
 public class BlogServices {
-    private final Connection con = MyDatabase.getInstance().getCon();
+    private final Connection con = MyDataBase.getInstance().getCon();
 
     public void createPost(BlogPost post) throws SQLException {
         String query = "INSERT INTO posts (title, content, author_cin, created_at, image_url, category) " +

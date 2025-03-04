@@ -5,7 +5,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import utils.MyDatabase;
+import utils.MyDataBase;
+
 
 import java.io.IOException;
 
@@ -21,7 +22,7 @@ public class Main extends Application {
 
     public static void main(String[] args) {
         // Initialisation de la connexion à la base de données
-        MyDatabase db = MyDatabase.getInstance();
+        MyDataBase db = MyDataBase.getInstance();
 
         // Lancer l'interface JavaFX
         launch(args);

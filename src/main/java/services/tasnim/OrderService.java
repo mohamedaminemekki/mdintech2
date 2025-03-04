@@ -2,7 +2,7 @@ package services.tasnim;
 
 import entities.tasnim.Order;
 import entities.tasnim.OrderItem;
-import utils.MyDatabase;
+import utils.MyDataBase;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,7 +16,7 @@ public class OrderService {
         List<Order> orders = new ArrayList<>();
         String sql = "SELECT * FROM `orders`";
 
-        try (Connection conn = MyDatabase.getCon();
+        try (Connection conn = MyDataBase.getInstance().getCon();
              Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery(sql)) {
 
@@ -44,7 +44,7 @@ public class OrderService {
         List<OrderItem> orderItems = new ArrayList<>();
         String sql = "SELECT * FROM orderItems WHERE orderId = ?";
 
-        try (Connection conn = MyDatabase.getCon();
+        try (Connection conn = MyDataBase.getInstance().getCon();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             pstmt.setInt(1, orderId);
@@ -70,7 +70,7 @@ public class OrderService {
     public void updateOrderStatus(int orderId, String status) {
         String sql = "UPDATE `orders` SET status = ? WHERE id = ?";
 
-        try (Connection conn = MyDatabase.getCon();
+        try (Connection conn = MyDataBase.getInstance().getCon();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             pstmt.setString(1, status);
@@ -85,7 +85,7 @@ public class OrderService {
 
     public int getTotalOrders() {
         String sql = "SELECT COUNT(*) AS total FROM `orders`";
-        try (Connection conn = MyDatabase.getCon();
+        try (Connection conn = MyDataBase.getInstance().getCon();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             ResultSet rs = pstmt.executeQuery();
@@ -100,7 +100,7 @@ public class OrderService {
 
     public double getTotalRevenue() {
         String sql = "SELECT SUM(priceTotal) AS total FROM orderItems";
-        try (Connection conn = MyDatabase.getCon();
+        try (Connection conn = MyDataBase.getInstance().getCon();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             ResultSet rs = pstmt.executeQuery();
@@ -121,7 +121,7 @@ public class OrderService {
         int orderId = -1;
 
         try {
-            conn = MyDatabase.getCon();
+            conn = MyDataBase.getInstance().getCon();
             conn.setAutoCommit(false); // Start a transaction
 
             // Insert the order
@@ -165,8 +165,7 @@ public class OrderService {
                 }
             }
         } finally {
-            MyDatabase.close(conn, orderStmt, generatedKeys);
-            MyDatabase.close(null, itemStmt, null);
+
         }
 
         return orderId;
@@ -178,7 +177,7 @@ public class OrderService {
         PreparedStatement deleteOrderStmt = null;
 
         try {
-            conn = MyDatabase.getCon();
+            conn = MyDataBase.getInstance().getCon();
             conn.setAutoCommit(false); // Start a transaction
 
             // 1. Delete order items
@@ -206,8 +205,7 @@ public class OrderService {
                 }
             }
         } finally {
-            MyDatabase.close(conn, deleteOrderItemsStmt, null);
-            MyDatabase.close(null, deleteOrderStmt, null);
+
         }
     }
 }

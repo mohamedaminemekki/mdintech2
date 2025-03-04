@@ -2,7 +2,7 @@ package services.Rahim;
 
 import entities.Rahim.Like;
 import entities.amine.User;
-import utils.MyDatabase;
+import utils.MyDataBase;
 
 import java.sql.*;
 import java.time.LocalDateTime;
@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class LikeServices {
-    private final Connection con = MyDatabase.getInstance().getCon();
+    private final Connection con = MyDataBase.getInstance().getCon();
 
     public void toggleLike(String userCin, int postId) throws SQLException {
         if (hasLiked(userCin, postId)) {

@@ -1,7 +1,8 @@
 package services.tasnim;
 
-import utils.MyDatabase;
+
 import entities.tasnim.Product;
+import utils.MyDataBase;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -18,7 +19,7 @@ public class ProductService implements IService<Product> {
         String query = "SELECT p.id, p.name, p.reference, p.price, p.stockLimit, COALESCE(s.quantity, 0) AS stock, p.sold " +
                 "FROM products p " +
                 "LEFT JOIN stock s ON p.id = s.productId";
-        try (Connection conn = MyDatabase.getCon();
+        try (Connection conn = MyDataBase.getInstance().getCon();
              PreparedStatement stmt = conn.prepareStatement(query);
              ResultSet rs = stmt.executeQuery()) {
 
@@ -41,7 +42,7 @@ public class ProductService implements IService<Product> {
 
     public void incrementSoldCount(int productId) {
         String query = "UPDATE products SET sold = sold + 1 WHERE id = ?";
-        try (Connection conn = MyDatabase.getCon();
+        try (Connection conn = MyDataBase.getInstance().getCon();
              PreparedStatement stmt = conn.prepareStatement(query)) {
             stmt.setInt(1, productId);
             stmt.executeUpdate();
@@ -56,7 +57,7 @@ public class ProductService implements IService<Product> {
         String productQuery = "INSERT INTO products (name, reference, price, stockLimit) VALUES (?, ?, ?, ?)";
         String stockQuery = "INSERT INTO stock (productId, quantity) VALUES (?, ?)";
 
-        try (Connection conn = MyDatabase.getCon();
+        try (Connection conn = MyDataBase.getInstance().getCon();
              PreparedStatement productStmt = conn.prepareStatement(productQuery, Statement.RETURN_GENERATED_KEYS);
              PreparedStatement stockStmt = conn.prepareStatement(stockQuery)) {
 
@@ -87,7 +88,7 @@ public class ProductService implements IService<Product> {
         String productQuery = "UPDATE products SET name = ?, reference = ?, price = ?, stockLimit = ? WHERE id = ?";
         String stockQuery = "UPDATE stock SET quantity = ? WHERE productId = ?";
 
-        try (Connection conn = MyDatabase.getCon();
+        try (Connection conn = MyDataBase.getInstance().getCon();
              PreparedStatement productStmt = conn.prepareStatement(productQuery);
              PreparedStatement stockStmt = conn.prepareStatement(stockQuery)) {
 
@@ -113,7 +114,7 @@ public class ProductService implements IService<Product> {
         String deleteStockQuery = "DELETE FROM stock WHERE productId = ?";
         String deleteProductQuery = "DELETE FROM products WHERE id = ?";
 
-        try (Connection conn = MyDatabase.getCon();
+        try (Connection conn = MyDataBase.getInstance().getCon();
              PreparedStatement deleteStockStmt = conn.prepareStatement(deleteStockQuery);
              PreparedStatement deleteProductStmt = conn.prepareStatement(deleteProductQuery)) {
 
@@ -131,7 +132,7 @@ public class ProductService implements IService<Product> {
 
     public String getProductNameById(int productId) {
         String sql = "SELECT name FROM products WHERE id = ?";
-        try (Connection conn = MyDatabase.getCon();
+        try (Connection conn = MyDataBase.getInstance().getCon();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             pstmt.setInt(1, productId);
@@ -151,7 +152,7 @@ public class ProductService implements IService<Product> {
                 "FROM products p " +
                 "JOIN stock s ON p.id = s.productId " +
                 "WHERE s.quantity < p.stockLimit";
-        try (Connection conn = MyDatabase.getCon();
+        try (Connection conn = MyDataBase.getInstance().getCon();
              PreparedStatement stmt = conn.prepareStatement(query);
              ResultSet rs = stmt.executeQuery()) {
 
@@ -177,7 +178,7 @@ public class ProductService implements IService<Product> {
     public void updateStock(int productId, int quantityAdded, String location) {
         String sql = "UPDATE stock SET quantity = quantity + ?, location = ? WHERE productId = ?";
 
-        try (Connection conn = MyDatabase.getCon();
+        try (Connection conn = MyDataBase.getInstance().getCon();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             pstmt.setInt(1, quantityAdded);
@@ -194,7 +195,7 @@ public class ProductService implements IService<Product> {
 
     public int getTotalProducts() {
         String query = "SELECT COUNT(*) AS total FROM products";
-        try (Connection conn = MyDatabase.getCon();
+        try (Connection conn = MyDataBase.getInstance().getCon();
              PreparedStatement stmt = conn.prepareStatement(query);
              ResultSet rs = stmt.executeQuery()) {
 
@@ -213,7 +214,7 @@ public class ProductService implements IService<Product> {
                 "FROM products p " +
                 "LEFT JOIN stock s ON p.id = s.productId";
 
-        try (Connection conn = MyDatabase.getCon(); // Use singleton connection
+        try (Connection conn = MyDataBase.getInstance().getCon(); // Use singleton connection
              PreparedStatement stmt = conn.prepareStatement(query);
              ResultSet rs = stmt.executeQuery()) {
 
@@ -238,7 +239,7 @@ public class ProductService implements IService<Product> {
         String productSql = "INSERT INTO products (name, reference, price, stockLimit) VALUES (?, ?, ?, ?)";
         String stockSql = "INSERT INTO stock (productId, quantity, location) VALUES (?, ?, ?)";
 
-        try (Connection conn = MyDatabase.getCon();
+        try (Connection conn = MyDataBase.getInstance().getCon();
              PreparedStatement productStmt = conn.prepareStatement(productSql, PreparedStatement.RETURN_GENERATED_KEYS);
              PreparedStatement stockStmt = conn.prepareStatement(stockSql)) {
 
@@ -274,7 +275,7 @@ public class ProductService implements IService<Product> {
     public void updateProduct(Product product) {
         String sql = "UPDATE products SET name = ?, reference = ?, price = ?, stockLimit = ? WHERE id = ?";
 
-        try (Connection conn = MyDatabase.getCon();
+        try (Connection conn = MyDataBase.getInstance().getCon();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             pstmt.setString(1, product.getName());
@@ -298,7 +299,7 @@ public class ProductService implements IService<Product> {
         PreparedStatement deleteProductStmt = null;
 
         try {
-            conn = MyDatabase.getCon();
+            conn = MyDataBase.getInstance().getCon();
             conn.setAutoCommit(false); // Start a transaction
 
             // 1. Delete from stock table
@@ -332,16 +333,14 @@ public class ProductService implements IService<Product> {
             }
             LOGGER.log(Level.SEVERE, "Error deleting product", e);
         } finally {
-            MyDatabase.close(conn, deleteStockStmt, null);
-            MyDatabase.close(null, deleteOrderItemsStmt, null);
-            MyDatabase.close(null, deleteProductStmt, null);
+
         }
     }
 
     public int getTotalOrders() {
         int totalOrders = 0;
         String query = "SELECT COUNT(*) AS total FROM `orders`";
-        try (Connection conn = MyDatabase.getCon();
+        try (Connection conn = MyDataBase.getInstance().getCon();
              PreparedStatement stmt = conn.prepareStatement(query);
              ResultSet rs = stmt.executeQuery()) {
             if (rs.next()) {
@@ -356,7 +355,7 @@ public class ProductService implements IService<Product> {
     public double getTotalRevenue() {
         double totalRevenue = 0;
         String query = "SELECT SUM(priceTotal) AS total FROM orderitems";
-        try (Connection conn = MyDatabase.getCon();
+        try (Connection conn = MyDataBase.getInstance().getCon();
              PreparedStatement stmt = conn.prepareStatement(query);
              ResultSet rs = stmt.executeQuery()) {
             if (rs.next()) {
@@ -371,7 +370,7 @@ public class ProductService implements IService<Product> {
     public int getLowStockProductsNumber() {
         int lowStockProducts = 0;
         String query = "SELECT COUNT(*) AS total FROM products p JOIN stock s ON p.id = s.productId WHERE s.quantity < p.stockLimit";
-        try (Connection conn = MyDatabase.getCon();
+        try (Connection conn = MyDataBase.getInstance().getCon();
              PreparedStatement stmt = conn.prepareStatement(query);
              ResultSet rs = stmt.executeQuery()) {
             if (rs.next()) {
