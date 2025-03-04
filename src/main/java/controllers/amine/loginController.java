@@ -160,6 +160,7 @@ public class loginController {
     @FXML
     private void handleGoogleLogin(ActionEvent event) {
         try {
+            GoogleCallbackServer.setEvent(event);
             GoogleCallbackServer.startServer(); // Start local server
 
             GoogleAuthorizationCodeFlow flow = new GoogleAuthorizationCodeFlow.Builder(

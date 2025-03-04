@@ -9,20 +9,25 @@ import com.google.api.client.http.HttpTransport;
 import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.gson.GsonFactory;
+import controllers.amine.VerificationController;
 import entities.amine.User;
 import io.github.cdimascio.dotenv.Dotenv;
 import com.sun.net.httpserver.HttpServer;
 import com.sun.net.httpserver.HttpExchange;
+import javafx.event.ActionEvent;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
+import javafx.stage.Stage;
 import javafx.util.Pair;
 import org.json.JSONObject;
 import services.amine.userService;
-import services.mariem.UserService;
 import utils.UserRole;
 import javafx.application.Platform;
-
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -36,8 +41,12 @@ public class GoogleCallbackServer {
     private static final HttpTransport HTTP_TRANSPORT = new NetHttpTransport();
     private static final JsonFactory JSON_FACTORY = GsonFactory.getDefaultInstance();
     static userService us = new userService();
+    private static navigation nav = new navigation(); // Instance of the navigation class
+    private static ActionEvent event; // Store the ActionEvent
 
-
+    public static void setEvent(ActionEvent event) {
+        GoogleCallbackServer.event = event;
+    }
     public static void startServer() throws IOException {
         HttpServer server = HttpServer.create(new InetSocketAddress(8081), 0);
 
@@ -73,10 +82,16 @@ public class GoogleCallbackServer {
                     System.out.println("Parsed User Info: " + userInfoJson.toString(2));
                     String email = userInfoJson.getString("email");
 
-
                     if (userExists(email)) {
                         // User exists, redirect to the desired page
-                        //redirectToPage("/dashboard"); // Replace with your redirect logic
+                        Platform.runLater(() -> {
+                            try {
+                                // Use the navigation class to switch scenes
+                                nav.switchScene(event, "/main-user-view.fxml");
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        });
                     } else {
                         // User does not exist, show a pop-up to collect additional information
                         showUserRegistrationPopup(userInfoJson);
@@ -197,8 +212,14 @@ public class GoogleCallbackServer {
                 us.save(newUser);
 
                 // Redirect to the desired page
-                //redirectToPage("/dashboard"); // Replace with your redirect logic
+                try {
+                    nav.switchScene(event, "/main-user-view.fxml");
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             });
         });
     }
+
+
 }
