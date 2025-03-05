@@ -17,7 +17,7 @@
         <Label layoutX="166.0" layoutY="39.0" styleClass="title-label" text="Welcome to MDINTECH" />
 
         <!-- Subtitle -->
-        <Label layoutX="150.0" layoutY="80.0" styleClass="subtitle-label" text="Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat" textAlignment="CENTER" />
+        <Label layoutX="151.0" layoutY="101.0" styleClass="subtitle-label" text="A Platform that provide you with a variety of services around your city, from your desktop" textAlignment="CENTER" />
 
         <!-- Input Fields -->
         <VBox layoutX="151.0" layoutY="168.0" spacing="15.0">

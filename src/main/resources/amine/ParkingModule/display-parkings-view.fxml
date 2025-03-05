@@ -6,9 +6,27 @@
 <AnchorPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
             fx:controller="controllers.amine.parkingController.DisplayParkingsViewController"
-            prefHeight="400.0" prefWidth="600.0">
-    <Button layoutX="10" layoutY="10" onAction="#handleBackButton" text="← Back" />
+            prefHeight="450.0" prefWidth="650.0"
+            style="-fx-background-color: #f4f4f4; -fx-padding: 20px;">
 
-    <ListView fx:id="parkingListView" layoutX="20.0" layoutY="20.0" prefHeight="360.0" prefWidth="560.0"/>
+    <!-- Back Button -->
+    <Button layoutX="20.0" layoutY="15.0"
+            text="← Back"
+            onAction="#handleBackButton"
+            style="-fx-background-color: #007bff; -fx-text-fill: white; -fx-font-size: 14px; -fx-padding: 8px 16px;
+                   -fx-background-radius: 8px; -fx-cursor: hand;"
+            onMouseEntered="#handleMouseEntered" onMouseExited="#handleMouseExited"
+    />
+
+    <!-- Title -->
+    <Label layoutX="250.0" layoutY="20.0" text="Parking List"
+           style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #333;"/>
+
+    <!-- List View -->
+    <ListView fx:id="parkingListView"
+              layoutX="20.0" layoutY="60.0"
+              prefHeight="360.0" prefWidth="610.0"
+              style="-fx-background-color: white; -fx-border-color: #ddd; -fx-border-radius: 8px;
+                     -fx-padding: 10px; -fx-background-radius: 8px;"/>
 
 </AnchorPane>

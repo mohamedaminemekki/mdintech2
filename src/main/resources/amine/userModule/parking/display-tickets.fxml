@@ -31,7 +31,6 @@
             <Label text="📜 All Parking Tickets" styleClass="section-title"/>
             <ListView fx:id="allTicketsListView" prefHeight="150"/>
         </VBox>
-
     </VBox>
 
 </AnchorPane>

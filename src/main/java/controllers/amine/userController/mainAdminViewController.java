@@ -44,21 +44,21 @@ public class mainAdminViewController {
 
     @FXML
     private void goToParkings() {
-        loadView("/org/example/mdintech/ParkingModule/display-parkings-view.fxml");
+        loadView("/amine/ParkingModule/display-parkings-view.fxml");
     }
 
     @FXML
     private void goToParkingTickets() {
-        loadView("/org/example/mdintech/ParkingModule/display-parkingtickets-view.fxml");
+        loadView("/amine/ParkingModule/display-parkingtickets-view.fxml");
     }
 
-    public void goToUsers(ActionEvent actionEvent) {loadView("/org/example/mdintech/userModule/display-users-view.fxml");}
+    public void goToUsers(ActionEvent actionEvent) {loadView("/amine/userModule/display-users-view.fxml");}
 
-    public void goToCreateParking(ActionEvent actionEvent) {loadView("/org/example/mdintech/ParkingModule/create-parking-view.fxml");}
+    public void goToCreateParking(ActionEvent actionEvent) {loadView("/amine/ParkingModule/create-parking-view.fxml");}
 
     public void logout(ActionEvent actionEvent) {
         loggedInUser.clearSession();
-        loadView("/org/example/mdintech/userModule/login-view.fxml");
+        loadView("/amine/userModule/login-view.fxml");
     }
 }
 

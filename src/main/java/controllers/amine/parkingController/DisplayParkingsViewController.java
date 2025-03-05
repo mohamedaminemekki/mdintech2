@@ -9,6 +9,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.input.MouseEvent;
@@ -24,10 +25,10 @@ public class DisplayParkingsViewController {
 
     @FXML
     private ListView<String> parkingListView;
-
     private ParkingService parkingService;
     private List<Parking> parkings;
-
+    @FXML
+    private Button backButton;
     @FXML
     public void initialize() {
         parkingService = new ParkingService();
@@ -55,7 +56,7 @@ public class DisplayParkingsViewController {
 
     private void goToDetailsView(MouseEvent event, Parking parking) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/example/mdintech/ParkingModule/display-parking-details-view.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/amine/ParkingModule/display-parking-details-view.fxml"));
             Parent root = loader.load();
 
             // Get the controller and pass the selected parking
@@ -76,5 +77,15 @@ public class DisplayParkingsViewController {
     }
     public void handleBackButton(ActionEvent event) throws IOException {
         navigation.switchScene(event, "/main-admin-view.fxml");
+    }
+    @FXML
+    public void handleMouseEntered(MouseEvent event) {
+        backButton.setStyle("-fx-background-color: #0056b3; -fx-text-fill: white; -fx-font-size: 14px; -fx-padding: 8px 16px; -fx-background-radius: 8px; -fx-cursor: hand;");
+    }
+
+    // Handle mouse exited
+    @FXML
+    public void handleMouseExited(MouseEvent event) {
+        backButton.setStyle("-fx-background-color: #007bff; -fx-text-fill: white; -fx-font-size: 14px; -fx-padding: 8px 16px; -fx-background-radius: 8px; -fx-cursor: hand;");
     }
 }

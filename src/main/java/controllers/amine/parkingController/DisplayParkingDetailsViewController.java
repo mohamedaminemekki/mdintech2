@@ -4,6 +4,7 @@ package controllers.amine.parkingController;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import entities.amine.ParkingModule.Parking;
@@ -11,13 +12,15 @@ import entities.amine.ParkingModule.ParkingTicket;
 import services.amine.ParkingModule.ParkingTicketService;
 import utils.amine.navigation;
 
+import java.awt.event.MouseEvent;
 import java.io.IOException;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
 
 public class DisplayParkingDetailsViewController implements Initializable {
-
+    @FXML
+    private Button backButton;
     @FXML
     private Label parkingNameLabel;
 
@@ -75,7 +78,18 @@ public class DisplayParkingDetailsViewController implements Initializable {
 
 
     public void handleBackButton(ActionEvent event) throws IOException {
-        navigation.switchScene(event, "/org/example/mdintech/ParkingModule/display-parkings-view.fxml");
+        navigation.switchScene(event, "/amine/ParkingModule/display-parkings-view.fxml");
     }
+
+    @FXML
+    public void handleMouseEntered(javafx.scene.input.MouseEvent mouseEvent) {
+        backButton.setStyle("-fx-background-color: #0056b3; -fx-text-fill: white; -fx-font-size: 14px; -fx-padding: 8px 16px; -fx-background-radius: 8px; -fx-cursor: hand;");
+    }
+
+    @FXML
+    public void handleMouseExited(javafx.scene.input.MouseEvent event) {
+        backButton.setStyle("-fx-background-color: #007bff; -fx-text-fill: white; -fx-font-size: 14px; -fx-padding: 8px 16px; -fx-background-radius: 8px; -fx-cursor: hand;");
+    }
+
 
 }

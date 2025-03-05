@@ -1,6 +1,5 @@
 package controllers.amine.userController;
 
-
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -8,6 +7,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.HBox;
 import javafx.util.Callback;
 import entities.amine.User;
 import services.amine.userService;
@@ -37,13 +37,14 @@ public class displayuserController {
         ObservableList<User> observableUsers = FXCollections.observableArrayList(users);
         usersList.setItems(observableUsers);
 
-        // Custom ListView Cell Renderer with Block/Unblock button
+        // Custom ListView Cell Renderer
         usersList.setCellFactory(new Callback<>() {
             @Override
             public ListCell<User> call(ListView<User> param) {
                 return new ListCell<>() {
                     private final ImageView profileImageView = new ImageView();
                     private final Button blockButton = new Button();
+                    private final HBox cellLayout = new HBox(10); // Spacing between elements
 
                     @Override
                     protected void updateItem(User user, boolean empty) {
@@ -53,7 +54,7 @@ public class displayuserController {
                             setText(null);
                             setGraphic(null);
                         } else {
-                            setText(user.getName() + " - " + user.getPhone() + " - " + user.getEmail() + " - CIN: " + user.getCIN());
+                            setText(user.getName() + " - " + user.getPhone() + " - " + user.getEmail());
 
                             // Profile Image Placeholder
                             profileImageView.setImage(new Image("file:src/main/resources/profile_placeholder.png"));
@@ -62,33 +63,43 @@ public class displayuserController {
 
                             // Configure Block/Unblock Button
                             updateBlockButton(user);
-
-                            // Button Click Action
                             blockButton.setOnAction(event -> toggleUserStatus(user));
 
-                            setGraphic(profileImageView);
-                            setGraphic(blockButton);
+                            // Layout: Image | Text | Button
+                            cellLayout.getChildren().setAll(profileImageView, blockButton);
+                            setGraphic(cellLayout);
                         }
                     }
 
-                    // Updates button text and style based on user's status
+                    // Updates button text and style
                     private void updateBlockButton(User user) {
                         if (user.isStatus()) {
                             blockButton.setText("Block");
-                            blockButton.setStyle("-fx-background-color: red; -fx-text-fill: white;");
+                            blockButton.setStyle(
+                                    "-fx-background-color: red; -fx-text-fill: white; " +
+                                            "-fx-border-radius: 10; -fx-background-radius: 10; " +
+                                            "-fx-padding: 5px 10px; -fx-font-size: 14px;"
+                            );
                         } else {
                             blockButton.setText("Unblock");
-                            blockButton.setStyle("-fx-background-color: green; -fx-text-fill: white;");
+                            blockButton.setStyle(
+                                    "-fx-background-color: green; -fx-text-fill: white; " +
+                                            "-fx-border-radius: 10; -fx-background-radius: 10; " +
+                                            "-fx-padding: 5px 10px; -fx-font-size: 14px;"
+                            );
                         }
+
+                        // Hover effect
+                        blockButton.setOnMouseEntered(e -> blockButton.setStyle("-fx-opacity: 0.8;"));
+                        blockButton.setOnMouseExited(e -> blockButton.setStyle("-fx-opacity: 1;"));
                     }
 
-                    // Toggle user status and update in DB
+                    // Toggle user status
                     private void toggleUserStatus(User user) {
                         boolean newStatus = !user.isStatus();
-                        user.setStatus(newStatus); // Update the local object
-
-                        us.updateUserStatus(user.getCIN(), newStatus); // Update DB
-                        updateBlockButton(user); // Refresh button
+                        user.setStatus(newStatus);
+                        us.updateUserStatus(user.getCIN(), newStatus);
+                        updateBlockButton(user);
                     }
                 };
             }
@@ -113,8 +124,7 @@ public class displayuserController {
         alert.setTitle("User Details");
         alert.setHeaderText("Information of " + user.getName());
         alert.setContentText(
-                "CIN: " + user.getCIN() + "\n" +
-                        "Email: " + user.getEmail() + "\n" +
+                "Email: " + user.getEmail() + "\n" +
                         "Phone: " + user.getPhone() + "\n" +
                         "Address: " + user.getAddress() + "\n" +
                         "City: " + user.getCity() + "\n" +
@@ -124,6 +134,7 @@ public class displayuserController {
         );
         alert.showAndWait();
     }
+
     public void handleBackButton(ActionEvent event) throws IOException {
         navigation.switchScene(event, "/main-admin-view.fxml");
     }
@@ -136,4 +147,3 @@ public class displayuserController {
         }
     }
 }
-
