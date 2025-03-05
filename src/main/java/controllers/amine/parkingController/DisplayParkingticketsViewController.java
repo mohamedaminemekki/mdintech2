@@ -1,12 +1,15 @@
 package controllers.amine.parkingController;
 
-
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.text.Text;
 import entities.amine.ParkingModule.ParkingTicket;
+import javafx.stage.Stage;
 import services.amine.ParkingModule.ParkingTicketService;
 import services.amine.userService;
 import entities.amine.User;
@@ -20,6 +23,14 @@ public class DisplayParkingticketsViewController {
 
     @FXML
     private ListView<String> ticketListView;
+    @FXML
+    private AnchorPane ticketDetailPane;
+    @FXML
+    private Label detailTitle;
+    @FXML
+    private Text detailContent;
+    @FXML
+    private Button closeButton;
 
     private final ParkingTicketService ticketService = new ParkingTicketService();
     private final userService userService = new userService();
@@ -43,7 +54,6 @@ public class DisplayParkingticketsViewController {
                 .collect(Collectors.toList());
 
         ticketListView.getItems().addAll(ticketDescriptions);
-
         ticketListView.setOnMouseClicked(this::handleTicketClick);
     }
 
@@ -60,18 +70,32 @@ public class DisplayParkingticketsViewController {
         User user = userService.findById(ticket.getUserID());
         String userName = (user != null) ? user.getName() : "Unknown User";
 
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Parking Ticket Details");
-        alert.setHeaderText("Ticket ID: " + ticket.getId());
-        alert.setContentText("Parking ID: " + ticket.getParkingID() +
-                "\nSlot ID: " + ticket.getParkingSlotID() +
-                "\nUser: " + userName +
-                "\nIssuing Date: " + ticket.getIssuingDate() +
-                "\nExpiration Date: " + ticket.getExpirationDate() +
-                "\nStatus: " + (ticket.isStatus() ? "Active" : "Expired"));
+        detailTitle.setText("🚗 Ticket ID: " + ticket.getId());
 
-        alert.showAndWait();
+        String statusStyle = ticket.isStatus() ? "-fx-fill: #28a745; -fx-font-weight: bold;" : "-fx-fill: #dc3545; -fx-font-weight: bold;";
+        String statusText = ticket.isStatus() ? "Active 🟢" : "Expired 🔴";
+
+        detailContent.setText(
+                "🔒 Slot ID: " + ticket.getParkingSlotID() + "\n" +
+                        "👤 User: " + userName + "\n" +
+                        "📅 Issuing Date: " + ticket.getIssuingDate() + "\n" +
+                        "📆 Expiration Date: " + ticket.getExpirationDate() + "\n" +
+                        statusText
+        );
+        detailContent.setStyle(statusStyle);
+
+        // Center the popup on the screen
+        Stage stage = (Stage) ticketDetailPane.getScene().getWindow();
+        stage.centerOnScreen();
+
+        ticketDetailPane.setStyle("-fx-background-color: white; -fx-border-color: #007bff; -fx-border-radius: 10; -fx-padding: 20; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 10, 0, 0, 10);");
+        ticketDetailPane.setVisible(true);
     }
+
+    public void closeTicketDetail(ActionEvent event) {
+        ticketDetailPane.setVisible(false);
+    }
+
     public void handleBackButton(ActionEvent event) throws IOException {
         navigation.switchScene(event, "/main-admin-view.fxml");
     }

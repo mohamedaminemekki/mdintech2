@@ -2,12 +2,42 @@
 
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.effect.*?>
+<?import javafx.geometry.*?>
 
 <AnchorPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
             fx:controller="controllers.amine.parkingController.DisplayParkingticketsViewController"
-            prefHeight="400.0" prefWidth="600.0">
-    <Button layoutX="10" layoutY="10" onAction="#handleBackButton" text="← Back" />
-    <ListView fx:id="ticketListView" layoutX="20.0" layoutY="20.0" prefHeight="360.0" prefWidth="560.0"/>
+            prefHeight="600.0" prefWidth="800.0"
+            style="-fx-background-color: #f0f4f8;">
 
+    <VBox layoutX="20" layoutY="20" spacing="10" prefWidth="760">
+
+        <HBox spacing="10" alignment="CENTER_LEFT">
+            <Button text="← Back" onAction="#handleBackButton"
+                    style="-fx-background-color: #ff6b6b; -fx-text-fill: white; -fx-font-size: 14; -fx-padding: 5 15;"/>
+            <Label text="Parking Tickets"
+                   style="-fx-font-size: 24; -fx-font-weight: bold; -fx-text-fill: #333;"/>
+        </HBox>
+
+        <ListView fx:id="ticketListView" prefHeight="480"
+                  style="-fx-background-color: white; -fx-border-color: #ccc; -fx-border-radius: 5; -fx-padding: 10;">
+            <effect>
+                <DropShadow radius="10" color="#d1d9e6"/>
+            </effect>
+        </ListView>
+    </VBox>
+
+    <!-- Ticket Details Popup Style -->
+    <AnchorPane fx:id="ticketDetailPane" layoutX="200" layoutY="100" prefHeight="300" prefWidth="350"
+                visible="false" style="-fx-background-color: white; -fx-border-color: #007bff; -fx-border-radius: 10; -fx-padding: 20;">
+        <VBox spacing="15" alignment="CENTER" prefWidth="310">
+            <Label fx:id="detailTitle" text="Ticket Details"
+                   style="-fx-font-size: 20; -fx-font-weight: bold; -fx-text-fill: #007bff;"/>
+            <Text fx:id="detailContent" wrappingWidth="300" textAlignment="CENTER" />
+            <Button text="Close" onAction="#closeTicketDetail"
+                    style="-fx-background-color: #ff6b6b; -fx-text-fill: white; -fx-padding: 5 15; -fx-font-size: 14; -fx-background-radius: 5;"/>
+        </VBox>
+    </AnchorPane>
 </AnchorPane>
