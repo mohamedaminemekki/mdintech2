@@ -161,8 +161,7 @@ public class GoogleCallbackServer {
             addressField.setPromptText("Address");
             TextField cityField = new TextField();
             cityField.setPromptText("City");
-            TextField stateField = new TextField();
-            stateField.setPromptText("State");
+
 
             grid.add(new Label("CIN:"), 0, 0);
             grid.add(cinField, 1, 0);
@@ -172,8 +171,7 @@ public class GoogleCallbackServer {
             grid.add(addressField, 1, 2);
             grid.add(new Label("City:"), 0, 3);
             grid.add(cityField, 1, 3);
-            grid.add(new Label("State:"), 0, 4);
-            grid.add(stateField, 1, 4);
+
 
             dialog.getDialogPane().setContent(grid);
 
@@ -195,7 +193,7 @@ public class GoogleCallbackServer {
                 String phone = cinPhonePair.getValue();
                 String address = addressField.getText();
                 String city = cityField.getText();
-                String state = stateField.getText();
+
 
                 // Create a new User object
                 User newUser = new User(
@@ -207,8 +205,8 @@ public class GoogleCallbackServer {
                         phone,
                         address,
                         city,
-                        state,
-                        false, // Default status
+                        "",
+                        true, // Default status
                         userInfo.getString("picture"), // Path topic (if applicable)
                         null // Birthday (if applicable)
                 );

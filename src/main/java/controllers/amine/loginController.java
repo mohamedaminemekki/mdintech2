@@ -71,6 +71,10 @@ public class loginController {
         User user=us.login(email, password);
         if (user != null) {
             loggedInUser.initializeSession((user));
+            if (!user.isStatus()) {
+                goToDashboard(event, "/user-blocked-view.fxml");
+                return;
+            }
             if (user.getRole() == UserRole.ADMIN) {
                 goToDashboard(event, "/main-admin-view.fxml");
             } else if (user.getRole() == UserRole.USER) {
@@ -97,6 +101,7 @@ public class loginController {
             e.printStackTrace();
         }
     }
+
     private void showAlert(String title, String message) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle(title);
@@ -104,6 +109,7 @@ public class loginController {
         alert.setContentText(message);
         alert.showAndWait();
     }
+
     @FXML
     public void forgotPassword(ActionEvent event) {
         TextInputDialog dialog = new TextInputDialog();
@@ -137,6 +143,7 @@ public class loginController {
             goToVerificationPage(event, email);
         });
     }
+
     private void goToVerificationPage(ActionEvent event, String email) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/amine/userModule/verify-code-view.fxml"));
@@ -152,11 +159,13 @@ public class loginController {
             e.printStackTrace();
         }
     }
+
     private String generateVerificationCode() {
         Random random = new Random();
         int code = 100000 + random.nextInt(900000); // Ensures a 6-digit number
         return String.valueOf(code);
     }
+
     @FXML
     private void handleGoogleLogin(ActionEvent event) {
         try {
@@ -178,4 +187,5 @@ public class loginController {
             showAlert("Login Error", "Failed to initiate Google login.");
         }
     }
+
 }

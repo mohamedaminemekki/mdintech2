@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.geometry.*?>
+
+<AnchorPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="controllers.amine.UserBlockedView"
+            prefHeight="400.0" prefWidth="600.0"
+            style="-fx-background-color: #f4f4f4;"> <!-- Light gray background -->
+
+    <!-- VBox to center everything -->
+    <VBox alignment="CENTER" spacing="20" AnchorPane.topAnchor="0" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0">
+        <!-- ImageView for the blocked icon -->
+        <ImageView fx:id="imageView" fitHeight="150" fitWidth="150" />
+
+        <!-- Text for the blocked message -->
+        <Text text="This account has been blocked by the admin. You will get an email if it's activated."
+              textAlignment="CENTER"
+              wrappingWidth="400"
+        style="-fx-font-size: 16px; -fx-fill: #333333;" /> <!-- Dark gray text -->
+
+        <!-- Logout Button -->
+        <Button text="Logout"
+                style="-fx-background-color: #ff4444; -fx-text-fill: white; -fx-font-size: 14px; -fx-font-weight: bold; -fx-padding: 10 20; -fx-background-radius: 5;"
+                onAction="#logout"> <!-- Add a logout method in your controller -->
+            <padding>
+                <Insets top="10" right="20" bottom="10" left="20" /> <!-- Padding for the button -->
+            </padding>
+        </Button>
+    </VBox>
+
+</AnchorPane>
