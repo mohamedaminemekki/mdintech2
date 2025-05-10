@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.image.*?>
+
+<AnchorPane prefHeight="500.0" prefWidth="650.0" style="-fx-background-color: linear-gradient(to bottom, #ffffff, #eeeee4);" xmlns="http://javafx.com/javafx/17.0.6"
+            xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.Mohamed.AfficherReclamationClient">
+
+    <VBox alignment="CENTER" spacing="20" AnchorPane.bottomAnchor="20" AnchorPane.leftAnchor="20" AnchorPane.rightAnchor="20" AnchorPane.topAnchor="20">
+
+        <!-- Header Section with Title and Create Button -->
+        <HBox spacing="20" alignment="CENTER_LEFT" style="-fx-padding: 10px;">
+            <Label style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #333333;" text="Mes Réclamations" />
+            <Region/> <!-- Pushes button to the right -->
+            <Button fx:id="btnCreerReclamation"
+                    text="➕ Créer Réclamation"
+                    style="-fx-background-color: #eab676; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 10px 15px; -fx-border-radius: 5px;"
+                    onAction="#ouvrirAjouterReclamation"/>
+        </HBox>
+
+        <!-- Search Section -->
+        <HBox spacing="10" alignment="CENTER">
+            <Label text="Client ID:" style="-fx-font-weight: bold;" />
+            <TextField fx:id="clientIdField" promptText="Entrez votre Client ID" prefWidth="200" />
+            <Button fx:id="btnSearch" text="Rechercher" style="-fx-background-color: #eab676; -fx-text-fill: white; -fx-font-weight: bold;" onAction="#rechercherReclamations"/>
+            <Button fx:id="btnActualiser" style="-fx-background-color: transparent; -fx-padding: 5px;">
+                <graphic>
+                    <ImageView fitWidth="24" fitHeight="24">
+                        <image>
+                            <Image url="/Mohamed/images/refresh.png" />
+                        </image>
+                    </ImageView>
+                </graphic>
+            </Button>
+        </HBox>
+
+        <!-- En-tête du tableau -->
+        <GridPane hgap="10" vgap="5" style="-fx-padding: 10px; -fx-background-color: #ded8d0; -fx-font-weight: bold; -fx-border-radius: 5px;">
+            <columnConstraints>
+                <ColumnConstraints percentWidth="10"/>
+                <ColumnConstraints percentWidth="10"/>
+                <ColumnConstraints percentWidth="20"/>
+                <ColumnConstraints percentWidth="10"/>
+                <ColumnConstraints percentWidth="10"/>
+                <ColumnConstraints percentWidth="35"/>
+                <ColumnConstraints percentWidth="5"/>
+            </columnConstraints>
+
+            <Label text="ID" GridPane.columnIndex="0" style="-fx-text-fill: #000;" />
+            <Label text="Client ID" GridPane.columnIndex="1" style="-fx-text-fill: #000;" />
+            <Label text="Type" GridPane.columnIndex="2" style="-fx-text-fill: #000;" />
+            <Label text="Date" GridPane.columnIndex="3" style="-fx-text-fill: #000;" />
+            <Label text="État" GridPane.columnIndex="4" style="-fx-text-fill: #000;" />
+            <Label text="Réponse" GridPane.columnIndex="5" style="-fx-text-fill: #000;" />
+            <Label text="Action" GridPane.columnIndex="6" style="-fx-text-fill: #000;" />
+        </GridPane>
+
+        <!-- Liste des réclamations -->
+        <ListView fx:id="listViewReclamations" style="-fx-border-color: #cccccc; -fx-border-radius: 5px; -fx-background-color: white;" AnchorPane.bottomAnchor="150" AnchorPane.leftAnchor="20" AnchorPane.rightAnchor="20" AnchorPane.topAnchor="100" />
+
+        <!-- Zone de description -->
+        <HBox alignment="CENTER">
+            <TextArea fx:id="descriptionArea"
+                      editable="false"
+                      wrapText="true"
+                      prefWidth="500"
+                      prefHeight="250"
+                      maxWidth="500"
+                      maxHeight="250"
+                      style="-fx-border-color: #cccccc;
+                     -fx-border-radius: 5px;
+                     -fx-background-color: white;
+                     -fx-font-size: 14px;" />
+        </HBox>
+    </VBox>
+</AnchorPane>

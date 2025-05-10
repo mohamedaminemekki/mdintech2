@@ -1,5 +1,94 @@
 /* ============================= */
 /*         Global Styles         */
+
+/* ================= Design System Variables ================= */
+.root {
+    -primary-color: #2c3e50;
+    -secondary-color: #3498db;
+    -accent-color: #27ae60;
+    -danger-color: #e74c3c;
+    -light-background: #f5f7fa;
+    -text-primary: #333333;
+
+    -fx-font-family: "Segoe UI";
+    -fx-base: -primary-color;
+}
+
+/* ================= Modern ListView Styles ================= */
+.list-view {
+    -fx-background-color: transparent;
+    -fx-padding: 0;
+}
+
+.list-cell {
+    -fx-background-color: white;
+    -fx-background-radius: 8;
+    -fx-border-radius: 8;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.08), 6, 0, 0, 2);
+    -fx-margin: 0 0 12 0;
+    -fx-padding: 16;
+}
+
+.list-cell:hover {
+    -fx-background-color: #f0f4f8;
+    -fx-cursor: hand;
+}
+
+/* ================= Button Styles ================= */
+.primary-button {
+    -fx-background-color: -secondary-color;
+    -fx-text-fill: white;
+    -fx-font-weight: 600;
+    -fx-background-radius: 25;
+    -fx-padding: 10 24;
+    -fx-effect: dropshadow(gaussian, rgba(52,152,219,0.2), 6, 0, 0, 2);
+}
+
+.primary-button:hover {
+    -fx-background-color: #2980b9;
+}
+
+.icon-btn {
+    -fx-background-color: transparent;
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-padding: 10 16;
+    -fx-background-radius: 25;
+    -fx-graphic-text-gap: 12;
+}
+
+.icon-btn:hover {
+    -fx-background-color: rgba(255,255,255,0.1);
+}
+
+/* ================= Header Styles ================= */
+.section-header {
+    -fx-font-size: 24px;
+    -fx-text-fill: -primary-color;
+    -fx-font-weight: 700;
+    -fx-padding: 0 0 24 0;
+}
+
+/* ================= Dialog Enhancements ================= */
+.dialog-pane {
+    -fx-background-color: white;
+    -fx-background-radius: 12;
+    -fx-border-radius: 12;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 16, 0, 0, 4);
+    -fx-padding: 24;
+}
+
+.input-field {
+    -fx-background-radius: 6;
+    -fx-border-radius: 6;
+    -fx-border-color: #dbe4ee;
+    -fx-padding: 10 14;
+    -fx-font-size: 14px;
+}
+
+.input-field{
+    -fx-border-color: -secondary-color;
+}
 /* ============================= */
 .root {
     -fx-font-family: "Segoe UI", sans-serif;
@@ -138,7 +227,7 @@
 /*          Post Card            */
 /* ============================= */
 .post-card {
-    -fx-background-color: linear-gradient(to bottom, -light-background, #e0eafc);
+    -fx-background-color: linear-gradient;
     -fx-background-radius: 10;
     -fx-padding: 20px;
     -fx-spacing: 15px;
@@ -225,7 +314,6 @@
 /*   TitledPane pour Commentaires  */
 /* ============================= */
 .titled-pane {
-    -fx-background-color: -light-background;
     -fx-background-radius: 10;
     -fx-border-radius: 10;
     -fx-padding: 10px;
@@ -248,15 +336,18 @@
     -fx-padding: 10px;
 }
 .comment-box {
-    -fx-background-color: -light-background;
+    -fx-background-color: #ffffff;
     -fx-background-radius: 5;
     -fx-padding: 10px;
     -fx-spacing: 5px;
-    -fx-border-color: #ecf0f1;
+    -fx-border-color: #0574ec;
     -fx-border-width: 1px;
 }
 .comment-box .label {
     -fx-font-size: 13px;
+    -fx-text-fill:#0574ec ;
+
+
 }
 .comment-box .button {
     -fx-background-color: transparent;
@@ -315,7 +406,7 @@
     -fx-background-color: #34495e;
 }
 .post-card {
-    -fx-background-color: linear-gradient(to bottom, -light-background, #e0eafc);
+    -fx-background-color: linear-gradient;
     -fx-background-radius: 10px;
     -fx-padding: 20px;
     -fx-spacing: 15px;
@@ -423,7 +514,7 @@
     -fx-background-radius: 5px;
     -fx-padding: 10px;
     -fx-spacing: 8px;
-    -fx-border-color: #ecf0f1;
+    -fx-border-color: #041319;
     -fx-border-width: 1px;
 }
 
@@ -435,4 +526,49 @@
     -fx-text-fill: -primary-color;
     -fx-border-color: -secondary-color;
     -fx-border-width: 1px;
+}
+.invoice-item {
+    -fx-padding: 16;
+    -fx-spacing: 24;
+    -fx-border-color: #e0e7f1;
+    -fx-border-width: 0 0 1 0;
+}
+
+.invoice-field {
+    -fx-font-size: 14px;
+    -fx-text-fill: -text-primary;
+}
+
+.status-paid {
+    -fx-text-fill: -accent-color;
+    -fx-font-weight: 600;
+}
+
+.status-unpaid {
+    -fx-text-fill: -danger-color;
+    -fx-font-weight: 600;
+}
+/* ================= Responsive Design ================= */
+@media (max-width: 768px) {
+    .drawer {
+        -fx-pref-width: 200px;
+    }
+
+    .section-header {
+        -fx-font-size: 20px;
+    }
+
+    .list-cell {
+        -fx-padding: 12;
+    }
+}
+
+@media (max-width: 480px) {
+    .invoice-field {
+        -fx-font-size: 12px;
+    }
+
+    .primary-button {
+        -fx-padding: 8 16;
+    }
 }

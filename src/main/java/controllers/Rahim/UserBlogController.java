@@ -532,7 +532,7 @@ public class UserBlogController {
         Label authorLabel = new Label(comment.getAuthorCin());
         authorLabel.setStyle("-fx-font-weight: bold;");
         Label timeLabel = new Label(formatDateTime(comment.getCreatedAt()));
-        timeLabel.setStyle("-fx-text-fill: #606770; -fx-font-size: 10;");
+        timeLabel.setStyle("-fx-text-fill: #040000; -fx-font-size: 10;");
         header.getChildren().addAll(authorLabel, timeLabel);
 
         // Contenu en mode lecture

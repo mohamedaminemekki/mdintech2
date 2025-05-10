@@ -1,4 +1,4 @@
-package Controllers.tasnim;
+package controllers.tasnim;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -92,8 +92,8 @@ public class OrderManagementController {
     }
 
     private void handleConfirm(Order order) {
-        orderService.updateOrderStatus(order.getId(), "Confirmed");
-        String userEmail = getUserEmail(order.getUserId());
+        orderService.updateOrderStatus(order.getUserCIN(), "Confirmed");
+        String userEmail = getUserEmail(order.getUserCIN());
         if (userEmail != null) {
             emailService.sendEmail(userEmail, "Order Confirmed", "Your order has been confirmed.");
         }
@@ -101,18 +101,18 @@ public class OrderManagementController {
     }
 
     private void handleReject(Order order) {
-        orderService.updateOrderStatus(order.getId(), "Rejected");
-        String userEmail = getUserEmail(order.getUserId());
+        orderService.updateOrderStatus(order.getUserCIN(), "Rejected");
+        String userEmail = getUserEmail(order.getUserCIN());
         if (userEmail != null) {
             emailService.sendEmail(userEmail, "Order Rejected", "Your order has been rejected due to storage issues.");
         }
         handleRefresh();
     }
 
-    private String getUserEmail(int userId) {
+    private String getUserEmail(int UserCIN) {
         // Fetch user email from the database using UserService
         // Assuming you have a method in UserService to get user by ID
-        User user = userService.getUserById(userId);
+        User user = userService.getUserById(UserCIN);
         return user != null ? user.getEmail() : null;
     }
 }

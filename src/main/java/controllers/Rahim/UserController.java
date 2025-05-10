@@ -17,6 +17,7 @@ import javafx.stage.Stage;
 import javafx.util.Callback;
 import entities.Rahim.Facture;
 import services.Rahim.FactureServices;
+import Singleton.*;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -36,11 +37,13 @@ public class UserController {
 
     @FXML
     public void initialize() {
+        setCurrentUser();
         // Configure both ListViews with the same cell factory.
         configureListCells(unpaidList);
         configureListCells(paidList);
         addColumnHeaders(); // Add this line
         showUnpaid();
+        loadUserFactures();
     }
     private void addColumnHeaders() {
         GridPane header = new GridPane();
@@ -174,13 +177,15 @@ public class UserController {
         }
     }
 
-    public void setCurrentUser(User user) {
-        this.currentUser = user;
+    public void setCurrentUser( ) {
+        this.currentUser = loggedInUser.getInstance().getLoggedUser();
         loadUserFactures();
     }
 
     private void loadUserFactures() {
         try {
+            User user = loggedInUser.getInstance().getLoggedUser();
+            System.out.println(currentUser.toString());
             factureData.setAll(factureService.getFacturesByUser(Integer.toString(currentUser.getCIN())));
             ObservableList<Facture> unpaidData = FXCollections.observableArrayList();
             ObservableList<Facture> paidData = FXCollections.observableArrayList();

@@ -6,6 +6,7 @@ public class ServiceHospitalier {
     private String description;
     private int nombreLitsDisponibles;
 
+    public ServiceHospitalier() {}
     // Constructeurs
     public ServiceHospitalier(int idService, String nomService, String description) {
     }

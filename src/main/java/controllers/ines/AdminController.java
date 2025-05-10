@@ -105,11 +105,15 @@ public class AdminController {
         nomField.setPromptText("Nom du Service");
         TextField descriptionField = new TextField();
         descriptionField.setPromptText("Description");
+        TextField nombreLitsField = new TextField();
+        nombreLitsField.setPromptText("Nombre de lits disponibles");
 
         grid.add(new Label("Nom du Service:"), 0, 0);
         grid.add(nomField, 1, 0);
         grid.add(new Label("Description:"), 0, 1);
         grid.add(descriptionField, 1, 1);
+        grid.add(new Label("Nombre de Lits Disponibles:"), 0, 2);
+        grid.add(nombreLitsField, 1, 2);
 
         dialog.getDialogPane().setContent(grid);
 
@@ -117,9 +121,10 @@ public class AdminController {
         addButton.addEventFilter(ActionEvent.ACTION, e -> {
             String nom = nomField.getText().trim();
             String description = descriptionField.getText().trim();
+            String nombreLits = nombreLitsField.getText().trim();
 
             // Input validation (no invalid characters or numbers)
-            if (nom.isEmpty() || description.isEmpty()) {
+            if (nom.isEmpty() || description.isEmpty() || nombreLits.isEmpty()) {
                 showAlert("Champs vides", "Tous les champs sont obligatoires !", Alert.AlertType.ERROR);
                 e.consume();
                 return;
@@ -133,6 +138,14 @@ public class AdminController {
 
             if (!description.matches("^[A-Za-zÀ-ÿ\\s\\-.,!?:;()]+$")) {
                 showAlert("Erreur", "La description ne doit contenir que des lettres et des caractères spéciaux valides.", Alert.AlertType.ERROR);
+                e.consume();
+                return;
+            }
+
+            try {
+                Integer.parseInt(nombreLits); // Vérification si le nombre de lits est un entier
+            } catch (NumberFormatException ex) {
+                showAlert("Erreur", "Le nombre de lits disponibles doit être un nombre valide.", Alert.AlertType.ERROR);
                 e.consume();
                 return;
             }
@@ -151,7 +164,8 @@ public class AdminController {
             }
 
             try {
-                ServiceHospitalier service = new ServiceHospitalier(0, nom, description);
+                int nombreLitsDisponibles = Integer.parseInt(nombreLits);
+                ServiceHospitalier service = new ServiceHospitalier(0, nom, description, nombreLitsDisponibles);
                 serviceHospitalierServices.add(service);
                 showAlert("Succès", "Service ajouté avec succès !", Alert.AlertType.INFORMATION);
                 loadServices();
@@ -188,11 +202,14 @@ public class AdminController {
 
         TextField nomField = new TextField(selectedService.getNomService());
         TextField descriptionField = new TextField(selectedService.getDescription());
+        TextField nombreLitsField = new TextField(String.valueOf(selectedService.getNombreLitsDisponibles()));
 
         grid.add(new Label("Nom du Service:"), 0, 0);
         grid.add(nomField, 1, 0);
         grid.add(new Label("Description:"), 0, 1);
         grid.add(descriptionField, 1, 1);
+        grid.add(new Label("Nombre de Lits Disponibles:"), 0, 2);
+        grid.add(nombreLitsField, 1, 2);
 
         dialog.getDialogPane().setContent(grid);
 
@@ -200,10 +217,19 @@ public class AdminController {
         updateButton.addEventFilter(ActionEvent.ACTION, e -> {
             String nom = nomField.getText().trim();
             String description = descriptionField.getText().trim();
+            String nombreLits = nombreLitsField.getText().trim();
 
             // Validation des champs
-            if (nom.isEmpty() || description.isEmpty()) {
+            if (nom.isEmpty() || description.isEmpty() || nombreLits.isEmpty()) {
                 showAlert("Erreur", "Tous les champs sont obligatoires !", Alert.AlertType.ERROR);
+                e.consume();
+                return;
+            }
+
+            try {
+                Integer.parseInt(nombreLits); // Vérification si le nombre de lits est un entier
+            } catch (NumberFormatException ex) {
+                showAlert("Erreur", "Le nombre de lits disponibles doit être un nombre valide.", Alert.AlertType.ERROR);
                 e.consume();
                 return;
             }
@@ -211,6 +237,7 @@ public class AdminController {
             try {
                 selectedService.setNomService(nom);
                 selectedService.setDescription(description);
+                selectedService.setNombreLitsDisponibles(Integer.parseInt(nombreLits));
                 serviceHospitalierServices.update(selectedService);
                 showAlert("Succès", "Service modifié avec succès !", Alert.AlertType.INFORMATION);
                 loadServices();
@@ -278,35 +305,30 @@ public class AdminController {
         private final GridPane gridPane = new GridPane();
         private final Label nomLabel = new Label();
         private final Label descriptionLabel = new Label();
-
+        private final Label nombreLitsLabel = new Label();
 
         // Font and color
         {
             nomLabel.setFont(Font.font("Arial", FontWeight.BOLD, 14));
             descriptionLabel.setFont(Font.font("Arial", 12));
-
-        }
-
-        public ServiceCell() {
-            super();
+            nombreLitsLabel.setFont(Font.font("Arial", 12));
             gridPane.setHgap(10);
-            gridPane.setVgap(10);
+            gridPane.setVgap(5);
             gridPane.add(nomLabel, 0, 0);
             gridPane.add(descriptionLabel, 0, 1);
-
-
-
-         }
+            gridPane.add(nombreLitsLabel, 0, 2);
+        }
 
         @Override
         protected void updateItem(ServiceHospitalier service, boolean empty) {
             super.updateItem(service, empty);
-
             if (empty || service == null) {
+                setText(null);
                 setGraphic(null);
             } else {
                 nomLabel.setText(service.getNomService());
                 descriptionLabel.setText(service.getDescription());
+                nombreLitsLabel.setText("Lits Disponibles: " + service.getNombreLitsDisponibles());
                 setGraphic(gridPane);
             }
         }

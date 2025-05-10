@@ -28,7 +28,7 @@ public class User {
         Address = address;
         City = city;
         State = state;
-        status = false;
+        status = true;
         this.pathtopic = pathtopic;
         this.birthday = birthday;
     }

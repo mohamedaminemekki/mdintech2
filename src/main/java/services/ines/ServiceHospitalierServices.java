@@ -35,14 +35,16 @@ public class ServiceHospitalierServices implements IService<ServiceHospitalier> 
 
 
     public void add(ServiceHospitalier service) throws SQLException {
-        String query = "INSERT INTO `servicehospitalier` (`nomService`, `description`) VALUES (?, ?)";
+        String query = "INSERT INTO `servicehospitalier` (`nomService`, `description`, `nombreLitsDisponibles`) VALUES (?, ?, ?)";
         PreparedStatement ps = con.prepareStatement(query);
         ps.setString(1, service.getNomService());
         ps.setString(2, service.getDescription());
+        ps.setInt(3, service.getNombreLitsDisponibles()); // Ajout du 3ème attribut
 
         ps.executeUpdate();
         System.out.println("Service hospitalier ajouté !");
     }
+
     public void delete(int id) throws SQLException{
         String query = "DELETE FROM `servicehospitalier` WHERE `idService` = ?";
         PreparedStatement ps = con.prepareStatement(query);
@@ -127,9 +129,3 @@ public class ServiceHospitalierServices implements IService<ServiceHospitalier> 
 
 
 }
-
-
-
-
-
-

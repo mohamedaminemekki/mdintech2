@@ -32,7 +32,7 @@ public class FactureController {
     private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
     @FXML
-    public void initializeAdminData() {
+    public void initialize() {
         configureListCells();
         refreshList();
         insertAddButtonAboveList();

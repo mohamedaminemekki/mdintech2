@@ -1,5 +1,7 @@
-package Controllers.tasnim;
+package controllers.tasnim;
 
+import Singleton.loggedInUser;
+import entities.amine.User;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
@@ -15,7 +17,8 @@ import javafx.stage.Stage;
 import entities.tasnim.Product;
 import services.tasnim.NotificationService;
 import services.tasnim.ProductService;
-import utils.MyDatabase;
+import utils.db;
+
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -25,8 +28,9 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
+
 public class MainController {
-    private int userCIN = 87654321;
+
     private ProductService productService = new ProductService();// Store the CIN of the logged-in user
     @FXML
     private FlowPane productContainer;
@@ -39,7 +43,10 @@ public class MainController {
     @FXML
     private VBox notificationBox; // Reference to the notification VBox
     @FXML
-    private ScrollPane mainScrollPane; // Reference to the main ScrollPane
+    private ScrollPane mainScrollPane;
+    private int userCIN; // Remove hardcoded value
+
+
 
     @FXML
     private void toggleNotifications() {
@@ -62,6 +69,10 @@ public class MainController {
     public void initialize() {
         // Check for confirmed orders for the logged-in user
         checkForConfirmedOrders();
+        User currentUser = loggedInUser.getInstance().getLoggedUser();
+        if (currentUser != null) {
+            userCIN = currentUser.getCIN();
+        }
 
         // Load products and display them
         loadProductsFromDatabase();
@@ -71,8 +82,8 @@ public class MainController {
 
     private void checkForConfirmedOrders() {
         // Query to fetch confirmed orders for the logged-in user
-        String query = "SELECT id FROM orders WHERE userId = ? AND status = 'Confirmed'";
-        try (Connection conn = MyDatabase.getCon();
+        String query = "SELECT id FROM orders WHERE user_cin = ? AND status = 'Confirmed'";
+        try (Connection conn = db.getCon();
              PreparedStatement pstmt = conn.prepareStatement(query)) {
 
             pstmt.setInt(1, userCIN);
@@ -99,7 +110,7 @@ public class MainController {
 
     private double calculateTotalPriceForOrder(int orderId) {
         String query = "SELECT SUM(priceTotal) AS totalPrice FROM orderItems WHERE orderId = ?";
-        try (Connection conn = MyDatabase.getCon();
+        try (Connection conn = db.getCon();
              PreparedStatement pstmt = conn.prepareStatement(query)) {
 
             pstmt.setInt(1, orderId);
@@ -149,7 +160,7 @@ public class MainController {
             Parent root = loader.load();
 
             // Pass the notification message and orderId to the modal controller
-            OrderDetailsModalController modalController = loader.getController();
+            controllers.tasnim.OrderDetailsModalController modalController = loader.getController();
             modalController.setNotification(notification);
             modalController.setOrderId(orderId);
 
@@ -191,7 +202,7 @@ public class MainController {
         String query = "SELECT p.id, p.name, p.reference, p.price, p.stockLimit, COALESCE(s.quantity, 0) AS stock, p.sold " +
                 "FROM products p " +
                 "LEFT JOIN stock s ON p.id = s.productId";
-        try (Connection conn = MyDatabase.getCon();
+        try (Connection conn = db.getCon();
              PreparedStatement stmt = conn.prepareStatement(query);
              ResultSet rs = stmt.executeQuery()) {
 
@@ -365,7 +376,7 @@ public class MainController {
             Parent root = loader.load();
 
             // Pass the cartProducts list and totalPrice to the CartController.
-            CartController cartController = loader.getController();
+            controllers.tasnim.CartController cartController = loader.getController();
             cartController.setCartData(cartProducts, totalPrice);
 
             // Create and show a new window for the cart page.

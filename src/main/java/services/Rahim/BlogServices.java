@@ -1,13 +1,14 @@
 package services.Rahim;
 
 import entities.Rahim.BlogPost;
+import utils.MyDataBase;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
 public class BlogServices {
-    private final Connection con = MyDatabase.getInstance().getCon();
+    private final Connection con = MyDataBase.getInstance().getCon();
 
     public void createPost(BlogPost post) throws SQLException {
         String query = "INSERT INTO posts (title, content, author_cin, created_at, image_url, category) " +
@@ -32,7 +33,7 @@ public class BlogServices {
 
 
     public List<BlogPost> getAllPosts() throws SQLException {
-        String query = "SELECT p.*, u.nom as author, u.avatar_url as author_avatar " +
+        String query = "SELECT p.*, u.name as author, u.pathtopic as author_avatar " +
                 "FROM posts p " +
                 "JOIN users u ON p.author_cin = u.cin " +
                 "ORDER BY p.created_at DESC";
@@ -42,7 +43,7 @@ public class BlogServices {
 
 
     public List<BlogPost> getApprovedPosts() throws SQLException {
-        String query = "SELECT p.*, u.nom as author, u.avatar_url as author_avatar " +
+        String query = "SELECT p.*, u.name as author, u.pathtopic as author_avatar " +
                 "FROM posts p " +
                 "JOIN users u ON p.author_cin = u.cin " +
                 "ORDER BY p.created_at DESC";
@@ -78,7 +79,7 @@ public class BlogServices {
 
 
     public BlogPost getPostById(int postId) throws SQLException {
-        String query = "SELECT p.*, u.username as author, u.avatar_url as author_avatar " +
+        String query = "SELECT p.*, u.name as author, u.pathtopic as author_avatar " +
                 "FROM posts p " +
                 "JOIN users u ON p.author_cin = u.cin " +
                 "WHERE p.id = ?";

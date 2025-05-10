@@ -4,7 +4,7 @@
 <?import javafx.scene.layout.*?>
 
 <VBox xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="Controllers.tasnim.OrderDetailsModalController"
+      fx:controller="controllers.tasnim.OrderDetailsModalController"
       spacing="10"
       style="-fx-background-color: white;">
 

@@ -1,7 +1,8 @@
 package services.tasnim;
 
 import entities.tasnim.User;
-import utils.MyDatabase;
+import utils.db;
+
 import entities.tasnim.UserRole;
 
 import java.sql.Connection;
@@ -20,7 +21,7 @@ public class UserService {
         ResultSet rs = null;
 
         try {
-            con = MyDatabase.getCon();
+            con = db.getCon();
             pstmt = con.prepareStatement(query);
             pstmt.setInt(1, userId);
             rs = pstmt.executeQuery();
@@ -34,8 +35,6 @@ public class UserService {
             }
         } catch (SQLException e) {
             System.err.println("Error fetching user by ID: " + e.getMessage());
-        } finally {
-            MyDatabase.close(con, pstmt, rs);
         }
 
         return user;
@@ -52,7 +51,7 @@ public class UserService {
 
         try {
             // Get the database connection instance
-            con = MyDatabase.getCon();
+            con = db.getCon();
             pstmt = con.prepareStatement(query);
             pstmt.setInt(1, CIN); // Set the CIN parameter
             rs = pstmt.executeQuery();
@@ -69,11 +68,7 @@ public class UserService {
             }
         } catch (SQLException e) {
             System.err.println("Error fetching user role: " + e.getMessage());
-        } finally {
-            // Close resources in the reverse order of their creation
-            MyDatabase.close(con, pstmt, rs);
         }
-
         return role;
     }
 }

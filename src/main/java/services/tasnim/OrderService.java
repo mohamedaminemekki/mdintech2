@@ -1,8 +1,9 @@
 package services.tasnim;
 
+import Singleton.loggedInUser;
 import entities.tasnim.Order;
 import entities.tasnim.OrderItem;
-import utils.MyDatabase;
+import utils.db;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,16 +17,16 @@ public class OrderService {
         List<Order> orders = new ArrayList<>();
         String sql = "SELECT * FROM `orders`";
 
-        try (Connection conn = MyDatabase.getCon();
+        try (Connection conn = db.getCon();
              Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery(sql)) {
 
             while (rs.next()) {
                 Order order = new Order();
-                order.setId(rs.getInt("id"));
+                order.setId(rs.getInt("id"));                   // Set order's primary key
+                order.setUserCIN(loggedInUser.getInstance().getLoggedUser().getCIN()); // <-- Use singleton
                 order.setDate(rs.getDate("date"));
                 order.setStatus(rs.getString("status"));
-                order.setUserId(rs.getInt("userId"));
 
                 // Fetch order items
                 List<OrderItem> orderItems = getOrderItemsByOrderId(order.getId());
@@ -44,7 +45,7 @@ public class OrderService {
         List<OrderItem> orderItems = new ArrayList<>();
         String sql = "SELECT * FROM orderItems WHERE orderId = ?";
 
-        try (Connection conn = MyDatabase.getCon();
+        try (Connection conn = db.getCon();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             pstmt.setInt(1, orderId);
@@ -70,7 +71,7 @@ public class OrderService {
     public void updateOrderStatus(int orderId, String status) {
         String sql = "UPDATE `orders` SET status = ? WHERE id = ?";
 
-        try (Connection conn = MyDatabase.getCon();
+        try (Connection conn = db.getCon();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             pstmt.setString(1, status);
@@ -85,7 +86,7 @@ public class OrderService {
 
     public int getTotalOrders() {
         String sql = "SELECT COUNT(*) AS total FROM `orders`";
-        try (Connection conn = MyDatabase.getCon();
+        try (Connection conn = db.getCon();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             ResultSet rs = pstmt.executeQuery();
@@ -100,7 +101,7 @@ public class OrderService {
 
     public double getTotalRevenue() {
         String sql = "SELECT SUM(priceTotal) AS total FROM orderItems";
-        try (Connection conn = MyDatabase.getCon();
+        try (Connection conn = db.getCon();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             ResultSet rs = pstmt.executeQuery();
@@ -121,15 +122,15 @@ public class OrderService {
         int orderId = -1;
 
         try {
-            conn = MyDatabase.getCon();
+            conn = db.getCon();
             conn.setAutoCommit(false); // Start a transaction
 
             // Insert the order
-            String orderSql = "INSERT INTO `orders` (date, status, userId) VALUES (?, ?, ?)";
+            String orderSql = "INSERT INTO `orders` (date, status, user_cin) VALUES (?, ?, ?)";
             orderStmt = conn.prepareStatement(orderSql, PreparedStatement.RETURN_GENERATED_KEYS);
             orderStmt.setDate(1, new java.sql.Date(order.getDate().getTime()));
             orderStmt.setString(2, order.getStatus());
-            orderStmt.setInt(3, order.getUserId());
+            orderStmt.setInt(3, order.getUserCIN());
             orderStmt.executeUpdate();
 
             // Get the generated order ID
@@ -165,8 +166,7 @@ public class OrderService {
                 }
             }
         } finally {
-            MyDatabase.close(conn, orderStmt, generatedKeys);
-            MyDatabase.close(null, itemStmt, null);
+
         }
 
         return orderId;
@@ -178,7 +178,7 @@ public class OrderService {
         PreparedStatement deleteOrderStmt = null;
 
         try {
-            conn = MyDatabase.getCon();
+            conn = db.getCon();
             conn.setAutoCommit(false); // Start a transaction
 
             // 1. Delete order items
@@ -206,8 +206,16 @@ public class OrderService {
                 }
             }
         } finally {
-            MyDatabase.close(conn, deleteOrderItemsStmt, null);
-            MyDatabase.close(null, deleteOrderStmt, null);
+
+        }
+    }
+    private boolean userExists(int userCIN) throws SQLException {
+        String sql = "SELECT COUNT(*) AS count FROM users WHERE CIN = ?";
+        try (Connection conn = db.getCon();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setInt(1, userCIN);
+            ResultSet rs = pstmt.executeQuery();
+            return rs.next() && rs.getInt("count") > 0;
         }
     }
 }

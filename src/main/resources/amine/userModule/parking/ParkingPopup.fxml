@@ -1,22 +1,42 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="controllers.amine.userController.parking.ParkingPopupController"
-            prefHeight="200.0" prefWidth="300.0">
-    <VBox spacing="10" alignment="CENTER">
-        <Label text="Select Expiration Date:"/>
-        <DatePicker fx:id="expirationDatePicker"/>
-        <ComboBox fx:id="hourComboBox"/>
-        <ComboBox fx:id="minuteComboBox"/>
+<AnchorPane prefHeight="300.0" prefWidth="356.0" style="-fx-background-color: rgba(255, 255, 255, 0.85); -fx-background-radius: 15; -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 10, 0, 0, 4);" stylesheets="@style.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.amine.userController.parking.ParkingPopupController">
 
-        <Button fx:id="confirmButton" text="Confirm" onAction="#confirmReservation"/>
+    <VBox alignment="CENTER" layoutX="63.0" layoutY="24.0" prefHeight="252.0" prefWidth="226.0" spacing="15">
+        <!-- Title with close button -->
+        <HBox alignment="CENTER_RIGHT">
+            <Label style="-fx-font-size: 18px; -fx-font-weight: bold;" text="Reserve Parking Spot" />
+            <Button onAction="#closePopup" style="-fx-background-color: transparent; -fx-text-fill: red; -fx-font-size: 14px;" text="X" />
+        </HBox>
+
+        <Separator />
+
+        <Label style="-fx-font-size: 14px;" text="Select Expiration Date:" />
+        <DatePicker fx:id="expirationDatePicker" style="-fx-pref-width: 200px;" />
+
+        <HBox alignment="CENTER" spacing="10">
+            <VBox>
+                <Label style="-fx-font-size: 14px;" text="Hour" />
+                <ComboBox fx:id="hourComboBox" style="-fx-pref-width: 80px;" />
+            </VBox>
+            <VBox>
+                <Label style="-fx-font-size: 14px;" text="Minutes" />
+                <ComboBox fx:id="minuteComboBox" style="-fx-pref-width: 80px;" />
+            </VBox>
+        </HBox>
+
+        <Separator />
+
+        <Button fx:id="confirmButton" onAction="#confirmReservation" styleClass="confirm-button" text="Confirm Reservation" />
     </VBox>
-</AnchorPane>
 
+</AnchorPane>

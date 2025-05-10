@@ -1,11 +1,14 @@
-package Controllers.tasnim;
+package controllers.tasnim;
 
+import Singleton.loggedInUser;
+import entities.amine.User;
 import entities.tasnim.Order;
 import entities.tasnim.OrderItem;
 import entities.tasnim.Product;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.control.Label;
@@ -63,37 +66,52 @@ public class CartController {
     @FXML
     private void handleConfirmOrder() {
         if (cartProducts.isEmpty()) {
-            System.out.println("Cart is empty. Nothing to confirm.");
+            showAlert("Empty Cart", "Your cart is empty. Add items before confirming.");
             return;
         }
 
-        // Create an Order object
+        // Get logged-in user from singleton
+        User currentUser = loggedInUser.getInstance().getLoggedUser();
+        if (currentUser == null) {
+            showAlert("Error", "No user logged in!");
+            return;
+        }
+
+        // Create and populate Order
         Order order = new Order();
         order.setDate(new Date());
-        order.setStatus("Pending"); // Default status
-        order.setUserId(87654321); // Replace with the actual user ID (e.g., from a session)
+        order.setStatus("Pending");
+        order.setUserCIN(currentUser.getCIN());  // Critical fix: Set CIN from session
 
-        // Create OrderItem objects
+        // Create OrderItems
         List<OrderItem> orderItems = new ArrayList<>();
         for (Product product : cartProducts) {
             OrderItem item = new OrderItem();
             item.setProductId(product.getId());
-            item.setQuantity(1); // Assuming quantity is 1 for each product
+            item.setQuantity(1);
             item.setPriceTotal(product.getPrice());
             orderItems.add(item);
         }
 
-        // Save the order and items to the database
+        // Save to database
         int orderId = orderService.saveOrder(order, orderItems);
         if (orderId != -1) {
-            System.out.println("Order confirmed successfully. Order ID: " + orderId);
-            // Clear the cart after confirmation
-            cartProducts.clear();
-            cartItems.clear();
-            totalPrice = 0.0;
-            totalPriceLabel.setText("Total: 0.00 dt");
+            showAlert("Success", "Order #" + orderId + " confirmed!");
+            clearCart();
         } else {
-            System.out.println("Failed to confirm order.");
+            showAlert("Error", "Failed to save order");
         }
+    }
+
+    private void clearCart() {
+        cartProducts.clear();
+        cartItems.clear();
+        totalPrice = 0.0;
+        totalPriceLabel.setText("Total: 0.00 dt");
+    }
+
+    private void showAlert(String title, String message) {
+        new Alert(Alert.AlertType.INFORMATION, message)
+                .setTitle(title);
     }
 }

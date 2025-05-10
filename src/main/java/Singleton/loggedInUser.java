@@ -28,5 +28,6 @@
         public static void clearSession() {
             instance = null;
         }
+
     }
 

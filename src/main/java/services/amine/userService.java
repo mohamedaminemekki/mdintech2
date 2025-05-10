@@ -54,6 +54,36 @@ public class userService implements Iservice<User> {
         }
     }
 
+    public boolean saveGoogle(User obj) {
+        String hashedPassword = PasswordVerification.hashPassword(obj.getPassword());
+
+        String query = "INSERT INTO users (CIN, Name, Email, Password, Role, Phone, Address, City, State, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        try (Connection conn = dbConnection.getInstance().getConn();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+
+            stmt.setInt(1, obj.getCIN());
+            stmt.setString(2, obj.getName());
+            stmt.setString(3, obj.getEmail());
+            stmt.setString(4, hashedPassword);
+            stmt.setString(5, obj.getRole().name()); // Convert Enum to String
+            stmt.setString(6, obj.getPhone());
+            stmt.setString(7, obj.getAddress());
+            stmt.setString(8, obj.getCity());
+            stmt.setString(9, obj.getState());
+            stmt.setBoolean(10, obj.isStatus());
+
+            int rowsInserted = stmt.executeUpdate();
+            if (rowsInserted > 0) {
+                System.out.println("User saved successfully.");
+                return true; // Indicate success
+            } else {
+                throw new SQLException("User could not be saved.");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Database error: " + e.getMessage());
+        }
+    }
 
 
     @Override
@@ -199,6 +229,7 @@ public class userService implements Iservice<User> {
                             rs.getString("Address"),
                             rs.getString("City"),
                             rs.getString("State"),
+                            rs.getBoolean("status"),
                             rs.getString("pathtopic"),
                             rs.getDate("birthday")
                     );

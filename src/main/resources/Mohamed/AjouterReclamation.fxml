@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
+<AnchorPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="controllers.Mohamed.AjouterReclamation"
+            prefHeight="600.0" prefWidth="650.0"
+            style="-fx-background-color: linear-gradient(to bottom, #ffffff, #eeeee4);">
+    <Button fx:id="btnRetour"
+            style="-fx-background-color: transparent; -fx-padding: 5px;"
+            onAction="#retournerPagePrecedente">
+        <graphic>
+            <ImageView fitWidth="24" fitHeight="24">
+                <image>
+                    <Image url="/images/back.png" />
+                </image>
+            </ImageView>
+        </graphic>
+    </Button>
+    <VBox spacing="20" alignment="TOP_CENTER"
+          layoutX="0" layoutY="20"
+          AnchorPane.topAnchor="20" AnchorPane.bottomAnchor="20"
+          AnchorPane.leftAnchor="20" AnchorPane.rightAnchor="20">
+
+        <!-- Title -->
+        <Label text="Ajouter une Réclamation"
+               style="-fx-font-size: 26px;
+                      -fx-font-weight: bold;
+                      -fx-text-fill: #0c0c0c;" />
+
+        <!-- Form Grid -->
+        <GridPane hgap="15" vgap="15" alignment="CENTER">
+            <!-- Email Address -->
+            <Label text="Email:"
+                   style="-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #21130d;"
+                   GridPane.rowIndex="1" GridPane.columnIndex="0" />
+            <TextField fx:id="emailField" promptText="Entrez votre email"
+                       style="-fx-pref-width: 250px; -fx-text-fill: #555; -fx-background-radius: 8px; -fx-padding: 8px;"
+                       GridPane.rowIndex="1" GridPane.columnIndex="1" />
+
+            <!-- Type of Reclamation -->
+            <Label text="Type de Réclamation:"
+                   style="-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #21130d;"
+                   GridPane.rowIndex="2" GridPane.columnIndex="0" />
+            <ComboBox fx:id="typeComboBox"
+                      style="-fx-pref-width: 250px; -fx-background-radius: 8px;"
+                      GridPane.rowIndex="2" GridPane.columnIndex="1" />
+
+            <!-- Description -->
+            <Label text="Description:"
+                   style="-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #21130d;"
+                   GridPane.rowIndex="3" GridPane.columnIndex="0" />
+            <TextArea fx:id="descriptionField" promptText="Décrivez votre problème..."
+                      style="-fx-pref-width: 450px; -fx-pref-height: 100px; -fx-text-fill: #555;
+                             -fx-background-radius: 8px; -fx-padding: 8px;"
+                      GridPane.rowIndex="3" GridPane.columnIndex="1" />
+        </GridPane>
+
+        <!-- Submit Button (Aligned to the right) -->
+        <HBox alignment="CENTER_RIGHT" spacing="15" style="-fx-padding: 0 20 0 0;">
+            <Button fx:id="submitButton" text="Envoyer"
+                    style="-fx-background-color: #e4b271; -fx-text-fill: white; -fx-font-size: 14px; -fx-font-weight: bold; -fx-background-radius: 8px; -fx-pref-width: 120px; -fx-pref-height: 35px;" />
+        </HBox>
+
+    </VBox>
+</AnchorPane>

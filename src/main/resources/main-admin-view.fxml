@@ -11,7 +11,7 @@
             fx:controller="controllers.amine.userController.mainAdminViewController"
             prefHeight="400.0" prefWidth="600.0">
     <MenuBar fx:id="menuBar" AnchorPane.topAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0">
-        <Menu text="Navigation">
+        <Menu text="Parking">
             <!-- Added fx:id attributes -->
             <MenuItem fx:id="goToHomeView" text="Home" onAction="#goToHomeView" />
             <MenuItem fx:id="goToParkings" text="Parkings" onAction="#goToParkings" />
@@ -20,5 +20,30 @@
             <MenuItem fx:id="goToCreateParking" text="Createparking" onAction="#goToCreateParking" />
             <MenuItem fx:id="Logout" text="logout" onAction="#logout" />
         </Menu>
+        <Menu text="Market">
+            <!-- Added fx:id attributes -->
+            <MenuItem fx:id="goToMarketView" text="Home" onAction="#goToMarketView" />
+
+        </Menu>
+        <Menu text="Hopital">
+            <!-- Added fx:id attributes -->
+            <MenuItem fx:id="goToHospitalView" text="Home" onAction="#goToHospitalView" />
+
+        </Menu>
+        <Menu text="Transport">
+            <!-- Added fx:id attributes -->
+            <MenuItem fx:id="goToTransportView" text="Home" onAction="#goToTransportView" />
+        </Menu>
+        <Menu text="FactureAndBlog">
+            <!-- Added fx:id attributes -->
+            <MenuItem fx:id="goToFactureView" text="Home" onAction="#goToFactureView" />
+        </Menu>
+        <Menu text="Reclamation">
+            <!-- Added fx:id attributes -->
+            <MenuItem fx:id="goToReclamationView" text="Home" onAction="#goToReclamationView" />
+        </Menu>
     </MenuBar>
+
+
+
 </AnchorPane>

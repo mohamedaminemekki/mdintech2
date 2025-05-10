@@ -1,18 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="controllers.amine.parkingController.AddParkingViewController"
-            prefHeight="400.0" prefWidth="600.0">
-    <Button layoutX="10" layoutY="10" onAction="#handleBackButton" text="← Back" />
-    <VBox spacing="10" alignment="CENTER" layoutX="100" layoutY="50">
-        <TextField fx:id="nameField" promptText="Enter Parking Name"/>
-        <TextField fx:id="locationField" promptText="Enter Parking Location"/>
-        <TextField fx:id="capacityField" promptText="Enter Parking Capacity"/>  <!-- Added this field -->
-        <Button fx:id="addParkingButton" text="Add Parking" onAction="#handleAddParking"/>
+<AnchorPane prefHeight="500.0" prefWidth="368.0" style="-fx-background-color: #f5f5f5;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.amine.parkingController.AddParkingViewController">
+
+    <!-- Back Button -->
+    <Button layoutX="10" layoutY="10" onAction="#handleBackButton" style="-fx-background-color: #FF5733; -fx-text-fill: white; -fx-font-size: 14px; -fx-border-radius: 20px; -fx-padding: 10px 20px;" text="← Back">
+
+    </Button>
+
+    <!-- Form Section -->
+    <VBox alignment="CENTER" layoutX="118.0" layoutY="85.0" prefHeight="268.0" prefWidth="165.0" spacing="20">
+        <TextField fx:id="nameField" promptText="Enter Parking Name" style="-fx-background-color: #f5f5f5; -fx-border-radius: 15px; -fx-border-color: #cccccc; -fx-padding: 10px;" />
+        <Label fx:id="nameErrorLabel" style="-fx-font-size: 12px;" textFill="red" visible="false" />
+
+        <TextField fx:id="locationField" promptText="Enter Parking Location" style="-fx-background-color: #f5f5f5; -fx-border-radius: 15px; -fx-border-color: #cccccc; -fx-padding: 10px;" />
+        <Label fx:id="locationErrorLabel" style="-fx-font-size: 12px;" textFill="red" visible="false" />
+
+        <TextField fx:id="capacityField" promptText="Enter Parking Capacity" style="-fx-background-color: #f5f5f5; -fx-border-radius: 15px; -fx-border-color: #cccccc; -fx-padding: 10px;" />
+        <Label fx:id="capacityErrorLabel" style="-fx-font-size: 12px;" textFill="red" visible="false" />
+
+        <!-- Submit Button -->
+        <Button fx:id="addParkingButton" onAction="#handleAddParking" style="-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-font-size: 16px; -fx-padding: 15px 30px; -fx-border-radius: 30px;" text="Add Parking">
+
+        </Button>
     </VBox>
+
+    <!-- Add Icon at the Top -->
 
 </AnchorPane>

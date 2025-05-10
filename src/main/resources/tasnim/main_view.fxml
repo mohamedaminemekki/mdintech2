@@ -4,7 +4,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.geometry.Insets?>
 
-<BorderPane xmlns:fx="http://javafx.com/fxml/1" stylesheets="@styles.css" fx:controller="Controllers.tasnim.MainController">
+<BorderPane xmlns:fx="http://javafx.com/fxml/1" stylesheets="@styles.css" fx:controller="controllers.tasnim.MainController">
     <top>
         <VBox>
             <MenuBar>

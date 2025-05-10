@@ -2,7 +2,7 @@ package services.Rahim;
 
 import entities.Rahim.Like;
 import entities.amine.User;
-import utils.MyDatabase;
+import utils.MyDataBase;
 
 import java.sql.*;
 import java.time.LocalDateTime;
@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class LikeServices {
-    private final Connection con = MyDatabase.getInstance().getCon();
+    private final Connection con = MyDataBase.getInstance().getCon();
 
     public void toggleLike(String userCin, int postId) throws SQLException {
         if (hasLiked(userCin, postId)) {
@@ -67,8 +67,8 @@ public class LikeServices {
             while(rs.next()){
                 User user = new User();
                 user.setCIN(Integer.parseInt(rs.getString("cin")));
-                user.setName(rs.getString("nom")); // ou username selon votre table
-                user.setPathtopic(rs.getString("avatar_url"));
+                user.setName(rs.getString("name"));
+                user.setPathtopic(rs.getString("pathtopic"));
                 users.add(user);
             }
         }

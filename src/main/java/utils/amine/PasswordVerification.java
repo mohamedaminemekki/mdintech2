@@ -7,7 +7,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 public class PasswordVerification {
     private static final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
-    private PasswordVerification() {
+    public PasswordVerification() {
     }
 
     public static boolean isStrongPassword(String password) {

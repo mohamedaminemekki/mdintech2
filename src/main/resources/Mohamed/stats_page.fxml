@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.chart.PieChart?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.paint.Color?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:id="statsPage"
+      fx:controller="controllers.Mohamed.StatsController"
+      stylesheets="@css/styles.css"
+      spacing="20"
+      styleClass="stats-page">
+    <Button fx:id="btnRetour"
+            style="-fx-background-color: transparent; -fx-padding: 5px;"
+            onAction="#backpage">
+        <graphic>
+            <ImageView fitWidth="24" fitHeight="24">
+                <image>
+                    <Image url="/images/back.png" />
+                </image>
+            </ImageView>
+        </graphic>
+    </Button>
+
+    <!-- Filters -->
+    <HBox spacing="10">
+        <Label text="Filter by:" styleClass="filter-label" />
+        <ComboBox fx:id="filterComboBox" styleClass="filter-combo" />
+        <DatePicker fx:id="datePicker" styleClass="date-picker" />
+        <ComboBox fx:id="monthComboBox" styleClass="filter-combo" />
+        <Button text="Export to PDF" fx:id="exportPdfButton" styleClass="export-button" />
+    </HBox>
+
+    <!-- Stats Boxes -->
+    <HBox spacing="20" alignment="TOP_CENTER">
+        <!-- Total Reclamations Box -->
+        <StackPane styleClass="stats-box">
+            <Rectangle arcWidth="10" arcHeight="10" width="150" height="80" fill="#ecbd84" />
+            <VBox spacing="5" alignment="CENTER">
+                <Label text="Total Reclamations" styleClass="stats-box-title" />
+                <Label fx:id="totalReclamationsLabel" styleClass="stats-box-value" />
+            </VBox>
+        </StackPane>
+
+        <!-- Highest Reclamation Type Box -->
+        <StackPane styleClass="stats-box">
+            <Rectangle arcWidth="10" arcHeight="10" width="150" height="80" fill="#ecbd84" />
+            <VBox spacing="5" alignment="CENTER">
+                <Label text="Highest Reclamation Type" styleClass="stats-box-title" />
+                <Label fx:id="highestReclamationLabel" styleClass="stats-box-value" />
+            </VBox>
+        </StackPane>
+    </HBox>
+
+    <!-- Pie Chart -->
+    <PieChart fx:id="reclamationPieChart" title="Reclamation Types" />
+</VBox>
