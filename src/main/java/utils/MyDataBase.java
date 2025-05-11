@@ -5,11 +5,10 @@ package utils;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-
 public class MyDataBase {
 
 
-    private final String url ="jdbc:mysql://localhost:3306/mdintech";
+    private final String url ="jdbc:mysql://localhost:3306/pidev3a33";
     private final String username = "root";
     private final String pwd = "";
 

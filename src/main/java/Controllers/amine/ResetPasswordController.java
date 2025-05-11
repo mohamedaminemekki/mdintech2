@@ -1,4 +1,4 @@
-package controllers.amine;
+package Controllers.amine;
 
 
 import entities.amine.User;
