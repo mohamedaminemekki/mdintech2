@@ -1,50 +1,67 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Menu?>
-<?import javafx.scene.control.MenuBar?>
-<?import javafx.scene.control.MenuItem?>
-<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.geometry.Insets?>
+<?import java.net.URL?>
 
-<?import javafx.scene.layout.BorderPane?>
-<AnchorPane xmlns="http://javafx.com/javafx"
+<BorderPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
             fx:controller="controllers.amine.userController.mainUserViewController"
-            prefHeight="400.0" prefWidth="600.0">
+            prefHeight="700.0" prefWidth="1000.0"
+            styleClass="main-container">
 
-    <MenuBar fx:id="menuBar" AnchorPane.topAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0">
-        <Menu text="Parking Module">
-            <MenuItem fx:id="goToHomeView" text="Home" onAction="#goToHomeView" />
-            <MenuItem fx:id="goToParkings" text="Parkings" onAction="#goToParkings" />
-            <MenuItem fx:id="goToParkingTickets" text="Parking Tickets" onAction="#goToParkingTickets" />
-            <MenuItem fx:id="goToUpdateProfile" text="update profile" onAction="#goToUpdatePorfile" />
-            <MenuItem fx:id="Logout" text="logout" onAction="#logout" />
+    <stylesheets>
+        <URL value="@/styles/medintechstyle.css" /> <!-- "@" syntax for relative path -->
+    </stylesheets>
 
-        </Menu>
-        <Menu text="FactureAndBlog">
+    <top>
+        <fx:include source="navbar.fxml" />
+    </top>
 
-            <MenuItem fx:id="goToUserInterface" text="Home" onAction="#goToUserInterface" />
+    <center>
+        <!-- Main Content Area with Background Image -->
+        <StackPane>
+            <!-- Background Image -->
+            <ImageView fitWidth="1000" fitHeight="650" preserveRatio="false">
+                <Image url="/images/section_bg02.jpg"/>
+            </ImageView>
 
+            <!-- Content Overlay -->
+            <VBox alignment="CENTER" spacing="20">
+                <!-- Subtitle -->
+                <Label styleClass="subtitle" text="Plateforme unifiée des services publics" textFill="#2ecc71"/>
 
-                    </Menu>
+                <!-- Welcome Title -->
+                <Label styleClass="main-title" text="Bienvenue sur" textFill="WHITE"/>
 
-                    <Menu text="Market">
-                        <MenuItem fx:id="goToMarket" text="Home" onAction="#goToMarketInterface" />
+                <!-- Brand Name -->
+                <Label styleClass="brand-name" text="MédinTech" textFill="#3498db"/>
 
-                    </Menu>
-                    <Menu text="Transport">
-                        <MenuItem fx:id="goToTransport" text="Home" onAction="#goToTransportInterface" />
+                <!-- Description -->
+                <Label styleClass="description" wrapText="true" maxWidth="700"
+                       text="Une plateforme unifiée pour simplifier l'accès aux services publics d'un gouvernement en ligne, à travers une interface intuitive."
+                       textAlignment="CENTER" textFill="WHITE"/>
 
-                    </Menu>
-                    <Menu text="Hopital">
-                        <MenuItem fx:id="goToHopital" text="Home" onAction="#goToHopitalInterface" />
+                <!-- Search Container -->
+                <HBox styleClass="search-container" alignment="CENTER" spacing="0">
+                    <TextField fx:id="searchField" promptText="Rechercher un service public, une démarche..."
+                               styleClass="search-field" HBox.hgrow="ALWAYS"/>
+                    <ComboBox fx:id="serviceTypeComboBox" promptText="Tous les services" styleClass="service-combo"/>
+                    <Button fx:id="searchButton" text="Rechercher" styleClass="search-button"/>
+                </HBox>
+            </VBox>
+        </StackPane>
+    </center>
 
-                    </Menu>
-
-
-                <Menu text="Reclamation">
-                    <MenuItem fx:id="goToReclamation" text="Home" onAction="#goToReclamationInterface" />
-
-                </Menu>
-                </MenuBar>
-
-            </AnchorPane>
+    <bottom>
+        <!-- Footer with Logo -->
+        <HBox styleClass="footer" alignment="CENTER">
+            <ImageView fitHeight="40" fitWidth="40">
+                <Image url="/images/Smart City building outline logo.png"/>
+            </ImageView>
+        </HBox>
+    </bottom>
+</BorderPane>

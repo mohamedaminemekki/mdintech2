@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.geometry.Insets?>
+
+<!-- Navigation bar without notification bell or notification panel -->
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="controllers.amine.userController.mainUserViewController">
+    <MenuBar fx:id="menuBar" visible="false" managed="false" />
+    <HBox styleClass="nav-bar" alignment="CENTER_LEFT" spacing="15">
+        <StackPane styleClass="logo-container">
+            <ImageView fx:id="logoImage" fitHeight="50" fitWidth="50" preserveRatio="true">
+                <Image url="/images/Smart City building outline logo.png"/>
+            </ImageView>
+        </StackPane>
+        <Region HBox.hgrow="ALWAYS" />
+        <Button fx:id="homeBtn" styleClass="nav-button" text="Home" onAction="#goToHomeView"/>
+        <Button fx:id="marketBtn" styleClass="nav-button" text="Market" onAction="#goToMarketInterface"/>
+        <Button fx:id="hospitalBtn" styleClass="nav-button" text="Hospital" onAction="#goToHopitalInterface"/>
+        <Button fx:id="transportBtn" styleClass="nav-button" text="Voyage" onAction="#goToTransportInterface"/>
+        <Button fx:id="blogBtn" styleClass="nav-button" text="Blog" onAction="#goToUserInterface"/>
+        <Button fx:id="reclamationBtn" styleClass="nav-button" text="Contact" onAction="#goToReclamationInterface"/>
+        <Region HBox.hgrow="ALWAYS" />
+        <Button fx:id="logoutBtn" styleClass="nav-button" text="Logout" onAction="#logout"/>
+        <padding>
+            <Insets top="10" right="15" bottom="10" left="15"/>
+        </padding>
+    </HBox>
+</VBox>
