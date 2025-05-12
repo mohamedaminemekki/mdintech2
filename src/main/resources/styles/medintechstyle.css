@@ -1,0 +1,116 @@
+/* MédinTech Style CSS */
+
+/* Main container */
+.main-container {
+    -fx-background-color: #f5f5f5;
+}
+
+/* Navigation Bar */
+.nav-bar {
+    -fx-background-color: #0a2e50;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.4), 10, 0, 0, 3);
+    -fx-min-height: 60px;
+}
+
+/* Logo container */
+.logo-container {
+    -fx-background-color: #0a2e50;
+    -fx-background-radius: 5px;
+    -fx-padding: 5;
+}
+
+/* Navigation buttons */
+.nav-button {
+    -fx-background-color: transparent;
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-padding: 8 15;
+    -fx-cursor: hand;
+    -fx-font-weight: normal;
+    -fx-border-width: 0 0 2 0;
+    -fx-border-color: transparent;
+}
+
+.nav-button:hover {
+    -fx-border-color: #3498db;
+    -fx-text-fill: #3498db;
+}
+
+/* Main title text */
+.main-title {
+    -fx-font-size: 50px;
+    -fx-font-family: "Arial";
+    -fx-font-weight: bold;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.7), 6, 0, 0, 2);
+}
+
+/* Brand name styling */
+.brand-name {
+    -fx-font-size: 60px;
+    -fx-font-family: "Brush Script MT", cursive;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.7), 6, 0, 0, 2);
+}
+
+/* Subtitle text */
+.subtitle {
+    -fx-font-size: 30px;
+    -fx-font-family: "Brush Script MT", cursive;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.7), 6, 0, 0, 2);
+}
+
+/* Description text */
+.description {
+    -fx-font-size: 16px;
+    -fx-font-family: "Arial";
+    -fx-opacity: 0.9;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.7), 6, 0, 0, 2);
+}
+
+/* Search container */
+.search-container {
+    -fx-background-color: transparent;
+    -fx-max-width: 800px;
+    -fx-min-width: 600px;
+    -fx-min-height: 50px;
+}
+
+/* Search field */
+.search-field {
+    -fx-background-color: white;
+    -fx-background-radius: 25 0 0 25;
+    -fx-padding: 8 15;
+    -fx-font-size: 14px;
+    -fx-prompt-text-fill: #8e9399;
+    -fx-min-height: 45px;
+}
+
+/* Service combo box */
+.service-combo {
+    -fx-background-color: white;
+    -fx-background-radius: 0;
+    -fx-padding: 8 15;
+    -fx-font-size: 14px;
+    -fx-min-height: 45px;
+    -fx-prompt-text-fill: #8e9399;
+}
+
+/* Search button */
+.search-button {
+    -fx-background-color: #ff5722;
+    -fx-text-fill: white;
+    -fx-background-radius: 0 25 25 0;
+    -fx-padding: 8 20;
+    -fx-font-size: 14px;
+    -fx-cursor: hand;
+    -fx-min-height: 45px;
+}
+
+.search-button:hover {
+    -fx-background-color: #e64a19;
+}
+
+/* Footer */
+.footer {
+    -fx-background-color: rgba(10, 46, 80, 0.8);
+    -fx-padding: 15;
+}

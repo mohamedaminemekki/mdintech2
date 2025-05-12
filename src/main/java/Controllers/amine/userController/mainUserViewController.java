@@ -23,13 +23,13 @@ public class mainUserViewController {
     @FXML private MenuItem goToUpdateProfile;
     @FXML private MenuItem logout;
 
-    private void loadView(String fxmlFile) {
+    private void loadView(String fxmlFile, ActionEvent event) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlFile));
             Parent root = loader.load();
 
-            // Get stage from the menuBar's scene
-            Stage stage = (Stage) menuBar.getScene().getWindow();
+            // Get stage from the event source (button or any node)
+            Stage stage = (Stage) ((javafx.scene.Node) event.getSource()).getScene().getWindow();
             stage.setScene(new Scene(root));
             stage.show();
         } catch (IOException e) {
@@ -38,44 +38,46 @@ public class mainUserViewController {
     }
 
     @FXML
-    private void goToHomeView() {
-        loadView("/main-user-view.fxml");
+    private void goToHomeView(ActionEvent event) {
+        loadView("/main-user-view.fxml", event);
     }
 
     @FXML
-    private void goToParkings() {
-        loadView("/amine/userModule/parking/display-parkings.fxml");
+    private void goToParkings(ActionEvent event) {
+        loadView("/amine/userModule/parking/display-parkings.fxml", event);
     }
 
     @FXML
-    private void goToParkingTickets() {
-        loadView("/amine/userModule/parking/display-tickets.fxml");
+    private void goToParkingTickets(ActionEvent event) {
+        loadView("/amine/userModule/parking/display-tickets.fxml", event);
     }
 
-    public void goToUpdatePorfile(ActionEvent actionEvent) {loadView("/amine/userModule/update-user-view.fxml");}
+    public void goToUpdatePorfile(ActionEvent event) {
+        loadView("/amine/userModule/update-user-view.fxml", event);
+    }
 
-    public void logout(ActionEvent actionEvent) {
+    public void logout(ActionEvent event) {
         loggedInUser.clearSession();
-        loadView("/amine/userModule/login-view.fxml");
+        loadView("/amine/userModule/login-view.fxml", event);
     }
     @FXML
-    private void goToUserInterface() {
-        loadView("/rahim/UserInterface.fxml");
+    private void goToUserInterface(ActionEvent event) {
+        loadView("/rahim/UserInterface.fxml", event);
     }
     @FXML
-    private void goToMarketInterface() {
-        loadView("/tasnim/main_view.fxml");
+    private void goToMarketInterface(ActionEvent event) {
+        loadView("/tasnim/main_view.fxml", event);
     }
     @FXML
-    private void goToTransportInterface() {
-        loadView("/views/MainWindow.fxml");
+    private void goToTransportInterface(ActionEvent event) {
+        loadView("/views/MainWindow.fxml", event);
     }
     @FXML
-    private void goToHopitalInterface() {
-        loadView("/ines/service-view.fxml");
+    private void goToHopitalInterface(ActionEvent event) {
+        loadView("/ines/service-view.fxml", event);
     }
     @FXML
-    private void goToReclamationInterface() {
-        loadView("/Mohamed/AfficherReclamationClient.fxml");
+    private void goToReclamationInterface(ActionEvent event) {
+        loadView("/Mohamed/AfficherReclamationClient.fxml", event);
     }
 }
