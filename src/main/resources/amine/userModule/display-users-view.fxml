@@ -8,7 +8,7 @@
 <AnchorPane prefHeight="500.0" prefWidth="700.0"
             xmlns="http://javafx.com/javafx/23.0.1"
             xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="controllers.amine.userController.displayuserController">
+            fx:controller="Controllers.amine.userController.displayuserController">
 
     <!-- Back Button -->
     <Button layoutX="10" layoutY="10" onAction="#handleBackButton" text="← Back"

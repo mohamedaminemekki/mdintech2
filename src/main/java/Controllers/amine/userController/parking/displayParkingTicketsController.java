@@ -43,7 +43,7 @@ public class displayParkingTicketsController {
             return;
         }
 
-        int userId = loggedInUser.getInstance().getLoggedUser().getCIN();
+        int userId = Integer.parseInt(loggedInUser.getInstance().getLoggedUser().getCIN());
 
         List<ParkingTicket> tickets = ticketService.findByUserId(userId);
 

@@ -24,7 +24,7 @@ public class OrderService {
             while (rs.next()) {
                 Order order = new Order();
                 order.setId(rs.getInt("id"));                   // Set order's primary key
-                order.setUserCIN(loggedInUser.getInstance().getLoggedUser().getCIN()); // <-- Use singleton
+                order.setUserCIN(Integer.parseInt(loggedInUser.getInstance().getLoggedUser().getCIN())); // <-- Use singleton
                 order.setDate(rs.getDate("date"));
                 order.setStatus(rs.getString("status"));
 

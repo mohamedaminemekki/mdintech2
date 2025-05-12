@@ -1,6 +1,7 @@
 package utils.amine;
 
 import Singleton.loggedInUser;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.google.api.client.auth.oauth2.TokenResponse;
 import com.google.api.client.googleapis.auth.oauth2.GoogleAuthorizationCodeTokenRequest;
 import com.google.api.client.http.HttpRequest;
@@ -10,7 +11,7 @@ import com.google.api.client.http.HttpTransport;
 import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.gson.GsonFactory;
-import controllers.amine.VerificationController;
+import Controllers.amine.VerificationController;
 import entities.amine.User;
 import io.github.cdimascio.dotenv.Dotenv;
 import com.sun.net.httpserver.HttpServer;
@@ -33,6 +34,7 @@ import javafx.application.Platform;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.InetSocketAddress;
+import java.util.Date;
 import java.util.Optional;
 import java.util.concurrent.Executors;
 
@@ -159,8 +161,7 @@ public class GoogleCallbackServer {
             phoneField.setPromptText("Phone");
             TextField addressField = new TextField();
             addressField.setPromptText("Address");
-            TextField cityField = new TextField();
-            cityField.setPromptText("City");
+
 
 
             grid.add(new Label("CIN:"), 0, 0);
@@ -169,8 +170,7 @@ public class GoogleCallbackServer {
             grid.add(phoneField, 1, 1);
             grid.add(new Label("Address:"), 0, 2);
             grid.add(addressField, 1, 2);
-            grid.add(new Label("City:"), 0, 3);
-            grid.add(cityField, 1, 3);
+
 
 
             dialog.getDialogPane().setContent(grid);
@@ -192,27 +192,29 @@ public class GoogleCallbackServer {
                 int cin = Integer.parseInt(cinPhonePair.getKey());
                 String phone = cinPhonePair.getValue();
                 String address = addressField.getText();
-                String city = cityField.getText();
+
 
 
                 // Create a new User object
                 User newUser = new User(
                         name,
-                        cin,
+                        Integer.toString(cin),
                         email,
                         "defaultPassword", // You can generate a random password or leave it empty
-                        UserRole.USER, // Default role
+                        "ROLE_USER", // Default role
                         phone,
                         address,
-                        city,
-                        "",
-                        true, // Default status
-                        userInfo.getString("picture"), // Path topic (if applicable)
-                        null // Birthday (if applicable)
+                        userInfo.getString("picture"),
+                        new Date(),
+                        ""
                 );
 
                 // Save the new user to the database
-                us.saveGoogle(newUser);
+                try {
+                    us.saveGoogle(newUser);
+                } catch (JsonProcessingException e) {
+                    throw new RuntimeException(e);
+                }
 
                 // Stop the server and redirect to the desired page
                 try {

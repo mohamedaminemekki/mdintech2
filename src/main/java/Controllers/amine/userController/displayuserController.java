@@ -1,4 +1,4 @@
-package controllers.amine.userController;
+package Controllers.amine.userController;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -73,7 +73,7 @@ public class displayuserController {
 
                     // Updates button text and style
                     private void updateBlockButton(User user) {
-                        if (user.isStatus()) {
+                        if (user.isActive()) {
                             blockButton.setText("Block");
                             blockButton.setStyle(
                                     "-fx-background-color: red; -fx-text-fill: white; " +
@@ -96,8 +96,8 @@ public class displayuserController {
 
                     // Toggle user status
                     private void toggleUserStatus(User user) {
-                        boolean newStatus = !user.isStatus();
-                        user.setStatus(newStatus);
+                        boolean newStatus = !user.isActive();
+                        user.setActive(newStatus);
                         us.updateUserStatus(user.getCIN(), newStatus);
                         updateBlockButton(user);
                     }
@@ -111,10 +111,9 @@ public class displayuserController {
         Integer minAge = parseInteger(minAgeField.getText());
         Integer maxAge = parseInteger(maxAgeField.getText());
         String name = nameField.getText().trim();
-        Integer cin = parseInteger(cinField.getText());
         String address = addressField.getText().trim();
 
-        List<User> filteredUsers = us.searchUsers(minAge, maxAge, name, cin, address);
+        List<User> filteredUsers = us.searchUsers(minAge, maxAge, name, cinField.getText(), address);
         ObservableList<User> observableUsers = FXCollections.observableArrayList(filteredUsers);
         usersList.setItems(observableUsers);
     }
@@ -127,10 +126,8 @@ public class displayuserController {
                 "Email: " + user.getEmail() + "\n" +
                         "Phone: " + user.getPhone() + "\n" +
                         "Address: " + user.getAddress() + "\n" +
-                        "City: " + user.getCity() + "\n" +
-                        "State: " + user.getState() + "\n" +
-                        "Role: " + user.getRole() + "\n" +
-                        "Status: " + (user.isStatus() ? "Active" : "Inactive")
+                        "Role: " + user.getRoles().get(0) + "\n" +
+                        "Status: " + (user.isActive() ? "Active" : "Inactive")
         );
         alert.showAndWait();
     }

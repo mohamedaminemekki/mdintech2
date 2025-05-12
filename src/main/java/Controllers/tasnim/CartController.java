@@ -81,7 +81,7 @@ public class CartController {
         Order order = new Order();
         order.setDate(new Date());
         order.setStatus("Pending");
-        order.setUserCIN(currentUser.getCIN());  // Critical fix: Set CIN from session
+        order.setUserCIN(Integer.parseInt(currentUser.getCIN()));  // Critical fix: Set CIN from session
 
         // Create OrderItems
         List<OrderItem> orderItems = new ArrayList<>();

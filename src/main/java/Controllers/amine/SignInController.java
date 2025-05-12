@@ -1,4 +1,4 @@
-package controllers.amine;
+package Controllers.amine;
 
 
 import javafx.event.ActionEvent;
@@ -32,10 +32,16 @@ import java.util.Random;
 public class SignInController {
 
     @FXML
-    private TextField nameField, cinField, emailField, phoneField, addressField, cityField;
+    private TextField bioField,nameField, cinField, emailField, phoneField, addressField, cityField;
 
     @FXML
     private PasswordField passwordField;
+
+    @FXML
+    private ImageView profileImageView;
+
+    @FXML
+    private DatePicker birthdayPicker;
 
     @FXML
     private Button signInButton;
@@ -43,13 +49,7 @@ public class SignInController {
     @FXML
     private Label passwordStrengthLabel;
 
-    @FXML
-    private ImageView profileImageView;
-
     private File selectedImageFile;
-
-    @FXML
-    private DatePicker birthdayPicker;
 
     @FXML
     private ScrollPane scrollPane;
@@ -81,15 +81,14 @@ public class SignInController {
     private void handleSignIn(ActionEvent event) {
         try {
             String name = nameField.getText();
-            int cin = Integer.parseInt(cinField.getText());
+            String cin = cinField.getText();
             String email = emailField.getText();
             String password = passwordField.getText();
             String phone = phoneField.getText();
             String address = addressField.getText();
-            String city = cityField.getText();
-            UserRole role = UserRole.USER;
-
+            String bio = bioField.getText();
             LocalDate localDate = birthdayPicker.getValue();
+
             if (localDate == null) {
                 showAlert("Error", "Please select a valid birthday.");
                 return;
@@ -119,7 +118,7 @@ public class SignInController {
             }
 
             // Save user in the database
-            User newUser = new User(name, cin, email, password, role, phone, address, city, "Tunisia", profileImagePath, birthday);
+            User newUser = new User(name, cin, email, password, "ROLE_USER", phone, address, profileImagePath, birthday,bio);
             userService.save(newUser);
 
             showAlert("Success", "User registered successfully!");

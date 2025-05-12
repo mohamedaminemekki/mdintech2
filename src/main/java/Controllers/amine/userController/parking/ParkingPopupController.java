@@ -94,7 +94,7 @@ public class ParkingPopupController {
         }
 
         ParkingTicket ticket = new ParkingTicket(
-                loggedInUser.getInstance().getLoggedUser().getCIN(),
+                Integer.parseInt(loggedInUser.getInstance().getLoggedUser().getCIN()),
                 selectedParking.getID(),
                 availableSlot,
                 new Date(System.currentTimeMillis()),

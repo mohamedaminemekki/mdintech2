@@ -1,4 +1,4 @@
-package controllers.Rahim;
+package Controllers.Rahim;
 
 import entities.amine.User;
 import javafx.collections.FXCollections;
@@ -186,7 +186,7 @@ public class UserController {
         try {
             User user = loggedInUser.getInstance().getLoggedUser();
             System.out.println(currentUser.toString());
-            factureData.setAll(factureService.getFacturesByUser(Integer.toString(currentUser.getCIN())));
+            factureData.setAll(factureService.getFacturesByUser(currentUser.getCIN()));
             ObservableList<Facture> unpaidData = FXCollections.observableArrayList();
             ObservableList<Facture> paidData = FXCollections.observableArrayList();
             for (Facture f : factureData) {

@@ -71,7 +71,7 @@ public class MainController {
         checkForConfirmedOrders();
         User currentUser = loggedInUser.getInstance().getLoggedUser();
         if (currentUser != null) {
-            userCIN = currentUser.getCIN();
+            userCIN = Integer.parseInt(currentUser.getCIN());
         }
 
         // Load products and display them

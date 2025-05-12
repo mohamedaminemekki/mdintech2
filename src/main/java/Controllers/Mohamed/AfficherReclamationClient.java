@@ -244,7 +244,7 @@ public class AfficherReclamationClient {
     @FXML
     private void chargerReclamations() {
         try {
-            int clientId = loggedInUser.getInstance().getLoggedUser().getCIN();
+            int clientId = Integer.parseInt(loggedInUser.getInstance().getLoggedUser().getCIN());
             allReclamations = reclamationService.readListById(clientId);
             String clientIdText = clientIdField.getText().trim();
 
@@ -273,7 +273,7 @@ public class AfficherReclamationClient {
         }
 
         try {
-            int clientId = loggedInUser.getInstance().getLoggedUser().getCIN();
+            int clientId = Integer.parseInt(loggedInUser.getInstance().getLoggedUser().getCIN());
             List<Reclamation> filteredReclamations = allReclamations.stream()
                     .filter(rec -> rec.getClient_id() == clientId)
                     .collect(Collectors.toList());

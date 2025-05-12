@@ -71,15 +71,17 @@ public class loginController {
         User user=us.login(email, password);
         if (user != null) {
             loggedInUser.initializeSession((user));
-            System.out.println(user.isStatus());
-            if (!user.isStatus()) {
+
+            if (!user.isActive()) {
                 goToDashboard(event, "/user-blocked-view.fxml");
                 return;
             }
-            if (user.getRole() == UserRole.ADMIN) {
+            if (user.getRoles().contains("ROLE_ADMIN")) {
                 goToDashboard(event, "/main-admin-view.fxml");
-            } else if (user.getRole() == UserRole.USER) {
+            } else if (user.getRoles().contains("ROLE_USER")) {
                 goToDashboard(event, "/main-user-view.fxml");
+            } else {
+                showAlert("Access Denied", "You do not have permission to access this application.");
             }
         }else{
             showAlert("User Not Found ","no credentials are matching the ones you gave us !!!!! .????");

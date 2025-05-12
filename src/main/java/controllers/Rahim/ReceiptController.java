@@ -1,4 +1,4 @@
-package controllers.Rahim;
+package Controllers.Rahim;
 
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;

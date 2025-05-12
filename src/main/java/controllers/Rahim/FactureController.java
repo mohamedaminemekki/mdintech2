@@ -1,4 +1,4 @@
-package controllers.Rahim;
+package Controllers.Rahim;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;

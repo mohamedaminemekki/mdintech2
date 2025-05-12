@@ -1,4 +1,4 @@
-package controllers.Rahim;
+package Controllers.Rahim;
 
 import Singleton.loggedInUser;
 import entities.Rahim.Comment;
@@ -168,7 +168,7 @@ public class UserBlogController {
         post.setTitle(postTitle.getText());
         post.setContent(postContent.getText());
         post.setAuthor(currentUser.getName());
-        post.setAuthor_cin(Integer.toString(currentUser.getCIN())) ;
+        post.setAuthor_cin(currentUser.getCIN()) ;
         post.setImageUrl(imagePath);
         post.setCategory(categoryCombo.getValue());
         post.setCreatedAt(LocalDateTime.now());
@@ -251,7 +251,7 @@ public class UserBlogController {
         // Bouton options si l'utilisateur est l'auteur
         Node optionsButton = null;
         // Remplacement de SessionManager par loggedInUser
-        if (Integer.toString(loggedInUser.getInstance().getLoggedUser().getCIN()).equals(post.getAuthorCin())) {
+        if (loggedInUser.getInstance().getLoggedUser().getCIN().equals(post.getAuthorCin())) {
             Button btnOptions = new Button("⋮");
             btnOptions.getStyleClass().add("options-button");
             ContextMenu contextMenu = new ContextMenu();
@@ -459,7 +459,7 @@ public class UserBlogController {
     private void handleLike(BlogPost post) {
         try {
             // Remplacement de SessionManager par loggedInUser
-            likeService.toggleLike(Integer.toString(loggedInUser.getInstance().getLoggedUser().getCIN()), post.getId());
+            likeService.toggleLike(loggedInUser.getInstance().getLoggedUser().getCIN(), post.getId());
             refreshPost(post.getId());
         } catch (Exception e) {
             showAlert("Erreur", "Échec de l'action : " + e.getMessage());
@@ -498,7 +498,7 @@ public class UserBlogController {
         result.ifPresent(comment -> {
             try {
                 // Remplacement de SessionManager par loggedInUser
-                commentService.addComment(post.getId(), Integer.toString(loggedInUser.getInstance().getLoggedUser().getCIN()), comment);
+                commentService.addComment(post.getId(), loggedInUser.getInstance().getLoggedUser().getCIN(), comment);
                 refreshPost(post.getId());
             } catch (Exception e) {
                 showAlert("Erreur", "Impossible d'ajouter le commentaire");
@@ -514,7 +514,7 @@ public class UserBlogController {
                 showAlert("Commentaire refusé", "Votre commentaire contient des termes inappropriés.");
             } else {
                 // Remplacement de SessionManager par loggedInUser
-                commentService.addComment(post.getId(), Integer.toString(loggedInUser.getInstance().getLoggedUser().getCIN()), commentText);
+                commentService.addComment(post.getId(), loggedInUser.getInstance().getLoggedUser().getCIN(), commentText);
                 refreshPost(post.getId());
             }
         } catch (Exception e) {

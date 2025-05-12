@@ -1,5 +1,6 @@
-package controllers.Rahim;
+package Controllers.Rahim;
 
+import Controllers.Rahim.UserController;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;

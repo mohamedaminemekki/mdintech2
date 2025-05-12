@@ -66,7 +66,7 @@ public class LikeServices {
             ResultSet rs = ps.executeQuery();
             while(rs.next()){
                 User user = new User();
-                user.setCIN(Integer.parseInt(rs.getString("cin")));
+                user.setCIN(rs.getString("cin"));
                 user.setName(rs.getString("name"));
                 user.setPathtopic(rs.getString("pathtopic"));
                 users.add(user);

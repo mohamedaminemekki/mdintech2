@@ -40,13 +40,12 @@ public class updateuserController {
                     currentUser.getCIN(),
                     currentUser.getEmail(),
                     currentUser.getPassword(),
-                    currentUser.getRole(),  // Include role
+                    currentUser.getRoles().get(0),  // Include role
                     currentUser.getPhone(),
                     currentUser.getAddress(),
-                    currentUser.getCity(),
-                    currentUser.getState(),
                     currentUser.getPathtopic(),
-                    currentUser.getBirthday()// Include status if using second constructor
+                    currentUser.getBirthday(),
+                    currentUser.getBio()
             );
 
             // Initialize fields with current values
@@ -54,8 +53,7 @@ public class updateuserController {
             emailField.setText(originalUser.getEmail());
             phoneField.setText(originalUser.getPhone());
             addressField.setText(originalUser.getAddress());
-            cityField.setText(originalUser.getCity());
-            stateField.setText(originalUser.getState());
+
         }
     }
 
@@ -98,15 +96,6 @@ public class updateuserController {
             changesDetected = true;
         }
 
-        if (!newCity.equals(originalUser.getCity())) {
-            currentUser.setCity(newCity);
-            changesDetected = true;
-        }
-
-        if (!newState.equals(originalUser.getState())) {
-            currentUser.setState(newState);
-            changesDetected = true;
-        }
 
         boolean passwordChanged = false;
         if (!newPassword.isEmpty()) {
@@ -135,13 +124,12 @@ public class updateuserController {
                     currentUser.getCIN(),
                     currentUser.getEmail(),
                     originalUser.getPassword(), // Use original password if not changed
-                    currentUser.getRole(),
+                    currentUser.getRoles().get(0),
                     currentUser.getPhone(),
                     currentUser.getAddress(),
-                    currentUser.getCity(),
-                    currentUser.getState(),
                     currentUser.getPathtopic(),
-                    currentUser.getBirthday()
+                    currentUser.getBirthday(),
+                    currentUser.getBio()
             );
 
             statusLabel.setText("User updated successfully!");

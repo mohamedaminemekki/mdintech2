@@ -1,4 +1,4 @@
-package controllers.Mohamed;
+package Controllers.Mohamed;
 
 import Singleton.loggedInUser;
 import com.sendgrid.*;
@@ -97,14 +97,14 @@ public class AjouterReclamation {
                 return;
             }
 
-            int clientId = loggedInUser.getInstance().getLoggedUser().getCIN();
+            int clientId = Integer.parseInt(loggedInUser.getInstance().getLoggedUser().getCIN());
             String email = emailField.getText(); // Get email from the field
             LocalDate date = LocalDate.now();
             String description = descriptionField.getText();
             String type = typeComboBox.getValue();
 
             // Determine priority using Hugging Face API
-            HuggingFaceAPI huggingFaceAPI = new HuggingFaceAPI();
+            controllers.Mohamed.HuggingFaceAPI huggingFaceAPI = new controllers.Mohamed.HuggingFaceAPI();
             String priorite = huggingFaceAPI.determinePriority(description);
 
             String photoPath = selectedImageFile != null ? selectedImageFile.getAbsolutePath() : "Aucune photo";
