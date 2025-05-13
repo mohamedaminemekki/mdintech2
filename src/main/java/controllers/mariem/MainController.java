@@ -17,6 +17,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+import javafx.scene.web.WebView;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import entities.mariem.Trip;
@@ -436,19 +437,40 @@ public class MainController {
         openMap("/views/metro_map.fxml", "Carte du Métro");
     }
 
+    @FXML
     private void openMap(String fxmlFile, String title) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlFile));
             Parent root = loader.load();
 
+            // Correction : Utiliser le bon controller selon le type de carte
+            if (fxmlFile.contains("bus_map")) {
+                BusMapController controller = loader.getController();
+                controller.setTripService(this.tripService);
+            } else if (fxmlFile.contains("metro_map")) {
+                MetroMapController controller = loader.getController();
+                controller.setTripService(this.tripService);
+            }
+
             Stage stage = new Stage();
             stage.setTitle(title);
             stage.setScene(new Scene(root));
+
+            // Ajouter pour forcer le redimensionnement initial
+            stage.setOnShown(e -> {
+                Platform.runLater(() -> {
+                    if (fxmlFile.contains("bus_map")) {
+                        ((BusMapController)loader.getController()).invalidateMap();
+                    }
+                });
+            });
+
             stage.show();
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
+
 
     private void showWeather(String cityName) {
         String weatherInfo = String.valueOf(WeatherService.getWeatherData(cityName));
@@ -484,6 +506,24 @@ public class MainController {
         openMap("/views/Chat.fxml", "Chatbot");
     }
 
+    public void start(Stage stage) throws Exception {
+        // Chargement racine
+        Parent root = FXMLLoader.load(getClass().getResource("/views/metro_map_view.fxml"));
 
+        // Configuration de la scène
+        Scene scene = new Scene(root);
+        scene.setFill(Color.TRANSPARENT); // Important
+
+        stage.setScene(scene);
+        stage.show();
+
+        // Correction finale après affichage
+        Platform.runLater(() -> {
+            WebView webView = (WebView) scene.lookup("#webView");
+            if (webView != null) {
+                webView.getEngine().executeScript("if(map) map.invalidateSize(true)");
+            }
+        });
+    }
 
     }

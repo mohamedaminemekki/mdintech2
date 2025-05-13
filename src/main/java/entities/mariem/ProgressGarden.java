@@ -13,9 +13,9 @@ public class ProgressGarden extends Pane {
     private static final double PLANT_SPACING = 50;
 
     public enum PlantType {
-        FLOWER("/images/plants/flower.png"),
-        TREE("/images/plants/tree.png"),
-        BUSH("/images/plants/bush.png");
+        FLOWER("/images/plants/flower.jpg"),
+        TREE("/images/plants/tree3.jpg"),
+        BUSH("/images/plants/bush.jpg");
 
         private final String imagePath;
 

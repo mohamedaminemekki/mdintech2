@@ -57,7 +57,7 @@ public class AdminDashboardController {
     @FXML
     private void openStatistics() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/statistics.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/stats_trips.fxml"));
             Parent root = loader.load();
             Stage stage = new Stage();
             stage.setTitle("Statistiques");
@@ -86,4 +86,5 @@ public class AdminDashboardController {
             e.printStackTrace();
         }
     }
+
 }

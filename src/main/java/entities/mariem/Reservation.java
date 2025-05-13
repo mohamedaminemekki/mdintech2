@@ -12,9 +12,13 @@ public class Reservation {
     private int seatNumber;
     private String seatType;
     private String paymentStatus;
+    private String departure;
+    private String destination;
+    private Timestamp departureTime;
+    private double price;
 
     // Constructeurs
-    public Reservation(int id, int userId, int tripId, int transportId, Timestamp reservationTime, String status, int seatNumber, String seatType, String paymentStatus) {
+    public Reservation(int id, int userId, int tripId, int transportId, Timestamp reservationTime, String status, int seatNumber, String seatType, String paymentStatus, String departure, String destination, Timestamp departureTime, double price) {
         this.id = id;
         this.userId = userId;
         this.tripId = tripId;
@@ -24,9 +28,13 @@ public class Reservation {
         this.seatNumber = seatNumber;
         this.seatType = seatType;
         this.paymentStatus = paymentStatus;
+        this.departure = departure;
+        this.destination = destination;
+        this.departureTime = departureTime;
+        this.price = price;
     }
 
-    public Reservation(int userId, int tripId, int transportId, Timestamp reservationTime, String status, int seatNumber, String seatType, String paymentStatus) {
+    public Reservation(int userId, int tripId, int transportId, Timestamp reservationTime, String status, int seatNumber, String seatType, String paymentStatus, String departure, String destination, Timestamp departureTime, double price) {
         this.userId = userId;
         this.tripId = tripId;
         this.transportId = transportId;
@@ -35,9 +43,19 @@ public class Reservation {
         this.seatNumber = seatNumber;
         this.seatType = seatType;
         this.paymentStatus = paymentStatus;
+        this.departure = departure;
+        this.destination = destination;
+        this.departureTime = departureTime;
+        this.price = price;
     }
 
     public Reservation() {}
+
+    public Reservation(int userId, int tripId, int transportId, Timestamp reservationTime, String status, int seatNumber, String seatType, String paymentStatus) {
+    }
+
+    public Reservation(int resId, int i, int i1, int i2, Timestamp newReservationTime, String newStatus, int newSeatNumber, String newSeatType, String newPaymentStatus) {
+    }
 
     // Getters et Setters
     public int getId() { return id; }
@@ -67,6 +85,18 @@ public class Reservation {
     public String getPaymentStatus() { return paymentStatus; }
     public void setPaymentStatus(String paymentStatus) { this.paymentStatus = paymentStatus; }
 
+    public String getDeparture() { return departure; }
+    public void setDeparture(String departure) { this.departure = departure; }
+
+    public String getDestination() { return destination; }
+    public void setDestination(String destination) { this.destination = destination; }
+
+    public Timestamp getDepartureTime() { return departureTime; }
+    public void setDepartureTime(Timestamp departureTime) { this.departureTime = departureTime; }
+
+    public double getPrice() { return price; }
+    public void setPrice(double price) { this.price = price; }
+
     @Override
     public String toString() {
         return "Reservation{" +
@@ -79,10 +109,13 @@ public class Reservation {
                 ", seatNumber=" + seatNumber +
                 ", seatType='" + seatType + '\'' +
                 ", paymentStatus='" + paymentStatus + '\'' +
+                ", departure='" + departure + '\'' +
+                ", destination='" + destination + '\'' +
+                ", departureTime=" + departureTime +
+                ", price=" + price +
                 '}';
     }
 
-    // Correction des méthodes setReservationId et getReservationId
     public void setReservationId(int reservationId) {
         this.id = reservationId;
     }

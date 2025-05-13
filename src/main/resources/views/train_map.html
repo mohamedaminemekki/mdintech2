@@ -1,47 +1,178 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html>
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Carte des Trains</title>
-    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
-    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <title>Carte Train</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
     <style>
-        #map { height: 100vh; width: 100%; }
+        html, body, #map {
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            touch-action: auto;
+        }
+        .leaflet-container {
+            background: #f8f9fa;
+            outline: 0;
+        }
+        /* Correction cruciale pour le zoom */
+        .leaflet-map-pane,
+        .leaflet-tile,
+        .leaflet-marker-icon,
+        .leaflet-marker-shadow,
+        .leaflet-tile-container {
+            touch-action: auto !important;
+            pointer-events: auto !important;
+        }
+        .train-route-label {
+            font-weight: bold;
+            font-size: 12px;
+            text-shadow: -1px -1px 0 #fff, 1px -1px 0 #fff, -1px 1px 0 #fff, 1px 1px 0 #fff;
+            pointer-events: none;
+        }
+        .train-station-icon {
+            background: #d63384;
+            border-radius: 3px;
+            border: 2px solid #fff;
+            width: 14px;
+            height: 14px;
+            transform: rotate(45deg);
+        }
     </style>
 </head>
 <body>
-    <div id="map"></div>
-    <script>
-        // Initialisation de la carte
-        var map = L.map('map').setView([36.8065, 10.1815], 13); // Centrer sur Tunis
+<div id="map"></div>
+<script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+<script>
+    let map;
+    const trainRoutes = [];
+    const trainStations = {};
 
-        // Ajouter une couche de tuiles OpenStreetMap
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '© OpenStreetMap contributors'
+    function initMap() {
+        if (!map) {
+            map = L.map('map', {
+                preferCanvas: true,
+                zoomControl: true,
+                tap: false,
+                inertia: true,
+                zoomSnap: 0.5,
+                zoomDelta: 0.5
+            }).setView([36.8, 10.18], 10);
+
+            // Couche de base
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '© OpenStreetMap',
+                maxZoom: 18,
+                minZoom: 8,
+                noWrap: true
+            }).addTo(map);
+
+            // Activation explicite de tous les zooms
+            map.touchZoom.enable();
+            map.doubleClickZoom.enable();
+            map.scrollWheelZoom.enable();
+            map.boxZoom.enable();
+            map.keyboard.enable();
+
+            // Correction du zoom tactile
+            map._container.style.pointerEvents = 'auto';
+            map._container.style.touchAction = 'auto';
+
+            console.log('Train map initialized with full zoom controls');
+        }
+    }
+
+    // Fonction pour forcer le redimensionnement
+    function forceMapResize() {
+        if (map) {
+            setTimeout(() => {
+                map.invalidateSize({pan: false});
+                console.log('Map size invalidated');
+            }, 100);
+        }
+    }
+
+    window.addTrainRoute = function(departure, depLat, depLng, destination, destLat, destLng) {
+        if (!map) initMap();
+
+        addTrainStation(departure, depLat, depLng);
+        addTrainStation(destination, destLat, destLng);
+
+        const route = L.polyline([[depLat, depLng], [destLat, destLng]], {
+            color: '#d63384',
+            weight: 5,
+            opacity: 0.8,
+            lineJoin: 'round'
         }).addTo(map);
 
-        // Ajouter des marqueurs pour les arrêts de train
-        var trainStops = [
-            { name: "Gare Tunis", lat: 36.8065, lng: 10.1815 },
-            { name: "Gare Ariana", lat: 36.8625, lng: 10.1956 },
-            { name: "Gare Manouba", lat: 36.8081, lng: 10.0972 }
-        ];
+        // Ajout d'un label au milieu de la ligne
+        const midPoint = [(depLat + destLat) / 2, (depLng + destLng) / 2];
+        L.marker(midPoint, {
+            icon: L.divIcon({
+                className: 'train-route-label',
+                html: `Train ${departure} → ${destination}`,
+                iconSize: null
+            }),
+            interactive: false
+        }).addTo(map);
 
-        trainStops.forEach(function(stop) {
-            L.marker([stop.lat, stop.lng])
-                .addTo(map)
-                .bindPopup(stop.name);
-        });
+        route.bindPopup(`
+                <div style="text-align:center;min-width:180px">
+                    <h4 style="margin:5px 0;color:#d63384">Ligne Ferroviaire</h4>
+                    <div style="display:flex;justify-content:center;align-items:center">
+                        <span style="font-weight:bold">${departure}</span>
+                        <span style="margin:0 5px;color:#d63384">→</span>
+                        <span style="font-weight:bold">${destination}</span>
+                    </div>
+                </div>
+            `);
 
-        // Ajouter une ligne pour représenter le trajet de train
-        var trainRoute = [
-            [36.8065, 10.1815], // Gare Tunis
-            [36.8625, 10.1956], // Gare Ariana
-            [36.8081, 10.0972]  // Gare Manouba
-        ];
+        trainRoutes.push(route);
+        fitMapToRoutes();
+        forceMapResize(); // Ajout important
+    };
 
-        L.polyline(trainRoute, { color: 'red' }).addTo(map);
-    </script>
+    function addTrainStation(stationName, lat, lng) {
+        if (!trainStations[stationName]) {
+            trainStations[stationName] = L.marker([lat, lng], {
+                icon: L.divIcon({
+                    className: 'train-station-icon',
+                    iconSize: [18, 18]
+                }),
+                title: stationName,
+                riseOnHover: true
+            }).addTo(map)
+                .bindPopup(`
+                    <div style="text-align:center">
+                        <b style="color:#d63384">${stationName}</b>
+                        <p style="margin:3px 0">Gare Ferroviaire</p>
+                    </div>
+                `);
+        }
+    }
+
+    function fitMapToRoutes() {
+        const allFeatures = [...trainRoutes, ...Object.values(trainStations)];
+        if (allFeatures.length > 0) {
+            const featureGroup = L.featureGroup(allFeatures);
+            map.fitBounds(featureGroup.getBounds().pad(0.2));
+        }
+    }
+
+    // Initialisation différée avec focus
+    setTimeout(() => {
+        initMap();
+        if (map) {
+            map.getContainer().focus();
+            console.log('Map container focused');
+        }
+    }, 100);
+
+    // Export des fonctions pour JavaFX
+    window.initMap = initMap;
+    window.forceMapResize = forceMapResize;
+</script>
 </body>
 </html>

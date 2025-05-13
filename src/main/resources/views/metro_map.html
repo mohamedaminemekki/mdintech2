@@ -1,47 +1,105 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <meta charset="UTF-8">
+    <title>Carte Métro</title>
+    <link rel="stylesheet"
+          href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
     <style>
-        #map { height: 100vh; }
-        .metro-popup { min-width: 250px; }
-        .metro-button {
-            background: #007bff;
-            color: white;
-            border: none;
-            padding: 5px 10px;
-            cursor: pointer;
+        html, body, #map {
+            width: 100%; height: 100%;
+            margin: 0; padding: 0;
+            box-sizing: border-box;
+        }
+        .metro-label {
+            font-weight: bold;
+            font-size: 12px;
+            text-shadow: -1px -1px 0 #fff, 1px -1px 0 #fff, -1px 1px 0 #fff, 1px 1px 0 #fff;
+            padding: 2px;
+            white-space: nowrap;
         }
     </style>
 </head>
 <body>
 <div id="map"></div>
-<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+<script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
 <script>
-    var map = L.map('map').setView([36.8065, 10.1815], 13);
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+    let map;
+    const lines = [];
+    const cityMarkers = {};
 
-    function addMetroMarker(cityName, lat, lng) {
-        const marker = L.marker([lat, lng], {
-            icon: L.icon({
-                iconUrl: 'https://cdn-icons-png.flaticon.com/512/167/167755.png',
-                iconSize: [32, 32]
-            })
-        }).addTo(map);
-
-        marker.bindPopup(`
-                <div class="metro-popup">
-                    <h3>${cityName}</h3>
-                    <button class="metro-button"
-                            onclick="window.javaBridge.showCityTrips('${cityName}')">
-                        Voir les trajets
-                    </button>
-                </div>
-            `);
+    function initMap() {
+        if (!map) {
+            map = L.map('map').setView([36.8, 10.18], 10);
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '© OpenStreetMap',
+                maxZoom: 18
+            }).addTo(map);
+        }
+        console.log('Map initialized');
     }
 
-    // Exposer la fonction au scope global
-    window.addMetroMarker = addMetroMarker;
+    window.addMetroLine = function(dCity, dLat, dLng, rCity, rLat, rLng) {
+        if (!map) initMap();
+        console.log(`Drawing line ${dCity} → ${rCity}`);
+
+        // Créer ou mettre à jour les marqueurs de ville
+        addCityMarker(dCity, dLat, dLng);
+        addCityMarker(rCity, rLat, rLng);
+
+        // Dessiner la ligne avec des flèches et un style amélioré
+        const poly = L.polyline([[dLat, dLng], [rLat, rLng]], {
+            color: '#0066ff',
+            weight: 4,
+            opacity: 0.8,
+            dashArray: '5, 5',
+            lineJoin: 'round'
+        }).addTo(map);
+
+        // Ajouter une étiquette au milieu de la ligne
+        const midPoint = getMidPoint(dLat, dLng, rLat, rLng);
+        const label = L.marker(midPoint, {
+            icon: L.divIcon({
+                className: 'metro-label',
+                html: `${dCity} → ${rCity}`,
+                iconSize: null
+            }),
+            interactive: false
+        }).addTo(map);
+
+        // Ajouter un popup avec les informations
+        poly.bindPopup(`
+            <div style="text-align:center;">
+                <h4 style="margin:5px 0;">Ligne Métro</h4>
+                <div style="display:flex;justify-content:center;align-items:center;">
+                    <span style="font-weight:bold;">${dCity}</span>
+                    <span style="margin:0 5px;">→</span>
+                    <span style="font-weight:bold;">${rCity}</span>
+                </div>
+            </div>
+        `);
+
+        lines.push(poly);
+        const group = L.featureGroup([...lines, ...Object.values(cityMarkers)]);
+        map.fitBounds(group.getBounds().pad(0.1));
+    };
+
+    function addCityMarker(cityName, lat, lng) {
+        if (!cityMarkers[cityName]) {
+            cityMarkers[cityName] = L.marker([lat, lng], {
+                title: cityName,
+                riseOnHover: true
+            }).addTo(map)
+                .bindPopup(`<div style="text-align:center;"><b>${cityName}</b></div>`);
+        }
+    }
+
+    function getMidPoint(lat1, lng1, lat2, lng2) {
+        return [
+            (lat1 + lat2) / 2,
+            (lng1 + lng2) / 2
+        ];
+    }
 </script>
 </body>
 </html>

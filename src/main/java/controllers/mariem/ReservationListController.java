@@ -59,7 +59,7 @@ public class ReservationListController {
     }
 
     @FXML
-    public void initialize() {
+    private void initialize() {
         filterComboBox.getItems().addAll("Toutes", "Confirmed", "Pending", "Cancelled");
         filterComboBox.setValue("Toutes");
 
@@ -68,7 +68,6 @@ public class ReservationListController {
         searchField.textProperty().addListener((observable, oldValue, newValue) -> filterReservations());
         filterComboBox.valueProperty().addListener((observable, oldValue, newValue) -> filterReservations());
     }
-
     private void loadReservations() {
         try {
             List<Reservation> reservations = reservationService.getReservationsByUserId(currentUserId);
@@ -90,7 +89,7 @@ public class ReservationListController {
 
     private AnchorPane createReservationCard(Reservation reservation) {
         AnchorPane card = new AnchorPane();
-        card.setStyle("-fx-background-color: #ffffff; -fx-border-color: #cccccc; -fx-border-radius: 5px; -fx-padding: 15px; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 10, 0, 0, 0);");
+        card.getStyleClass().add("card");
 
         GridPane grid = new GridPane();
         grid.setHgap(10);
@@ -105,21 +104,36 @@ public class ReservationListController {
         }
 
         Label tripLabel = new Label("Trajet : " + reservation.getTripId());
-        tripLabel.setFont(Font.font("Arial", FontWeight.BOLD, 14));
-        tripLabel.setTextFill(Color.DARKBLUE);
+        tripLabel.getStyleClass().add("subtitle");
         grid.add(tripLabel, 1, 0);
 
+        Label departureLabel = new Label("Départ : " + reservation.getDeparture());
+        departureLabel.getStyleClass().add("label");
+        grid.add(departureLabel, 1, 1);
+
+        Label destinationLabel = new Label("Arrivée : " + reservation.getDestination());
+        destinationLabel.getStyleClass().add("label");
+        grid.add(destinationLabel, 1, 2);
+
+        Label dateLabel = new Label("Date : " + reservation.getDepartureTime().toLocalDateTime().toLocalDate());
+        dateLabel.getStyleClass().add("label");
+        grid.add(dateLabel, 1, 3);
+
+        Label priceLabel = new Label("Prix : " + reservation.getPrice() + " DT");
+        priceLabel.getStyleClass().add("label");
+        grid.add(priceLabel, 1, 4);
+
         Label passengersLabel = new Label("Passagers : " + reservation.getSeatNumber());
-        passengersLabel.setFont(Font.font("Arial", 12));
-        grid.add(passengersLabel, 1, 1);
+        passengersLabel.getStyleClass().add("label");
+        grid.add(passengersLabel, 1, 5);
 
         Label seatTypeLabel = new Label("Siège : " + reservation.getSeatType());
-        seatTypeLabel.setFont(Font.font("Arial", 12));
-        grid.add(seatTypeLabel, 1, 2);
+        seatTypeLabel.getStyleClass().add("label");
+        grid.add(seatTypeLabel, 1, 6);
 
         Label statusLabel = new Label("Statut : " + reservation.getStatus());
-        statusLabel.setFont(Font.font("Arial", FontWeight.BOLD, 12));
-        grid.add(statusLabel, 1, 3);
+        statusLabel.getStyleClass().add("label");
+        grid.add(statusLabel, 1, 7);
 
         // Apply styles based on status
         if (reservation.getStatus().equals("Cancelled")) {
@@ -137,26 +151,26 @@ public class ReservationListController {
         buttonBox.setLayoutY(10);
 
         Button detailsButton = new Button("Détails", loadIcon("/images/details.png", 16, 16));
-        detailsButton.setStyle("-fx-background-color: #2196F3; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 5px 10px; -fx-border-radius: 5px;");
+        detailsButton.getStyleClass().add("button");
         detailsButton.setOnAction(event -> showReservationDetails(reservation));
 
         if (reservation.getStatus().equals("Confirmed") || reservation.getStatus().equals("Pending")) {
             Button modifyButton = new Button("Modifier", loadIcon("/images/edit.png", 16, 16));
-            modifyButton.setStyle("-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 5px 10px; -fx-border-radius: 5px;");
+            modifyButton.getStyleClass().add("button");
             modifyButton.setOnAction(event -> modifyReservation(reservation));
             buttonBox.getChildren().add(modifyButton);
         }
 
         if (reservation.getStatus().equals("Confirmed") || reservation.getStatus().equals("Pending")) {
             Button cancelButton = new Button("Annuler", loadIcon("/images/cancel.png", 16, 16));
-            cancelButton.setStyle("-fx-background-color: #f44336; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 5px 10px; -fx-border-radius: 5px;");
+            cancelButton.getStyleClass().add("button");
             cancelButton.setOnAction(event -> cancelReservation(reservation));
             buttonBox.getChildren().add(cancelButton);
         }
 
         // Add the "Generate QR Code" button
-        Button qrCodeButton = new Button("Générer QR Code", loadIcon("/images/qrcode.png", 16, 16));
-        qrCodeButton.setStyle("-fx-background-color: #5f036e; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 5px 10px; -fx-border-radius: 5px;");
+        Button qrCodeButton = new Button("", loadIcon("/images/qrcode.png", 16, 16));
+        qrCodeButton.getStyleClass().add("icon");
         qrCodeButton.setUserData(reservation); // Associer la réservation au bouton
         qrCodeButton.setOnAction(event -> {
             Reservation res = (Reservation) qrCodeButton.getUserData();
@@ -216,7 +230,11 @@ public class ReservationListController {
         alert.setTitle("Détails de la réservation");
         alert.setHeaderText("Détails pour le trajet : " + reservation.getTripId());
         alert.setContentText(
-                "Nombre de passagers : " + reservation.getSeatNumber() + "\n" +
+                "Départ : " + reservation.getDeparture() + "\n" +
+                        "Arrivée : " + reservation.getDestination() + "\n" +
+                        "Date : " + reservation.getDepartureTime().toLocalDateTime().toLocalDate() + "\n" +
+                        "Prix : " + reservation.getPrice() + " €\n" +
+                        "Nombre de passagers : " + reservation.getSeatNumber() + "\n" +
                         "Type de siège : " + reservation.getSeatType() + "\n" +
                         "Statut : " + reservation.getStatus()
         );
@@ -274,7 +292,10 @@ public class ReservationListController {
                         String.valueOf(reservation.getTripId()).toLowerCase().contains(searchText) ||
                                 String.valueOf(reservation.getSeatNumber()).contains(searchText) ||
                                 reservation.getSeatType().toLowerCase().contains(searchText) ||
-                                reservation.getStatus().toLowerCase().contains(searchText)
+                                reservation.getStatus().toLowerCase().contains(searchText) ||
+                                reservation.getDeparture().toLowerCase().contains(searchText) ||
+                                reservation.getDestination().toLowerCase().contains(searchText) ||
+                                String.valueOf(reservation.getPrice()).contains(searchText)
                 )
                 .toList();
 

@@ -141,7 +141,7 @@
                             <!-- Carte Répartition des Transports -->
                             <VBox styleClass="stats-card" spacing="10">
                                 <HBox spacing="10" alignment="CENTER_LEFT">
-                                    <ImageView fitWidth="30" fitHeight="30">
+                                    <ImageView fitWidth="40" fitHeight="40">
                                         <image>
                                             <Image url="@/images/transport1.png"/>
                                         </image>
@@ -212,7 +212,7 @@
                 <!-- Onglet Jardin (Jardin de progression et impact environnemental) -->
                 <Tab text="Jardin" closable="false">
                     <graphic>
-                        <ImageView fitWidth="20" fitHeight="20">
+                        <ImageView fitWidth="35" fitHeight="35">
                             <image>
                                 <Image url="@/images/garden.jpg"/>
                             </image>
@@ -223,7 +223,7 @@
                             <!-- Titre et description pour le jardin -->
                             <Label text="Mon Jardin Virtuel" style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #2d3436;"/>
                             <Label text="Chaque trajet effectué plante un nouvel arbre dans votre jardin. Plus vous voyagez, plus votre forêt grandit et plus vous contribuez à l'environnement !"
-                                   style="-fx-font-size: 14px; -fx-text-fill: #2d3436; -fx-wrap-text: true;"/>
+                                   style="-fx-font-size: 16px; -fx-text-fill: #2d3436; -fx-wrap-text: true;"/>
                             <VBox styleClass="stats-card" spacing="10" alignment="CENTER">
                                 <Label text="Impact Environnemental" styleClass="section-title"/>
                                 <Label fx:id="envImpactLabel" style="-fx-font-size: 16px; -fx-text-fill: #27ae60; -fx-font-weight: bold;"/>

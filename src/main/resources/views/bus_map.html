@@ -1,85 +1,126 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html>
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Carte des Bus</title>
-    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
-    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <title>Carte Bus</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
     <style>
-        html, body {
+        html, body, #map {
+            width: 100%;
             height: 100%;
             margin: 0;
             padding: 0;
+            overflow: hidden;
+            touch-action: auto;
         }
-        /* On utilise position absolute pour occuper toute la surface */
-        #map {
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
+        .leaflet-container {
+            background: #fff;
+            outline: 0;
+        }
+        .bus-label {
+            font-weight: bold;
+            font-size: 12px;
+            text-shadow: -1px -1px 0 #fff, 1px -1px 0 #fff, -1px 1px 0 #fff, 1px 1px 0 #fff;
+            pointer-events: none;
+        }
+        .bus-stop-icon {
+            background: #ff7800;
+            border-radius: 50%;
+            border: 2px solid #fff;
+            width: 12px;
+            height: 12px;
         }
     </style>
 </head>
 <body>
-
 <div id="map"></div>
-
+<script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
 <script>
-    // Initialisation de la carte Leaflet
-    var map = L.map('map').setView([36.8065, 10.1815], 13);
+    let map;
+    const busLines = [];
+    const busStops = {};
+    let isInitialized = false;
 
-    // Ajouter la couche de tuiles OpenStreetMap
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '© OpenStreetMap contributors'
-    }).addTo(map);
+    function initMap() {
+        if (!isInitialized) {
+            map = L.map('map', {
+                preferCanvas: true,
+                zoomControl: true,
+                tap: false
+            }).setView([36.8, 10.18], 10);
 
-    // Fonction appelée depuis Java pour mettre à jour la carte avec les données des arrêts de bus
-    function updateBusMap(busStops) {
-        // Supprimer les anciens marqueurs et lignes
-        map.eachLayer(function(layer) {
-            if (layer instanceof L.Marker || layer instanceof L.Polyline) {
-                map.removeLayer(layer);
-            }
-        });
-        // Ajouter les nouveaux marqueurs et lignes
-        busStops.forEach(function(stop) {
-            var departureCoords = getCoordinates(stop.departure);
-            var destinationCoords = getCoordinates(stop.destination);
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '© OpenStreetMap',
+                maxZoom: 18,
+                minZoom: 8
+            }).addTo(map);
 
-            if (departureCoords && destinationCoords) {
-                L.marker(departureCoords).addTo(map).bindPopup(stop.departure);
-                L.marker(destinationCoords).addTo(map).bindPopup(stop.destination);
-                L.polyline([departureCoords, destinationCoords], { color: 'blue' }).addTo(map);
-            }
-        });
+            map.touchZoom.enable();
+            map.doubleClickZoom.enable();
+            map.scrollWheelZoom.enable();
+
+            isInitialized = true;
+            console.log('Bus map initialized with zoom controls');
+        }
     }
 
-    // Fonction pour obtenir les coordonnées d'une station
-    function getCoordinates(stationName) {
-        var coordinates = {
-            "Tunis": [36.8065, 10.1815],
-            "Manouba": [36.8081, 10.0972],
-            "Hammamet": [36.4000, 10.6167],
-            "Ariana": [36.8625, 10.1956],
-            "Sfax": [34.7406, 10.7603],
-            "Sousse": [35.8254, 10.6360],
-            "Monastir": [35.7833, 10.8333],
-            "Passage": [36.8625, 10.1956],
-            "Bardo": [36.8097, 10.1361],
-            "La Marsa": [36.8782, 10.3247],
-            "Ben Arous": [36.7531, 10.2189],
-            "Barcelone": [41.3851, 2.1734],
-            "Nabeul": [36.4561, 10.7376],
-            "Bizerte": [37.2744, 9.8739],
-            "Zaghouan": [36.4027, 10.1429],
-            "Gabès": [33.8815, 10.0983],
-            "Kef": [36.1822, 8.7148]
-        };
-        return coordinates[stationName];
+    window.addBusLine = function(departure, lat1, lng1, destination, lat2, lng2) {
+        if (!isInitialized) initMap();
+
+        addBusStop(departure, lat1, lng1);
+        addBusStop(destination, lat2, lng2);
+
+        const line = L.polyline([[lat1, lng1], [lat2, lng2]], {
+            color: '#ff7800',
+            weight: 4,
+            opacity: 0.8,
+            dashArray: '8, 6'
+        }).addTo(map);
+
+        const midPoint = [(lat1 + lat2) / 2, (lng1 + lng2) / 2];
+        L.marker(midPoint, {
+            icon: L.divIcon({
+                className: 'bus-label',
+                html: `${departure} → ${destination}`,
+                iconSize: null
+            }),
+            interactive: false
+        }).addTo(map);
+
+        line.bindPopup(`
+                <div style="text-align:center;min-width:150px">
+                    <h4 style="margin:5px 0;color:#ff7800">Ligne Bus</h4>
+                    <div style="display:flex;justify-content:center">
+                        <span style="font-weight:bold">${departure}</span>
+                        <span style="margin:0 5px">→</span>
+                        <span style="font-weight:bold">${destination}</span>
+                    </div>
+                </div>
+            `);
+
+        busLines.push(line);
+        fitMapToBounds();
+    };
+
+    function addBusStop(city, lat, lng) {
+        if (!busStops[city]) {
+            busStops[city] = L.marker([lat, lng], {
+                icon: L.divIcon({
+                    className: 'bus-stop-icon',
+                    iconSize: [16, 16]
+                })
+            }).addTo(map)
+                .bindPopup(`<div style="text-align:center"><b>${city}</b><br>Arrêt Bus</div>`);
+        }
     }
+
+    function fitMapToBounds() {
+        const group = L.featureGroup([...busLines, ...Object.values(busStops)]);
+        map.fitBounds(group.getBounds().pad(0.1));
+    }
+
+    // Initialisation différée pour meilleures performances
+    setTimeout(initMap, 100);
 </script>
-
 </body>
 </html>

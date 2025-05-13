@@ -21,7 +21,9 @@ public class ReservationService implements Services<Reservation> {
     @Override
     public List<Reservation> readList() throws SQLException {
         List<Reservation> reservations = new ArrayList<>();
-        String query = "SELECT * FROM reservations";
+        String query = "SELECT r.*, t.departure, t.destination, t.departure_time, t.price " +
+                "FROM reservations r " +
+                "JOIN trips t ON r.trip_id = t.id";
 
         try (Statement statement = connection.createStatement();
              ResultSet resultSet = statement.executeQuery(query)) {
@@ -35,7 +37,11 @@ public class ReservationService implements Services<Reservation> {
                         resultSet.getString("status"),
                         resultSet.getInt("seat_number"),
                         resultSet.getString("seat_type"),
-                        resultSet.getString("payment_status")
+                        resultSet.getString("payment_status"),
+                        resultSet.getString("departure"),
+                        resultSet.getString("destination"),
+                        resultSet.getTimestamp("departure_time"),
+                        resultSet.getDouble("price")
                 ));
             }
         } catch (SQLException e) {
@@ -150,7 +156,10 @@ public class ReservationService implements Services<Reservation> {
 
     public List<Reservation> getReservationsByUserId(int userId) {
         List<Reservation> reservations = new ArrayList<>();
-        String query = "SELECT * FROM reservations WHERE user_id = ?";
+        String query = "SELECT r.*, t.departure, t.destination, t.departure_time, t.price " +
+                "FROM reservations r " +
+                "JOIN trips t ON r.trip_id = t.id " +
+                "WHERE r.user_id = ?";
 
         try (PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setInt(1, userId);
@@ -166,7 +175,11 @@ public class ReservationService implements Services<Reservation> {
                         resultSet.getString("status"),
                         resultSet.getInt("seat_number"),
                         resultSet.getString("seat_type"),
-                        resultSet.getString("payment_status")
+                        resultSet.getString("payment_status"),
+                        resultSet.getString("departure"),
+                        resultSet.getString("destination"),
+                        resultSet.getTimestamp("departure_time"),
+                        resultSet.getDouble("price")
                 );
                 reservations.add(reservation);
             }
@@ -179,7 +192,9 @@ public class ReservationService implements Services<Reservation> {
 
     public List<Reservation> getAllReservations() throws SQLException {
         List<Reservation> reservations = new ArrayList<>();
-        String query = "SELECT * FROM reservations";
+        String query = "SELECT r.*, t.departure, t.destination, t.departure_time, t.price " +
+                "FROM reservations r " +
+                "JOIN trips t ON r.trip_id = t.id";
 
         try (PreparedStatement statement = connection.prepareStatement(query);
              ResultSet resultSet = statement.executeQuery()) {
@@ -194,7 +209,11 @@ public class ReservationService implements Services<Reservation> {
                         resultSet.getString("status"),
                         resultSet.getInt("seat_number"),
                         resultSet.getString("seat_type"),
-                        resultSet.getString("payment_status")
+                        resultSet.getString("payment_status"),
+                        resultSet.getString("departure"),
+                        resultSet.getString("destination"),
+                        resultSet.getTimestamp("departure_time"),
+                        resultSet.getDouble("price")
                 );
                 reservations.add(reservation);
             }
@@ -218,7 +237,10 @@ public class ReservationService implements Services<Reservation> {
 
     public List<Reservation> searchReservations(String keyword) throws SQLException {
         List<Reservation> reservations = new ArrayList<>();
-        String query = "SELECT * FROM reservations WHERE id LIKE ? OR user_id LIKE ? OR trip_id LIKE ? OR status LIKE ?";
+        String query = "SELECT r.*, t.departure, t.destination, t.departure_time, t.price " +
+                "FROM reservations r " +
+                "JOIN trips t ON r.trip_id = t.id " +
+                "WHERE r.id LIKE ? OR r.user_id LIKE ? OR r.trip_id LIKE ? OR r.status LIKE ?";
 
         try (PreparedStatement statement = connection.prepareStatement(query)) {
             String searchPattern = "%" + keyword + "%";
@@ -238,7 +260,11 @@ public class ReservationService implements Services<Reservation> {
                         resultSet.getString("status"),
                         resultSet.getInt("seat_number"),
                         resultSet.getString("seat_type"),
-                        resultSet.getString("payment_status")
+                        resultSet.getString("payment_status"),
+                        resultSet.getString("departure"),
+                        resultSet.getString("destination"),
+                        resultSet.getTimestamp("departure_time"),
+                        resultSet.getDouble("price")
                 ));
             }
         }
@@ -246,7 +272,10 @@ public class ReservationService implements Services<Reservation> {
     }
 
     public List<Reservation> searchByUserId(String keyword) throws SQLException {
-        String query = "SELECT * FROM reservations WHERE user_id = ?";
+        String query = "SELECT r.*, t.departure, t.destination, t.departure_time, t.price " +
+                "FROM reservations r " +
+                "JOIN trips t ON r.trip_id = t.id " +
+                "WHERE r.user_id = ?";
         try (PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setInt(1, Integer.parseInt(keyword));
             return executeQuery(statement);
@@ -254,7 +283,10 @@ public class ReservationService implements Services<Reservation> {
     }
 
     public List<Reservation> searchByTripId(String keyword) throws SQLException {
-        String query = "SELECT * FROM reservations WHERE trip_id = ?";
+        String query = "SELECT r.*, t.departure, t.destination, t.departure_time, t.price " +
+                "FROM reservations r " +
+                "JOIN trips t ON r.trip_id = t.id " +
+                "WHERE r.trip_id = ?";
         try (PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setInt(1, Integer.parseInt(keyword));
             return executeQuery(statement);
@@ -262,7 +294,10 @@ public class ReservationService implements Services<Reservation> {
     }
 
     public List<Reservation> searchByPaymentStatus(String keyword) throws SQLException {
-        String query = "SELECT * FROM reservations WHERE payment_status LIKE ?";
+        String query = "SELECT r.*, t.departure, t.destination, t.departure_time, t.price " +
+                "FROM reservations r " +
+                "JOIN trips t ON r.trip_id = t.id " +
+                "WHERE r.payment_status LIKE ?";
         try (PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setString(1, "%" + keyword + "%");
             return executeQuery(statement);
@@ -282,7 +317,11 @@ public class ReservationService implements Services<Reservation> {
                         resultSet.getString("status"),
                         resultSet.getInt("seat_number"),
                         resultSet.getString("seat_type"),
-                        resultSet.getString("payment_status")
+                        resultSet.getString("payment_status"),
+                        resultSet.getString("departure"),
+                        resultSet.getString("destination"),
+                        resultSet.getTimestamp("departure_time"),
+                        resultSet.getDouble("price")
                 );
                 reservations.add(reservation);
             }
@@ -308,7 +347,6 @@ public class ReservationService implements Services<Reservation> {
         }
         return tripIds;
     }
-    // Dans ReservationService.java
 
     public double getMonthlyRevenue() throws SQLException {
         String query = "SELECT SUM("
@@ -352,7 +390,7 @@ public class ReservationService implements Services<Reservation> {
             return rs.next() ? rs.getDouble(1) : 0.0;
         }
     }
-    // Rentabilité
+
     public Map<String, Double> getMostProfitableTrips(int limit) throws SQLException {
         Map<String, Double> data = new LinkedHashMap<>();
         String query = "SELECT CONCAT(t.departure, ' → ', t.destination), "
@@ -373,7 +411,6 @@ public class ReservationService implements Services<Reservation> {
         }
         return data;
     }
-
 
     public Map<String, Double> getLeastProfitableTrips(int limit) throws SQLException {
         Map<String, Double> data = new LinkedHashMap<>();
@@ -396,7 +433,6 @@ public class ReservationService implements Services<Reservation> {
         return data;
     }
 
-
     private String buildDateCondition(LocalDate... dates) {
         if (dates.length == 2) {
             return " AND reservation_time BETWEEN ? AND ? ";
@@ -410,6 +446,7 @@ public class ReservationService implements Services<Reservation> {
             stmt.setDate(2, Date.valueOf(dates[1]));
         }
     }
+
     public Map<String, Double> getCancellationByHour(LocalDate start, LocalDate end) throws SQLException {
         Map<String, Double> data = new LinkedHashMap<>();
         String query = "SELECT HOUR(reservation_time) as hour, "
@@ -446,5 +483,4 @@ public class ReservationService implements Services<Reservation> {
         }
         return data;
     }
-
 }

@@ -26,6 +26,10 @@ public class Trip {
         this.transportName = transportName;
     }
 
+    public Trip() {
+
+    }
+
     // Getters et Setters
     public int getTripId() {
         return tripId;
@@ -125,5 +129,8 @@ public class Trip {
 
     public String getVehicleImage() {
         return "";
+    }
+
+    public void setId(int id) {
     }
 }

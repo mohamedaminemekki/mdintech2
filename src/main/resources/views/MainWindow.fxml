@@ -64,8 +64,10 @@
                 <VBox spacing="20" alignment="CENTER" style="-fx-padding: 30; -fx-background-color: transparent;">
 
                     <HBox styleClass="top-bar" spacing="20" alignment="CENTER">
-                        <Label text=" Bienvenue sur Mdintech !" styleClass="welcome-text"/>
                         <Region HBox.hgrow="ALWAYS"/>
+                        <Label text="Bienvenue sur Mdintech !" styleClass="welcome-text"/>
+                        <Region HBox.hgrow="ALWAYS"/>
+
                         <Button text=" Profil" onAction="#handleProfile" styleClass="button"/>
                         <Button text="" onAction="#toggleTheme" styleClass="theme-toggle">
                             <graphic>

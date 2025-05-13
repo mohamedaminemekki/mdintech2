@@ -1,112 +1,179 @@
 package controllers.mariem;
 
+import entities.mariem.Trip;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
+import javafx.application.Platform;
 import javafx.concurrent.Worker;
 import javafx.fxml.FXML;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.web.WebView;
+import javafx.util.Duration;
+import netscape.javascript.JSObject;
+import org.json.JSONArray;
+import org.json.JSONObject;
+import services.mariem.TripService;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.Statement;
-import java.util.ArrayList;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLEncoder;
+import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class BusMapController {
+    @FXML private WebView webView;
+    @FXML private AnchorPane mapContainer;
 
-    @FXML
-    private AnchorPane mapContainer; // Correspond à fx:id="mapContainer" dans le FXML
+    private TripService tripService;
+    private Map<String, double[]> cityCoordinatesCache = new HashMap<>();
+    private final ExecutorService executor = Executors.newFixedThreadPool(3);
+    private static final int GEOCODING_DELAY = 500;
 
-    @FXML
-    private WebView webView;         // Correspond à fx:id="webView"
+    public void setTripService(TripService tripService) {
+        this.tripService = tripService;
+    }
 
     @FXML
     public void initialize() {
-        // Charger la carte depuis le fichier HTML (assurez-vous que bus_map.html est bien dans /mdinteech/views/)
-        String mapUrl = getClass().getResource("/views/bus_map.html").toExternalForm();
-        webView.getEngine().load(mapUrl);
+        if (tripService == null) {
+            try {
+                tripService = new TripService(utils.DatabaseConnection.getInstance().getConnection());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        configureWebView();
+        setupSizeBindings();
+    }
 
-        // Attendre la fin du chargement de la page HTML
-        webView.getEngine().getLoadWorker().stateProperty().addListener((obs, oldState, newState) -> {
-            if (newState == Worker.State.SUCCEEDED) {
-                // Appeler map.invalidateSize() lorsque le WebView est redimensionné
-                webView.widthProperty().addListener((o, oldVal, newVal) ->
-                        webView.getEngine().executeScript("map.invalidateSize()"));
-                webView.heightProperty().addListener((o, oldVal, newVal) ->
-                        webView.getEngine().executeScript("map.invalidateSize()"));
+    private void configureWebView() {
+        webView.setContextMenuEnabled(false);
+        webView.getEngine().setJavaScriptEnabled(true);
 
-                // Récupérer les arrêts de bus et les afficher sur la carte
-                List<BusStop> busStops = getBusStopsFromDatabase();
-                String busStopsJson = convertToJson(busStops);
-                webView.getEngine().executeScript("updateBusMap(" + busStopsJson + ")");
+        webView.getEngine().getLoadWorker().stateProperty().addListener((obs, oldS, newS) -> {
+            if (newS == Worker.State.SUCCEEDED) {
+                initializeJavaScriptBridge();
+                loadAndDisplayBusTrips();
+            }
+        });
+
+        webView.getEngine().load(getClass().getResource("/views/bus_map.html").toExternalForm());
+    }
+
+    private void initializeJavaScriptBridge() {
+        JSObject window = (JSObject) webView.getEngine().executeScript("window");
+        window.setMember("javaBridge", new JavaBridge());
+    }
+
+    private void setupSizeBindings() {
+        webView.prefWidthProperty().bind(mapContainer.widthProperty());
+        webView.prefHeightProperty().bind(mapContainer.heightProperty());
+        mapContainer.widthProperty().addListener((o, ov, nv) -> invalidateMap());
+        mapContainer.heightProperty().addListener((o, ov, nv) -> invalidateMap());
+    }
+
+    void invalidateMap() {
+        Platform.runLater(() ->
+                webView.getEngine().executeScript("if(map) map.invalidateSize(true);")
+        );
+    }
+
+    private void loadAndDisplayBusTrips() {
+        executor.execute(() -> {
+            try {
+                List<Trip> trips = tripService.readList();
+                int delay = 0;
+
+                for (Trip t : trips) {
+                    if (!"bus".equalsIgnoreCase(t.getTransportName())) continue;
+
+                    final Trip trip = t;
+                    int finalDelay = delay;
+                    Platform.runLater(() -> {
+                        Timeline timeline = new Timeline(
+                                new KeyFrame(Duration.millis(finalDelay), e -> processTrip(trip))
+                        );
+                        timeline.play();
+                    });
+                    delay += GEOCODING_DELAY;
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
             }
         });
     }
 
-    /**
-     * Récupère les arrêts de bus depuis la base de données (table "trips" : departure, destination).
-     */
-    private List<BusStop> getBusStopsFromDatabase() {
-        List<BusStop> busStops = new ArrayList<>();
+    private void processTrip(Trip trip) {
         try {
-            Connection connection = DriverManager.getConnection(
-                    "jdbc:mysql://localhost:3306/city_transport", "root", ""
-            );
-            Statement statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery("SELECT departure, destination FROM trips");
+            String dep = trip.getDeparture().trim();
+            String dest = trip.getDestination().trim();
 
-            while (resultSet.next()) {
-                String departure = resultSet.getString("departure");
-                String destination = resultSet.getString("destination");
-                busStops.add(new BusStop(departure, destination));
+            double[] depCoords = getCachedCoordinates(dep);
+            double[] destCoords = getCachedCoordinates(dest);
+
+            if (depCoords != null && destCoords != null) {
+                callAddBusLine(dep, depCoords[0], depCoords[1],
+                        dest, destCoords[0], destCoords[1]);
             }
-
-            resultSet.close();
-            statement.close();
-            connection.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return busStops;
     }
 
-    /**
-     * Convertit la liste des arrêts de bus en JSON pour être passée à la fonction JS "updateBusMap()".
-     */
-    private String convertToJson(List<BusStop> busStops) {
-        StringBuilder json = new StringBuilder("[");
-        for (BusStop stop : busStops) {
-            json.append("{")
-                    .append("\"departure\":\"").append(stop.getDeparture()).append("\",")
-                    .append("\"destination\":\"").append(stop.getDestination()).append("\"")
-                    .append("},");
+    private double[] getCachedCoordinates(String city) throws Exception {
+        String key = city.toLowerCase();
+        if (!cityCoordinatesCache.containsKey(key)) {
+            cityCoordinatesCache.put(key, fetchCoordinates(city));
         }
-        if (!busStops.isEmpty()) {
-            // Supprimer la dernière virgule
-            json.deleteCharAt(json.length() - 1);
-        }
-        json.append("]");
-        return json.toString();
+        return cityCoordinatesCache.get(key);
     }
 
-    /**
-     * Classe interne représentant un arrêt de bus (un départ + une destination).
-     */
-    private static class BusStop {
-        private final String departure;
-        private final String destination;
+    private double[] fetchCoordinates(String city) throws Exception {
+        String query = URLEncoder.encode(city + ", Tunisia", "UTF-8");
+        URL url = new URL("https://nominatim.openstreetmap.org/search?q=" + query + "&format=json&limit=1");
 
-        public BusStop(String departure, String destination) {
-            this.departure = departure;
-            this.destination = destination;
+        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+        conn.setRequestProperty("User-Agent", "JavaFX-BusMapApp");
+
+        try (BufferedReader rd = new BufferedReader(new InputStreamReader(conn.getInputStream()))) {
+            StringBuilder sb = new StringBuilder();
+            String line;
+            while ((line = rd.readLine()) != null) {
+                sb.append(line);
+            }
+            JSONArray arr = new JSONArray(sb.toString());
+            if (arr.length() > 0) {
+                JSONObject o = arr.getJSONObject(0);
+                return new double[]{o.getDouble("lat"), o.getDouble("lon")};
+            }
         }
+        return null;
+    }
 
-        public String getDeparture() {
-            return departure;
-        }
+    private void callAddBusLine(String dCity, double dLat, double dLng,
+                                String rCity, double rLat, double rLng) {
+        String script = String.format(Locale.US,
+                "addBusLine('%s', %f, %f, '%s', %f, %f);",
+                dCity.replace("'", "\\'"), dLat, dLng,
+                rCity.replace("'", "\\'"), rLat, rLng
+        );
+        Platform.runLater(() -> webView.getEngine().executeScript(script));
+    }
 
-        public String getDestination() {
-            return destination;
+    public void shutdown() {
+        executor.shutdownNow();
+    }
+
+    public class JavaBridge {
+        public void log(String msg) {
+            System.out.println("[JS] " + msg);
         }
     }
 }

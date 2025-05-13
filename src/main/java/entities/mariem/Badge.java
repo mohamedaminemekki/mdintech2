@@ -22,4 +22,6 @@ public class Badge {
     public String getImagePath() {
         return imagePath;
     }
+
+
 }

@@ -1,14 +1,20 @@
 package services.mariem;
 
 import entities.mariem.Trip;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import services.Services;
 
+import java.net.URI;
+import java.net.URLEncoder;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.nio.charset.StandardCharsets;
 import java.sql.*;
+import java.sql.Date;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class TripService implements Services<Trip> {
 
@@ -16,6 +22,10 @@ public class TripService implements Services<Trip> {
 
     public TripService(Connection connection) {
         this.connection = connection;
+    }
+
+    public TripService() {
+
     }
 
     // Vérifie si un Transport ID existe dans la table transport_types
@@ -71,7 +81,7 @@ public class TripService implements Services<Trip> {
                 System.out.println("Voyage récupéré : Départ = " + trip.getDeparture() + ", Destination = " + trip.getDestination());
             }
         } catch (SQLException e) {
-           System.err.println("Erreur lors de la récupération des voyages : " + e.getMessage());
+            System.err.println("Erreur lors de la récupération des voyages : " + e.getMessage());
             throw e;
         }
 
@@ -365,18 +375,53 @@ public class TripService implements Services<Trip> {
                 new Trip(2, 1, Timestamp.valueOf("2023-10-01 09:00:00"), Timestamp.valueOf("2023-10-01 10:00:00"), 10.0, "Ariana", "Manouba", "metro")
         );
     }
-    public double[] getCityCoordinates(String cityName) throws SQLException {
-        String query = "SELECT latitude, longitude FROM cities WHERE name = ?";
-        try (PreparedStatement statement = connection.prepareStatement(query)) {
-            statement.setString(1, cityName);
-            ResultSet rs = statement.executeQuery();
-            if (rs.next()) {
-                return new double[] {
-                        rs.getDouble("latitude"),
-                        rs.getDouble("longitude")
-                };
-            }
+    private final Map<String, double[]> geoCache = new HashMap<>();
+
+    /**
+     * Récupère les coordonnées [lat, lon] pour une ville via Nominatim.
+     * @param city Nom de la ville (ex. "Tunis")
+     * @return double[]{latitude, longitude} ou null si non trouvé
+     */
+    public double[] getCityCoordinates(String city) {
+        String key = city.trim().toLowerCase();
+        if (geoCache.containsKey(key)) {
+            return geoCache.get(key);
         }
+
+        try {
+            String query = URLEncoder.encode(city, StandardCharsets.UTF_8);
+            String url   = "https://nominatim.openstreetmap.org/search"
+                    + "?format=json&limit=1&q=" + query;
+
+            HttpRequest req  = HttpRequest.newBuilder()
+                    .uri(URI.create(url))
+                    .header("User-Agent", "JavaFX-App/1.0") // Nominatim exige un UA
+                    .GET()
+                    .build();
+
+            HttpClient http = HttpClient.newHttpClient();
+            HttpResponse<String> resp =
+                    http.send(req, HttpResponse.BodyHandlers.ofString());
+
+            if (resp.statusCode() == 200) {
+                JSONArray arr = new JSONArray(resp.body());
+                if (arr.length() > 0) {
+                    JSONObject o = arr.getJSONObject(0);
+                    double lat = o.getDouble("lat");
+                    double lon = o.getDouble("lon");
+                    double[] coords = { lat, lon };
+                    geoCache.put(key, coords);
+                    return coords;
+                }
+            } else {
+                System.err.println("Géo-codage échoué (" + resp.statusCode() + ")");
+            }
+        } catch (Exception e) {
+            System.err.println("Erreur géocodage pour \"" + city + "\": " + e.getMessage());
+        }
+
+        // si pas trouvé, on stocke un null pour ne pas retenter à chaque fois
+        geoCache.put(key, null);
         return null;
     }
 
@@ -387,5 +432,16 @@ public class TripService implements Services<Trip> {
             statement.setString(2, cityName);
             return executeQuery(statement);
         }
+    }
+    // Mapper un ResultSet à un objet Trip
+    private Trip mapResultSetToTrip(ResultSet rs) throws SQLException {
+        Trip trip = new Trip();
+        trip.setId(rs.getInt("id"));
+        trip.setDeparture(rs.getString("departure"));
+        trip.setDestination(rs.getString("destination"));
+        trip.setTransportName(rs.getString("transport_name"));
+        // Ajoutez d'autres champs selon votre structure de base de données
+
+        return trip;
     }
 }
