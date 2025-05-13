@@ -3,40 +3,105 @@
 <?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.geometry.Insets?>
+<?import javafx.fxml.FXMLLoader?>
 
-<BorderPane xmlns:fx="http://javafx.com/fxml/1" stylesheets="@styles.css" fx:controller="controllers.tasnim.MainController">
+<BorderPane xmlns:fx="http://javafx.com/fxml/1" stylesheets="@styles.css,@/styles/medintechstyle.css" fx:controller="Controllers.tasnim.MainController">
     <top>
-        <VBox>
-            <MenuBar>
-                <Menu text="Menu">
-                    <MenuItem text="Notifications" onAction="#toggleNotifications"/>
-                </Menu>
-            </MenuBar>
-            <!-- Notification Section (initially hidden) -->
-            <VBox fx:id="notificationBox" styleClass="notification-pane" spacing="10" prefWidth="300" visible="false" managed="false">
-                <Label text="Notifications" styleClass="notification-title"/>
+        <VBox spacing="0" styleClass="main-top-bar">
+            <fx:include source="/navbar.fxml" />
+            
+            <!-- Search and Filter Bar -->
+            <HBox spacing="15" alignment="CENTER" styleClass="search-bar">
+                <padding>
+                    <Insets top="15" right="20" bottom="15" left="20"/>
+                </padding>
+                <TextField promptText="Search products..." styleClass="search-field" HBox.hgrow="ALWAYS"/>
+                <ComboBox promptText="Category" styleClass="category-filter"/>
+                <Button text="Search" styleClass="search-button"/>
+                
+                <!-- Notification Icon -->
+                <StackPane styleClass="notification-icon-container">
+                    <Button styleClass="notification-button" onAction="#toggleNotifications">
+                        <graphic>
+                            <ImageView fitHeight="20" fitWidth="20">
+                                <Image url="@/images/bell.png"/>
+                            </ImageView>
+                        </graphic>
+                    </Button>
+                </StackPane>
+            </HBox>
+
+            <!-- Notification Panel (initially hidden) -->
+            <VBox fx:id="notificationBox" styleClass="notification-pane" visible="false" managed="false">
+                <padding>
+                    <Insets top="10" right="15" bottom="10" left="15"/>
+                </padding>
+                <HBox alignment="CENTER_LEFT" spacing="10">
+                    <Label text="Notifications" styleClass="notification-title"/>
+                    <Region HBox.hgrow="ALWAYS"/>
+                    <Button text="Mark all as read" styleClass="mark-read-button"/>
+                </HBox>
                 <ListView fx:id="notificationListView" styleClass="notification-list" onMouseClicked="#handleNotificationClick"/>
             </VBox>
         </VBox>
     </top>
-    <center>
-        <ScrollPane fx:id="mainScrollPane" fitToWidth="true">
-            <content>
-                <VBox spacing="30" alignment="center" styleClass="background">
-                    <Label text="Welcome to Mdintech's Market" styleClass="title"/>
 
-                    <!-- Dynamic Product Display -->
-                    <FlowPane fx:id="productContainer" hgap="20" vgap="20" alignment="center"/>
+    <center>
+        <ScrollPane fx:id="mainScrollPane" fitToWidth="true" styleClass="main-scroll-pane">
+            <content>
+                <VBox spacing="30" styleClass="background main-content">
+                    <padding>
+                        <Insets top="30" right="30" bottom="30" left="30"/>
+                    </padding>
+                    
+                    <!-- Welcome Section -->
+                    <VBox styleClass="welcome-section" alignment="CENTER">
+                        <Label text="Welcome to Mdintech's Market" styleClass="main-title"/>
+                        <Label text="Discover our amazing products" styleClass="subtitle"/>
+                    </VBox>
+                    
+                    <!-- Products Grid -->
+                    <FlowPane fx:id="productContainer" 
+                              hgap="30" vgap="30" 
+                              alignment="CENTER" 
+                              styleClass="product-flow">
+                        <padding>
+                            <Insets top="20" right="20" bottom="20" left="20"/>
+                        </padding>
+                    </FlowPane>
                 </VBox>
             </content>
         </ScrollPane>
     </center>
+
     <right>
-        <VBox styleClass="cart-sidebar" spacing="10" prefWidth="300">
-            <Label text="Your Cart" styleClass="cart-title"/>
-            <ListView fx:id="cartListView" styleClass="cart-list"/>
-            <Label fx:id="totalPriceLabel" text="Total: 0.00dt" styleClass="total-price"/>
-            <Button text="Confirm Order" styleClass="confirm-button" onAction="#confirmOrder"/>
+        <VBox styleClass="cart-sidebar" spacing="20">
+            <padding>
+                <Insets top="20" right="20" bottom="20" left="20"/>
+            </padding>
+            
+            <!-- Cart Header -->
+            <HBox alignment="CENTER" spacing="10" styleClass="cart-header">
+                <ImageView fitHeight="24" fitWidth="24">
+                    <Image url="@/images/cart.png"/>
+                </ImageView>
+                <Label text="Your Cart" styleClass="cart-title"/>
+            </HBox>
+            
+            <!-- Cart Items -->
+            <ListView fx:id="cartListView" styleClass="cart-list" VBox.vgrow="ALWAYS"/>
+            
+            <!-- Cart Summary -->
+            <VBox spacing="10" styleClass="cart-summary">
+                <HBox alignment="CENTER_RIGHT">
+                    <Label text="Total: " styleClass="total-label"/>
+                    <Label fx:id="totalPriceLabel" text="0.00dt" styleClass="total-price"/>
+                </HBox>
+                <Button text="Confirm Order" 
+                        styleClass="confirm-button" 
+                        onAction="#confirmOrder"
+                        maxWidth="Infinity"/>
+            </VBox>
         </VBox>
     </right>
 </BorderPane>

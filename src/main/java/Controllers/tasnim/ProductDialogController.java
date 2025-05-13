@@ -1,4 +1,4 @@
-package controllers.tasnim;
+package Controllers.tasnim;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
@@ -50,7 +50,19 @@ public class ProductDialogController {
 
     public Product getProduct() {
         if (product == null) {
-            product = new Product();
+            // Gather all required fields from the dialog (with safe defaults)
+            int id = 0;
+            String name = nameField.getText();
+            String reference = referenceField.getText();
+            double price = parseDouble(priceField.getText());
+            int stockLimit = parseInt(stockLimitField.getText());
+            int stock = parseInt(stockField.getText());
+            String imagePath = "";
+            int sold = 0;
+            String description = "";
+            String category = "";
+            java.time.LocalDateTime createdAt = java.time.LocalDateTime.now();
+            product = new Product(id, name, reference, price, stockLimit, stock, imagePath, sold, description, category, createdAt);
         }
         product.setName(nameField.getText());
         product.setReference(referenceField.getText());

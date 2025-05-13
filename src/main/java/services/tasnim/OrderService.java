@@ -23,15 +23,22 @@ public class OrderService {
 
             while (rs.next()) {
                 Order order = new Order();
-                order.setId(rs.getInt("id"));                   // Set order's primary key
-                order.setUserCIN(Integer.parseInt(loggedInUser.getInstance().getLoggedUser().getCIN())); // <-- Use singleton
+                order.setId(rs.getInt("id"));
+                // Fetch and set the User object (assuming you have a UserService)
+                String userCIN = rs.getString("user_id");
+                entities.amine.User user = new services.tasnim.UserService().getUserByCIN(userCIN);
+                order.setUser(user);
                 order.setDate(rs.getDate("date"));
                 order.setStatus(rs.getString("status"));
-
+                // Set product from product_id column if present
+                int productId = rs.getInt("product_id");
+                if (!rs.wasNull() && productId > 0) {
+                    entities.tasnim.Product product = new services.tasnim.ProductService().getProductById(productId);
+                    order.setProduct(product);
+                }
                 // Fetch order items
                 List<OrderItem> orderItems = getOrderItemsByOrderId(order.getId());
                 order.setOrderItems(orderItems);
-
                 orders.add(order);
             }
         } catch (SQLException e) {
@@ -43,7 +50,7 @@ public class OrderService {
 
     private List<OrderItem> getOrderItemsByOrderId(int orderId) {
         List<OrderItem> orderItems = new ArrayList<>();
-        String sql = "SELECT * FROM orderItems WHERE orderId = ?";
+        String sql = "SELECT * FROM order_item WHERE order_id = ?";
 
         try (Connection conn = db.getCon();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -54,11 +61,14 @@ public class OrderService {
             while (rs.next()) {
                 OrderItem item = new OrderItem();
                 item.setId(rs.getInt("id"));
-                item.setProductId(rs.getInt("productId"));
+                // Fetch and set the Product object (assuming you have a ProductService)
+                int productId = rs.getInt("product_id");
+                entities.tasnim.Product product = new services.tasnim.ProductService().getProductById(productId);
+                item.setProduct(product);
                 item.setQuantity(rs.getInt("quantity"));
-                item.setPriceTotal(rs.getDouble("priceTotal"));
-                item.setOrderId(rs.getInt("orderId"));
-
+                item.setPriceTotal(rs.getDouble("price_total"));
+                // Set parent order if needed
+                // item.setOrder(order); // Only if you have the order object here
                 orderItems.add(item);
             }
         } catch (SQLException e) {
@@ -100,7 +110,7 @@ public class OrderService {
     }
 
     public double getTotalRevenue() {
-        String sql = "SELECT SUM(priceTotal) AS total FROM orderItems";
+        String sql = "SELECT SUM(price_total) AS total FROM order_item";
         try (Connection conn = db.getCon();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
@@ -126,11 +136,27 @@ public class OrderService {
             conn.setAutoCommit(false); // Start a transaction
 
             // Insert the order
-            String orderSql = "INSERT INTO `orders` (date, status, user_cin) VALUES (?, ?, ?)";
+            String orderSql = "INSERT INTO `orders` (date, status, user_id, product_id, created_at) VALUES (?, ?, ?, ?, ?)";
             orderStmt = conn.prepareStatement(orderSql, PreparedStatement.RETURN_GENERATED_KEYS);
             orderStmt.setDate(1, new java.sql.Date(order.getDate().getTime()));
             orderStmt.setString(2, order.getStatus());
-            orderStmt.setInt(3, order.getUserCIN());
+            // Use user.getId() for user_id foreign key
+            orderStmt.setInt(3, order.getUser() != null ? order.getUser().getId() : java.sql.Types.NULL);
+            // Set product_id to the first product in the order (if available), else null
+            Integer productId = null;
+            if (order.getProduct() != null) {
+                productId = order.getProduct().getId();
+            } else if (orderItems != null && !orderItems.isEmpty() && orderItems.get(0).getProduct() != null) {
+                productId = orderItems.get(0).getProduct().getId();
+            }
+            if (productId != null && productId > 0) {
+                orderStmt.setInt(4, productId);
+            } else {
+                orderStmt.setNull(4, java.sql.Types.INTEGER);
+            }
+            // Always set created_at for the order
+            Timestamp orderCreatedAt = order.getCreatedAt() != null ? new Timestamp(order.getCreatedAt().getTime()) : new Timestamp(System.currentTimeMillis());
+            orderStmt.setTimestamp(5, orderCreatedAt);
             orderStmt.executeUpdate();
 
             // Get the generated order ID
@@ -139,14 +165,17 @@ public class OrderService {
                 orderId = generatedKeys.getInt(1);
 
                 // Insert each order item
-                String itemSql = "INSERT INTO orderItems (productId, quantity, priceTotal, orderId) VALUES (?, ?, ?, ?)";
+                String itemSql = "INSERT INTO order_item (product_id, order_id, quantity, price_total) VALUES (?, ?, ?, ?)";
                 itemStmt = conn.prepareStatement(itemSql);
 
                 for (OrderItem item : orderItems) {
-                    itemStmt.setInt(1, item.getProductId());
-                    itemStmt.setInt(2, item.getQuantity());
-                    itemStmt.setDouble(3, item.getPriceTotal());
-                    itemStmt.setInt(4, orderId);
+                    if (item.getProduct() == null || item.getProduct().getId() <= 0) {
+                        throw new SQLException("OrderItem has null or invalid Product. Each order item must reference a valid product_id.");
+                    }
+                    itemStmt.setInt(1, item.getProduct().getId());
+                    itemStmt.setInt(2, orderId);
+                    itemStmt.setInt(3, item.getQuantity());
+                    itemStmt.setDouble(4, item.getPriceTotal());
                     itemStmt.addBatch(); // Add to batch for bulk insert
                 }
 
@@ -166,7 +195,11 @@ public class OrderService {
                 }
             }
         } finally {
-
+            // Clean up resources
+            try { if (generatedKeys != null) generatedKeys.close(); } catch (Exception ignored) {}
+            try { if (orderStmt != null) orderStmt.close(); } catch (Exception ignored) {}
+            try { if (itemStmt != null) itemStmt.close(); } catch (Exception ignored) {}
+            try { if (conn != null) conn.setAutoCommit(true); } catch (Exception ignored) {}
         }
 
         return orderId;
@@ -182,7 +215,7 @@ public class OrderService {
             conn.setAutoCommit(false); // Start a transaction
 
             // 1. Delete order items
-            String deleteOrderItemsSql = "DELETE FROM orderItems WHERE orderId = ?";
+            String deleteOrderItemsSql = "DELETE FROM order_item WHERE order_id = ?";
             deleteOrderItemsStmt = conn.prepareStatement(deleteOrderItemsSql);
             deleteOrderItemsStmt.setInt(1, orderId);
             deleteOrderItemsStmt.executeUpdate();
@@ -206,14 +239,17 @@ public class OrderService {
                 }
             }
         } finally {
-
+            try { if (deleteOrderItemsStmt != null) deleteOrderItemsStmt.close(); } catch (Exception ignored) {}
+            try { if (deleteOrderStmt != null) deleteOrderStmt.close(); } catch (Exception ignored) {}
+            try { if (conn != null) conn.setAutoCommit(true); } catch (Exception ignored) {}
         }
     }
-    private boolean userExists(int userCIN) throws SQLException {
-        String sql = "SELECT COUNT(*) AS count FROM users WHERE CIN = ?";
+
+    private boolean userExists(int userId) throws SQLException {
+        String sql = "SELECT COUNT(*) AS count FROM user WHERE id = ?";
         try (Connection conn = db.getCon();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            pstmt.setInt(1, userCIN);
+            pstmt.setInt(1, userId);
             ResultSet rs = pstmt.executeQuery();
             return rs.next() && rs.getInt("count") > 0;
         }

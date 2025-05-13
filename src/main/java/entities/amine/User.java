@@ -90,6 +90,9 @@ public class User {
         this.isGoogleAuthenticatorEnabled = isGoogleAuthenticatorEnabled;
     }
 
+    public User(int id, String cin, String name, String email) {
+    }
+
     public String getName() {
         return Name;
     }

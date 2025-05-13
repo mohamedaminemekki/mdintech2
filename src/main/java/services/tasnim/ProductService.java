@@ -16,9 +16,7 @@ public class ProductService implements IService<Product> {
     @Override
     public List<Product> readList() throws SQLException {
         List<Product> products = new ArrayList<>();
-        String query = "SELECT p.id, p.name, p.reference, p.price, p.stockLimit, COALESCE(s.quantity, 0) AS stock, p.sold " +
-                "FROM products p " +
-                "LEFT JOIN stock s ON p.id = s.productId";
+        String query = "SELECT id, name, reference, price, stock_limit, stock, image_path, sold, description, category, created_at FROM product";
         try (Connection conn = db.getCon();
              PreparedStatement stmt = conn.prepareStatement(query);
              ResultSet rs = stmt.executeQuery()) {
@@ -28,11 +26,15 @@ public class ProductService implements IService<Product> {
                 String name = rs.getString("name");
                 String reference = rs.getString("reference");
                 double price = rs.getDouble("price");
-                int stockLimit = rs.getInt("stockLimit");
+                int stockLimit = rs.getInt("stock_limit");
                 int stock = rs.getInt("stock");
                 int sold = rs.getInt("sold");
-                String imagePath = "/tn/esprit/market_3a33/images/product" + id + ".jpg";
-                products.add(new Product(id, name, reference, price, stockLimit, stock, imagePath, sold));
+                String imagePath = rs.getString("image_path");
+                String description = rs.getString("description");
+                String category = rs.getString("category");
+                java.sql.Timestamp createdAtTs = rs.getTimestamp("created_at");
+                java.time.LocalDateTime createdAt = createdAtTs != null ? createdAtTs.toLocalDateTime() : java.time.LocalDateTime.now();
+                products.add(new Product(id, name, reference, price, stockLimit, stock, imagePath, sold, description, category, createdAt));
             }
         } catch (SQLException e) {
             throw e;
@@ -41,7 +43,8 @@ public class ProductService implements IService<Product> {
     }
 
     public void incrementSoldCount(int productId) {
-        String query = "UPDATE products SET sold = sold + 1 WHERE id = ?";
+        // Fix: Use the correct table name 'product' instead of 'products'
+        String query = "UPDATE product SET sold = sold + 1 WHERE id = ?";
         try (Connection conn = db.getCon();
              PreparedStatement stmt = conn.prepareStatement(query)) {
             stmt.setInt(1, productId);
@@ -54,30 +57,20 @@ public class ProductService implements IService<Product> {
 
     @Override
     public void add(Product product) throws SQLException {
-        String productQuery = "INSERT INTO products (name, reference, price, stockLimit) VALUES (?, ?, ?, ?)";
-        String stockQuery = "INSERT INTO stock (productId, quantity) VALUES (?, ?)";
-
+        String productQuery = "INSERT INTO product (name, reference, price, stock_limit, stock, image_path, sold, description, category, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try (Connection conn = db.getCon();
-             PreparedStatement productStmt = conn.prepareStatement(productQuery, Statement.RETURN_GENERATED_KEYS);
-             PreparedStatement stockStmt = conn.prepareStatement(stockQuery)) {
-
-            // Insert into products table
+             PreparedStatement productStmt = conn.prepareStatement(productQuery, Statement.RETURN_GENERATED_KEYS)) {
             productStmt.setString(1, product.getName());
             productStmt.setString(2, product.getReference());
             productStmt.setDouble(3, product.getPrice());
             productStmt.setInt(4, product.getStockLimit());
+            productStmt.setInt(5, product.getStock());
+            productStmt.setString(6, product.getImagePath());
+            productStmt.setInt(7, product.getSold());
+            productStmt.setString(8, product.getDescription());
+            productStmt.setString(9, product.getCategory());
+            productStmt.setTimestamp(10, Timestamp.valueOf(product.getCreatedAt()));
             productStmt.executeUpdate();
-
-            // Get the generated product ID
-            ResultSet generatedKeys = productStmt.getGeneratedKeys();
-            if (generatedKeys.next()) {
-                int productId = generatedKeys.getInt(1);
-
-                // Insert into stock table
-                stockStmt.setInt(1, productId);
-                stockStmt.setInt(2, product.getStock());
-                stockStmt.executeUpdate();
-            }
         } catch (SQLException e) {
             throw e;
         }
@@ -85,25 +78,21 @@ public class ProductService implements IService<Product> {
 
     @Override
     public void update(Product product) throws SQLException {
-        String productQuery = "UPDATE products SET name = ?, reference = ?, price = ?, stockLimit = ? WHERE id = ?";
-        String stockQuery = "UPDATE stock SET quantity = ? WHERE productId = ?";
-
+        String productQuery = "UPDATE product SET name = ?, reference = ?, price = ?, stock_limit = ?, stock = ?, image_path = ?, sold = ?, description = ?, category = ?, created_at = ? WHERE id = ?";
         try (Connection conn = db.getCon();
-             PreparedStatement productStmt = conn.prepareStatement(productQuery);
-             PreparedStatement stockStmt = conn.prepareStatement(stockQuery)) {
-
-            // Update products table
+             PreparedStatement productStmt = conn.prepareStatement(productQuery)) {
             productStmt.setString(1, product.getName());
             productStmt.setString(2, product.getReference());
             productStmt.setDouble(3, product.getPrice());
             productStmt.setInt(4, product.getStockLimit());
-            productStmt.setInt(5, product.getId());
+            productStmt.setInt(5, product.getStock());
+            productStmt.setString(6, product.getImagePath());
+            productStmt.setInt(7, product.getSold());
+            productStmt.setString(8, product.getDescription());
+            productStmt.setString(9, product.getCategory());
+            productStmt.setTimestamp(10, Timestamp.valueOf(product.getCreatedAt()));
+            productStmt.setInt(11, product.getId());
             productStmt.executeUpdate();
-
-            // Update stock table
-            stockStmt.setInt(1, product.getStock());
-            stockStmt.setInt(2, product.getId());
-            stockStmt.executeUpdate();
         } catch (SQLException e) {
             throw e;
         }
@@ -111,18 +100,9 @@ public class ProductService implements IService<Product> {
 
     @Override
     public void delete(int productId) throws SQLException {
-        String deleteStockQuery = "DELETE FROM stock WHERE productId = ?";
-        String deleteProductQuery = "DELETE FROM products WHERE id = ?";
-
+        String deleteProductQuery = "DELETE FROM product WHERE id = ?";
         try (Connection conn = db.getCon();
-             PreparedStatement deleteStockStmt = conn.prepareStatement(deleteStockQuery);
              PreparedStatement deleteProductStmt = conn.prepareStatement(deleteProductQuery)) {
-
-            // Delete from stock table first
-            deleteStockStmt.setInt(1, productId);
-            deleteStockStmt.executeUpdate();
-
-            // Then delete from products table
             deleteProductStmt.setInt(1, productId);
             deleteProductStmt.executeUpdate();
         } catch (SQLException e) {
@@ -131,7 +111,8 @@ public class ProductService implements IService<Product> {
     }
 
     public String getProductNameById(int productId) {
-        String sql = "SELECT name FROM products WHERE id = ?";
+        // Fix: Use the correct table name 'product' instead of 'products'
+        String sql = "SELECT name FROM product WHERE id = ?";
         try (Connection conn = db.getCon();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
@@ -148,11 +129,8 @@ public class ProductService implements IService<Product> {
 
     public List<Product> getLowStockProducts() {
         List<Product> lowStockProducts = new ArrayList<>();
-        String query = "SELECT p.id, p.name, p.reference, p.price, p.stockLimit, s.quantity, p.sold " +
-                "FROM products p " +
-                "JOIN stock s ON p.id = s.productId " +
-                "WHERE s.quantity < p.stockLimit";
-        try (Connection conn =db.getCon();
+        String query = "SELECT id, name, reference, price, stock_limit, stock, image_path, sold, description, category, created_at FROM product WHERE stock < stock_limit";
+        try (Connection conn = db.getCon();
              PreparedStatement stmt = conn.prepareStatement(query);
              ResultSet rs = stmt.executeQuery()) {
 
@@ -161,12 +139,15 @@ public class ProductService implements IService<Product> {
                 String name = rs.getString("name");
                 String reference = rs.getString("reference");
                 double price = rs.getDouble("price");
-                int stockLimit = rs.getInt("stockLimit");
-                int quantity = rs.getInt("quantity");
+                int stockLimit = rs.getInt("stock_limit");
+                int stock = rs.getInt("stock");
                 int sold = rs.getInt("sold");
-                String imagePath = "/tn/esprit/market_3a33/images/product" + id + ".jpg";
-                // Create a Product object without imagePath
-                Product product = new Product(id, name, reference, price, stockLimit, quantity, imagePath, sold);
+                String imagePath = rs.getString("image_path");
+                String description = rs.getString("description");
+                String category = rs.getString("category");
+                java.sql.Timestamp createdAtTs = rs.getTimestamp("created_at");
+                java.time.LocalDateTime createdAt = createdAtTs != null ? createdAtTs.toLocalDateTime() : java.time.LocalDateTime.now();
+                Product product = new Product(id, name, reference, price, stockLimit, stock, imagePath, sold, description, category, createdAt);
                 lowStockProducts.add(product);
             }
         } catch (SQLException e) {
@@ -176,25 +157,21 @@ public class ProductService implements IService<Product> {
     }
 
     public void updateStock(int productId, int quantityAdded, String location) {
-        String sql = "UPDATE stock SET quantity = quantity + ?, location = ? WHERE productId = ?";
-
+        // Update the stock directly in the product table, ignore location
+        String sql = "UPDATE product SET stock = stock + ? WHERE id = ?";
         try (Connection conn = db.getCon();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
-
             pstmt.setInt(1, quantityAdded);
-            pstmt.setString(2, location);
-            pstmt.setInt(3, productId);
-
+            pstmt.setInt(2, productId);
             pstmt.executeUpdate();
             LOGGER.info("Stock updated successfully for product ID: " + productId);
-
         } catch (SQLException e) {
             LOGGER.log(Level.SEVERE, "Error updating stock", e);
         }
     }
 
     public int getTotalProducts() {
-        String query = "SELECT COUNT(*) AS total FROM products";
+        String query = "SELECT COUNT(*) AS total FROM product";
         try (Connection conn = db.getCon();
              PreparedStatement stmt = conn.prepareStatement(query);
              ResultSet rs = stmt.executeQuery()) {
@@ -210,11 +187,8 @@ public class ProductService implements IService<Product> {
 
     public List<Product> getAllProducts() {
         List<Product> products = new ArrayList<>();
-        String query = "SELECT p.id, p.name, p.reference, p.price, p.stockLimit, COALESCE(s.quantity, 0) AS stock, p.sold " +
-                "FROM products p " +
-                "LEFT JOIN stock s ON p.id = s.productId";
-
-        try (Connection conn = db.getCon(); // Use singleton connection
+        String query = "SELECT id, name, reference, price, stock_limit, stock, image_path, sold, description, category, created_at FROM product";
+        try (Connection conn = db.getCon();
              PreparedStatement stmt = conn.prepareStatement(query);
              ResultSet rs = stmt.executeQuery()) {
 
@@ -223,11 +197,15 @@ public class ProductService implements IService<Product> {
                 String name = rs.getString("name");
                 String reference = rs.getString("reference");
                 double price = rs.getDouble("price");
-                int stockLimit = rs.getInt("stockLimit");
+                int stockLimit = rs.getInt("stock_limit");
                 int stock = rs.getInt("stock");
                 int sold = rs.getInt("sold");
-                String imagePath = "/tn/esprit/market_3a33/images/product" + id + ".jpg";
-                products.add(new Product(id, name, reference, price, stockLimit, stock, imagePath, sold));
+                String imagePath = rs.getString("image_path");
+                String description = rs.getString("description");
+                String category = rs.getString("category");
+                java.sql.Timestamp createdAtTs = rs.getTimestamp("created_at");
+                java.time.LocalDateTime createdAt = createdAtTs != null ? createdAtTs.toLocalDateTime() : java.time.LocalDateTime.now();
+                products.add(new Product(id, name, reference, price, stockLimit, stock, imagePath, sold, description, category, createdAt));
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -236,104 +214,31 @@ public class ProductService implements IService<Product> {
     }
 
     public void addProduct(Product product) {
-        String productSql = "INSERT INTO products (name, reference, price, stockLimit) VALUES (?, ?, ?, ?)";
-        String stockSql = "INSERT INTO stock (productId, quantity, location) VALUES (?, ?, ?)";
-
-        try (Connection conn = db.getCon();
-             PreparedStatement productStmt = conn.prepareStatement(productSql, PreparedStatement.RETURN_GENERATED_KEYS);
-             PreparedStatement stockStmt = conn.prepareStatement(stockSql)) {
-
-            // Insert product
-            productStmt.setString(1, product.getName());
-            productStmt.setString(2, product.getReference());
-            productStmt.setDouble(3, product.getPrice());
-            productStmt.setInt(4, product.getStockLimit());
-            productStmt.executeUpdate();
-
-            // Get the generated product ID
-            ResultSet generatedKeys = productStmt.getGeneratedKeys();
-            int productId = -1;
-            if (generatedKeys.next()) {
-                productId = generatedKeys.getInt(1);
-            }
-
-            // Insert stock
-            if (productId != -1) {
-                stockStmt.setInt(1, productId);
-                stockStmt.setInt(2, product.getStock());
-                stockStmt.setString(3, "Default Location"); // You can change this to a parameter if needed
-                stockStmt.executeUpdate();
-            }
-
-            LOGGER.info("Product and stock added successfully: " + product.getName());
-
+        // Use the same logic as add()
+        try {
+            add(product);
         } catch (SQLException e) {
             LOGGER.log(Level.SEVERE, "Error adding product to database", e);
         }
     }
 
     public void updateProduct(Product product) {
-        String sql = "UPDATE products SET name = ?, reference = ?, price = ?, stockLimit = ? WHERE id = ?";
-
-        try (Connection conn = db.getCon();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
-
-            pstmt.setString(1, product.getName());
-            pstmt.setString(2, product.getReference());
-            pstmt.setDouble(3, product.getPrice());
-            pstmt.setInt(4, product.getStockLimit());
-            pstmt.setInt(5, product.getId());
-
-            pstmt.executeUpdate();
+        // Use the same logic as update()
+        try {
+            update(product);
             LOGGER.info("Product updated successfully: " + product.getName());
-
         } catch (SQLException e) {
             LOGGER.log(Level.SEVERE, "Error updating product", e);
         }
     }
 
     public void deleteProduct(int productId) {
-        Connection conn = null;
-        PreparedStatement deleteStockStmt = null;
-        PreparedStatement deleteOrderItemsStmt = null;
-        PreparedStatement deleteProductStmt = null;
-
+        // Use the same logic as delete()
         try {
-            conn = db.getCon();
-            conn.setAutoCommit(false); // Start a transaction
-
-            // 1. Delete from stock table
-            String deleteStockSql = "DELETE FROM stock WHERE productId = ?";
-            deleteStockStmt = conn.prepareStatement(deleteStockSql);
-            deleteStockStmt.setInt(1, productId);
-            deleteStockStmt.executeUpdate();
-
-            // 2. Delete from orderItems table
-            String deleteOrderItemsSql = "DELETE FROM orderItems WHERE productId = ?";
-            deleteOrderItemsStmt = conn.prepareStatement(deleteOrderItemsSql);
-            deleteOrderItemsStmt.setInt(1, productId);
-            deleteOrderItemsStmt.executeUpdate();
-
-            // 3. Delete from products table
-            String deleteProductSql = "DELETE FROM products WHERE id = ?";
-            deleteProductStmt = conn.prepareStatement(deleteProductSql);
-            deleteProductStmt.setInt(1, productId);
-            deleteProductStmt.executeUpdate();
-
-            conn.commit(); // Commit the transaction
-            LOGGER.info("Product and related records deleted successfully: " + productId);
-
+            delete(productId);
+            LOGGER.info("Product deleted successfully: " + productId);
         } catch (SQLException e) {
-            try {
-                if (conn != null) {
-                    conn.rollback(); // Rollback the transaction on error
-                }
-            } catch (SQLException ex) {
-                LOGGER.log(Level.SEVERE, "Error rolling back transaction", ex);
-            }
             LOGGER.log(Level.SEVERE, "Error deleting product", e);
-        } finally {
-
         }
     }
 
@@ -369,7 +274,7 @@ public class ProductService implements IService<Product> {
 
     public int getLowStockProductsNumber() {
         int lowStockProducts = 0;
-        String query = "SELECT COUNT(*) AS total FROM products p JOIN stock s ON p.id = s.productId WHERE s.quantity < p.stockLimit";
+        String query = "SELECT COUNT(*) AS total FROM product WHERE stock < stock_limit";
         try (Connection conn = db.getCon();
              PreparedStatement stmt = conn.prepareStatement(query);
              ResultSet rs = stmt.executeQuery()) {
@@ -380,6 +285,35 @@ public class ProductService implements IService<Product> {
             e.printStackTrace();
         }
         return lowStockProducts;
+    }
+
+    public entities.tasnim.Product getProductById(int productId) {
+        // Fix: Use the correct table and column names for 'product'
+        String sql = "SELECT * FROM product WHERE id = ?";
+        try (Connection conn = utils.db.getCon();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setInt(1, productId);
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) {
+                // Fill in all required fields for Product constructor
+                return new entities.tasnim.Product(
+                        rs.getInt("id"),
+                        rs.getString("name"),
+                        rs.getString("reference"),
+                        rs.getDouble("price"),
+                        rs.getInt("stock_limit"),
+                        rs.getInt("stock"),
+                        rs.getString("image_path"),
+                        rs.getInt("sold"),
+                        rs.getString("description") != null ? rs.getString("description") : "",
+                        rs.getString("category") != null ? rs.getString("category") : "",
+                        rs.getTimestamp("created_at") != null ? rs.getTimestamp("created_at").toLocalDateTime() : java.time.LocalDateTime.now()
+                );
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
 }

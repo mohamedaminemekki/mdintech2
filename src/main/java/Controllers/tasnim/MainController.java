@@ -1,7 +1,9 @@
-package controllers.tasnim;
+package Controllers.tasnim;
 
 import Singleton.loggedInUser;
 import entities.amine.User;
+import entities.tasnim.Order;
+import entities.tasnim.OrderItem;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
@@ -17,6 +19,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import entities.tasnim.Product;
 import services.tasnim.NotificationService;
+import services.tasnim.OrderService;
 import services.tasnim.ProductService;
 import utils.db;
 
@@ -27,12 +30,13 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 
 
 public class MainController {
 
-    private ProductService productService = new ProductService();// Store the CIN of the logged-in user
+    private ProductService productService = new ProductService();
     @FXML
     private FlowPane productContainer;
     @FXML
@@ -45,9 +49,6 @@ public class MainController {
     private VBox notificationBox; // Reference to the notification VBox
     @FXML
     private ScrollPane mainScrollPane;
-    private int userCIN; // Remove hardcoded value
-
-
 
     @FXML
     private void toggleNotifications() {
@@ -69,12 +70,9 @@ public class MainController {
     @FXML
     public void initialize() {
         // Check for confirmed orders for the logged-in user
-        checkForConfirmedOrders();
         User currentUser = loggedInUser.getInstance().getLoggedUser();
-        if (currentUser != null) {
-            userCIN = Integer.parseInt(currentUser.getCIN());
-        }
-
+        // Use currentUser.getId() everywhere, remove all user_cin usage
+        checkForConfirmedOrders();
         // Load products and display them
         loadProductsFromDatabase();
         applyDiscounts(); // Apply discounts to the least sold products
@@ -83,11 +81,13 @@ public class MainController {
 
     private void checkForConfirmedOrders() {
         // Query to fetch confirmed orders for the logged-in user
-        String query = "SELECT id FROM orders WHERE user_cin = ? AND status = 'Confirmed'";
+        User currentUser = loggedInUser.getInstance().getLoggedUser();
+        if (currentUser == null) return; // Defensive null check
+        String query = "SELECT id FROM orders WHERE user_id = ? AND status = 'Confirmed'";
         try (Connection conn = db.getCon();
              PreparedStatement pstmt = conn.prepareStatement(query)) {
 
-            pstmt.setInt(1, userCIN);
+            pstmt.setInt(1, currentUser.getId());
             ResultSet rs = pstmt.executeQuery();
 
             while (rs.next()) {
@@ -110,7 +110,7 @@ public class MainController {
     }
 
     private double calculateTotalPriceForOrder(int orderId) {
-        String query = "SELECT SUM(priceTotal) AS totalPrice FROM orderItems WHERE orderId = ?";
+        String query = "SELECT SUM(price_total) AS totalPrice FROM order_item WHERE order_Id = ?";
         try (Connection conn = db.getCon();
              PreparedStatement pstmt = conn.prepareStatement(query)) {
 
@@ -161,7 +161,7 @@ public class MainController {
             Parent root = loader.load();
 
             // Pass the notification message and orderId to the modal controller
-            controllers.tasnim.OrderDetailsModalController modalController = loader.getController();
+            OrderDetailsModalController modalController = loader.getController();
             modalController.setNotification(notification);
             modalController.setOrderId(orderId);
 
@@ -200,9 +200,7 @@ public class MainController {
     }
 
     private void loadProductsFromDatabase() {
-        String query = "SELECT p.id, p.name, p.reference, p.price, p.stockLimit, COALESCE(s.quantity, 0) AS stock, p.sold " +
-                "FROM products p " +
-                "LEFT JOIN stock s ON p.id = s.productId";
+        String query = "SELECT id, name, reference, price, stock_limit, stock, image_path, sold, description, category, created_at FROM product";
         try (Connection conn = db.getCon();
              PreparedStatement stmt = conn.prepareStatement(query);
              ResultSet rs = stmt.executeQuery()) {
@@ -210,13 +208,22 @@ public class MainController {
             while (rs.next()) {
                 int id = rs.getInt("id");
                 String name = rs.getString("name");
+                if (name == null || name.trim().isEmpty()) {
+                    name = "Unnamed Product";
+                }
                 String reference = rs.getString("reference");
                 double price = rs.getDouble("price");
-                int stockLimit = rs.getInt("stockLimit");
+                int stockLimit = rs.getInt("stock_limit");
                 int stock = rs.getInt("stock");
                 int sold = rs.getInt("sold");
-                String imagePath = "/images/product" + id + ".jpg";
-                products.add(new Product(id, name, reference, price, stockLimit, stock, imagePath, sold));
+                String imagePath = rs.getString("image_path");
+                String description = rs.getString("description");
+                String category = rs.getString("category");
+                java.sql.Timestamp createdAtTs = rs.getTimestamp("created_at");
+                java.time.LocalDateTime createdAt = createdAtTs != null ? createdAtTs.toLocalDateTime() : java.time.LocalDateTime.now();
+
+                // Use the full Product constructor with all required fields
+                products.add(new Product(id, name, reference, price, stockLimit, stock, imagePath, sold, description, category, createdAt));
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -273,13 +280,47 @@ public class MainController {
         VBox card = new VBox(10); // Spacing between elements
         card.getStyleClass().add("product-card");
 
-        // Product Image
-        ImageView imageView = new ImageView(new Image(getClass().getResource(product.getImagePath()).toExternalForm()));
+        // Defensive: Ensure product name and imagePath are not null and not empty
+        String imagePath = (product.getImagePath() != null && !product.getImagePath().isEmpty()) ? product.getImagePath() : "/images/default.png";
+        String name = (product.getName() != null && !product.getName().trim().isEmpty()) ? product.getName() : "Unnamed Product";
+
+        // Defensive: Ensure imagePath is valid and resource exists
+        Image image;
+        try {
+            // If imagePath is a relative path from DB (e.g. /uploads/products/...), try to load from resources/images/products
+            if (imagePath.startsWith("/uploads/products/")) {
+                String fileName = imagePath.substring("/uploads/products/".length());
+                String resourcePath = "/images/products/" + fileName;
+                java.net.URL resourceUrl = getClass().getResource(resourcePath);
+                if (resourceUrl != null) {
+                    image = new Image(resourceUrl.toExternalForm());
+                } else {
+                    // Try loading from the file system as a fallback
+                    String fsPath = System.getProperty("user.dir") + "/src/main/resources/images/products/" + fileName;
+                    java.io.File file = new java.io.File(fsPath);
+                    if (file.exists()) {
+                        image = new Image(file.toURI().toString());
+                    } else {
+                        image = new Image(getClass().getResource("/images/default.png").toExternalForm());
+                    }
+                }
+            } else {
+                java.net.URL resourceUrl = getClass().getResource(imagePath);
+                if (resourceUrl != null) {
+                    image = new Image(resourceUrl.toExternalForm());
+                } else {
+                    image = new Image(getClass().getResource("/images/default.png").toExternalForm());
+                }
+            }
+        } catch (Exception e) {
+            image = new Image(getClass().getResource("/images/default.png").toExternalForm());
+        }
+        ImageView imageView = new ImageView(image);
         imageView.setFitWidth(150);
         imageView.setFitHeight(150);
 
         // Product Name
-        Label nameLabel = new Label(product.getName());
+        Label nameLabel = new Label(name);
         nameLabel.getStyleClass().add("product-name");
 
         // Prices (initial and discounted) - Only show if the product is discounted
@@ -372,22 +413,55 @@ public class MainController {
     @FXML
     private void confirmOrder() {
         try {
-            // Load the cart FXML page.
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/tasnim/cart.fxml"));
-            Parent root = loader.load();
+            if (cartProducts.isEmpty()) {
+                showAlert("Empty Cart", "Your cart is empty. Add items before confirming.");
+                return;
+            }
 
-            // Pass the cartProducts list and totalPrice to the CartController.
-            controllers.tasnim.CartController cartController = loader.getController();
-            cartController.setCartData(cartProducts, totalPrice);
+            // Get logged-in user
+            User currentUser = loggedInUser.getInstance().getLoggedUser();
+            if (currentUser == null) {
+                showAlert("Error", "No user logged in!");
+                return;
+            }
 
-            // Create and show a new window for the cart page.
-            Stage stage = new Stage();
-            stage.setTitle("Shopping Cart");
-            stage.setScene(new Scene(root));
-            stage.show();
+            // Create and populate Order
+            Order order = new Order();
+            order.setDate(new Date());
+            order.setStatus("Pending");
+            order.setUser(currentUser);
+            order.setOrderItems(new ArrayList<>());
 
+            // Create OrderItems
+            List<OrderItem> orderItems = new ArrayList<>();
+            for (Product product : cartProducts) {
+                OrderItem item = new OrderItem();
+                item.setProduct(product);
+                item.setQuantity(1);
+                item.setPriceTotal(product.getPrice());
+                item.setOrder(order);
+                orderItems.add(item);
+                order.addOrderItem(item);
+            }
+
+            // Save order
+            OrderService orderService = new OrderService();
+            int orderId = orderService.saveOrder(order, orderItems);
+            
+            if (orderId != -1) {
+                // Clear the cart after successful order
+                cartProducts.clear();
+                cartListView.getItems().clear();
+                totalPrice = 0.0;
+                totalPriceLabel.setText("Total: 0.00 dt");
+                
+                showAlert("Success", "Order #" + orderId + " confirmed!");
+            } else {
+                showAlert("Error", "Failed to confirm order.");
+            }
         } catch (Exception e) {
             e.printStackTrace();
+            showAlert("Error", "An error occurred while confirming your order.");
         }
     }
 

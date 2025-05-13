@@ -1,4 +1,4 @@
-package controllers.tasnim;
+package Controllers.tasnim;
 
 import Singleton.loggedInUser;
 import entities.amine.User;
@@ -81,16 +81,19 @@ public class CartController {
         Order order = new Order();
         order.setDate(new Date());
         order.setStatus("Pending");
-        order.setUserCIN(Integer.parseInt(currentUser.getCIN()));  // Critical fix: Set CIN from session
+        order.setUser(currentUser); // Link to entities.amine.User
+        order.setOrderItems(new ArrayList<>());
 
-        // Create OrderItems
+        // Create OrderItems with Product references
         List<OrderItem> orderItems = new ArrayList<>();
         for (Product product : cartProducts) {
             OrderItem item = new OrderItem();
-            item.setProductId(product.getId());
-            item.setQuantity(1);
+            item.setProduct(product); // Set Product object
+            item.setQuantity(1); // Default quantity 1, adjust if needed
             item.setPriceTotal(product.getPrice());
+            item.setOrder(order); // Set parent Order
             orderItems.add(item);
+            order.addOrderItem(item); // Maintain bidirectional link
         }
 
         // Save to database
@@ -99,7 +102,7 @@ public class CartController {
             showAlert("Success", "Order #" + orderId + " confirmed!");
             clearCart();
         } else {
-            showAlert("Error", "Failed to save order");
+            showAlert("Error", "Failed to confirm order.");
         }
     }
 
