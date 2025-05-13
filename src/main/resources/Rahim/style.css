@@ -1,37 +1,144 @@
-/* ============================= */
-/*         Global Styles         */
+/* Blog Specific Styles */
+/* Theme Colors */
+.root {
+    -fx-font-family: "Segoe UI", sans-serif;
+    -fx-background-color: #f8f9fa;
+    
+    /* Theme Variables */
+    -primary: #2c3e50;
+    -secondary: #0574ec;
+    -accent: #27ae60;
+    -warn: #e74c3c;
+    -background: #f8f9fa;
+    -surface: #ffffff;
+    -text-primary: #2c3e50;
+    -text-secondary: #505d6b;
+    -text-light: #7f8c8d;
+}
+
+.blog-header {
+    -fx-padding: 40 0 20 0;
+    -fx-alignment: center;
+}
+
+.blog-title {
+    -fx-font-size: 32px;
+    -fx-font-weight: bold;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 4, 0, 0, 1);
+}
+
+.blog-subtitle {
+    -fx-font-family: "Segoe UI", sans-serif;
+    -fx-font-size: 16px;
+    -fx-text-fill: -text-secondary;
+}
+
+/* Modern Scrollpane */
+.modern-scrollpane {
+    -fx-background: transparent;
+    -fx-background-color: transparent;
+}
+
+.modern-scrollpane > .viewport {
+    -fx-background-color: transparent;
+}
+
+.modern-scrollpane > .scroll-bar:vertical {
+    -fx-background-color: transparent;
+    -fx-padding: 0 0 0 5;
+}
+
+.modern-scrollpane > .scroll-bar:vertical > .thumb {
+    -fx-background-color: #0a2e50;
+    -fx-background-radius: 5px;
+    -fx-opacity: 0.6;
+}
+
+/* Enhanced Create Post Box */
+.create-post-box {
+    -fx-background-color: white;
+    -fx-padding: 25px;
+    -fx-background-radius: 15px;
+    -fx-effect: dropshadow(gaussian, rgba(10,46,80,0.1), 10, 0, 0, 4);
+    -fx-max-width: 800px;
+    -fx-spacing: 15px;
+}
+
+.create-post-label {
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -text-primary;
+}
+
+.create-post-subtitle {
+    -fx-font-size: 14px;
+    -fx-text-fill: -text-secondary;
+}
+
+/* Global Styles */
 
 /* ================= Design System Variables ================= */
 .root {
+    /* JavaFX specific */
     -primary-color: #2c3e50;
     -secondary-color: #3498db;
     -accent-color: #27ae60;
     -danger-color: #e74c3c;
     -light-background: #f5f7fa;
-    -text-primary: #333333;
-
+    -text-primary: #2c3e50;
+    -text-secondary: #505d6b;
+    -text-light: #7f8c8d;
     -fx-font-family: "Segoe UI";
     -fx-base: -primary-color;
+    
+    /* Standard CSS */
+    --primary-color: #2c3e50;
+    --secondary-color: #3498db;
+    --accent-color: #27ae60;
+    --danger-color: #e74c3c;
+    --light-background: #f5f7fa;
+    --text-primary: #2c3e50;
+    --text-secondary: #505d6b;
+    --text-light: #7f8c8d;
+    font-family: "Segoe UI", sans-serif;
 }
 
 /* ================= Modern ListView Styles ================= */
 .list-view {
+    /* JavaFX specific */
     -fx-background-color: transparent;
     -fx-padding: 0;
+    
+    /* Standard CSS */
+    background-color: transparent;
+    padding: 0;
 }
 
 .list-cell {
+    /* JavaFX specific */
     -fx-background-color: white;
     -fx-background-radius: 8;
     -fx-border-radius: 8;
     -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.08), 6, 0, 0, 2);
     -fx-margin: 0 0 12 0;
     -fx-padding: 16;
+    
+    /* Standard CSS */
+    background-color: white;
+    border-radius: 8px;
+    margin: 0 0 12px 0;
+    padding: 16px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.08);
 }
 
 .list-cell:hover {
+    /* JavaFX specific */
     -fx-background-color: #f0f4f8;
     -fx-cursor: hand;
+    
+    /* Standard CSS */
+    background-color: #f0f4f8;
+    cursor: pointer;
 }
 
 /* ================= Button Styles ================= */
@@ -48,60 +155,72 @@
     -fx-background-color: #2980b9;
 }
 
-.icon-btn {
+.icon-btn, .icon-btn-active, .nav-btn {
     -fx-background-color: transparent;
-    -fx-text-fill: white;
+    -fx-text-fill: #2c3e50;
     -fx-font-size: 14px;
-    -fx-padding: 10 16;
-    -fx-background-radius: 25;
-    -fx-graphic-text-gap: 12;
-}
-
-.icon-btn:hover {
-    -fx-background-color: rgba(255,255,255,0.1);
+    -fx-padding: 10px 15px;
+    -fx-cursor: hand;
 }
 
 /* ================= Header Styles ================= */
 .section-header {
-    -fx-font-size: 24px;
-    -fx-text-fill: -primary-color;
     -fx-font-weight: 700;
     -fx-padding: 0 0 24 0;
 }
 
 /* ================= Dialog Enhancements ================= */
 .dialog-pane {
+    /* JavaFX specific */
     -fx-background-color: white;
     -fx-background-radius: 12;
     -fx-border-radius: 12;
     -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 16, 0, 0, 4);
     -fx-padding: 24;
+    
+    /* Standard CSS */
+    background-color: white;
+    border-radius: 12px;
+    padding: 24px;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.1);
 }
 
 .input-field {
+    /* JavaFX specific */
     -fx-background-radius: 6;
     -fx-border-radius: 6;
-    -fx-border-color: #dbe4ee;
+    -fx-border-color: #14457a;
     -fx-padding: 10 14;
     -fx-font-size: 14px;
+    
+    /* Standard CSS */
+    background-color: white;
+    border-radius: 6px;
+    border: 1px solid #dbe4ee;
+    padding: 10px 14px;
+    font-size: 14px;
 }
 
-.input-field{
+.input-field:focused {
+    /* JavaFX specific */
     -fx-border-color: -secondary-color;
+    
+    /* Standard CSS */
+    border-color: var(--secondary-color);
 }
+
 /* ============================= */
 .root {
+    -primary-color: #2c3e50;
+    -secondary-color: #0574ec;
+    -accent-color: #27ae60;
+    -danger-color: #e74c3c;
+    -light-bg: #f8f9fa;
+    -dark-text: #2c3e50;
+    -medium-text: #505d6b;
+    -light-text: #7f8c8d;
     -fx-font-family: "Segoe UI", sans-serif;
-    -fx-background-color: #f5f7fa;  /* Fond très clair */
-}
-
-/* Palette de Couleurs */
-.root {
-    -primary-color: #2c3e50;       /* Bleu foncé élégant */
-    -secondary-color: #2980b9;     /* Bleu vif */
-    -accent-color: #27ae60;        /* Vert accent */
-    -danger-color: #e74c3c;        /* Rouge */
-    -light-background: #ffffff;    /* Blanc pur */
+    -fx-background-color: -light-bg;
 }
 
 /* ============================= */
@@ -113,7 +232,7 @@
     -fx-spacing: 15px;
 }
 .drawer-title {
-    -fx-text-fill: white;
+    -fx-text-fill: #000000;
     -fx-font-size: 24px;
     -fx-font-weight: bold;
 }
@@ -130,20 +249,20 @@
 }
 .nav-btn {
     -fx-background-color: transparent;
-    -fx-text-fill: white;
+    -fx-text-fill: -text-primary;
+    color: #2c3e50;
     -fx-font-size: 16px;
+    font-size: 16px;
     -fx-padding: 10px 15px;
+    padding: 10px 15px;
     -fx-alignment: CENTER_LEFT;
     -fx-cursor: hand;
+    cursor: pointer;
 }
-.nav-button:hover, .icon-btn:hover {
-    -fx-background-color: rgba(255,255,255,0.2);
+.drawer-title, .nav-button {
+    -fx-text-fill: #000000;
+    color: #ecf0f1;
 }
-.nav-button.active {
-    -fx-background-color: -secondary-color;
-    -fx-text-fill: white;
-}
-
 /* ============================= */
 /*       Barre de Recherche      */
 /* ============================= */
@@ -153,10 +272,12 @@
     -fx-pref-width: 220px;
     -fx-border-color: -secondary-color;
     -fx-border-radius: 25;
+    -fx-text-fill: -text-primary;
+    -fx-prompt-text-fill: -text-light;
 }
 .search-btn {
     -fx-background-color: -secondary-color;
-    -fx-text-fill: white;
+    -fx-text-fill: #f8f9fa;
     -fx-font-weight: bold;
     -fx-background-radius: 25;
     -fx-padding: 10px 20px;
@@ -178,12 +299,16 @@
     -fx-background-radius: 25;
     -fx-padding: 10px;
     -fx-pref-width: 420px;
+    -fx-text-fill: -text-primary;
+    -fx-prompt-text-fill: -text-light;
 }
 .post-content-area {
     -fx-background-color: #ecf0f1;
     -fx-background-radius: 10;
     -fx-padding: 10px;
     -fx-wrap-text: true;
+    -fx-text-fill: -text-primary;
+    -fx-prompt-text-fill: -text-light;
 }
 .generate-btn, .secondary-btn {
     -fx-background-color: #bdc3c7;
@@ -194,7 +319,7 @@
 }
 .publish-btn {
     -fx-background-color: -secondary-color;
-    -fx-text-fill: white;
+    -fx-text-fill: #ffffff;
     -fx-font-weight: bold;
     -fx-background-radius: 25;
     -fx-padding: 10px 20px;
@@ -210,7 +335,7 @@
 .section-title {
     -fx-font-size: 24px;
     -fx-font-weight: bold;
-    -fx-text-fill: -primary-color;
+    -fx-text-fill: #000000;
     -fx-padding: 10px 0;
 }
 
@@ -227,17 +352,31 @@
 /*          Post Card            */
 /* ============================= */
 .post-card {
-    -fx-background-color: linear-gradient;
+    /* JavaFX specific */
+    -fx-background-color: linear-gradient(to bottom, #ffffff, #f8f9fa);
     -fx-background-radius: 10;
     -fx-padding: 20px;
     -fx-spacing: 15px;
     -fx-max-width: 600px;
     -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 8, 0, 0, 4);
     -fx-alignment: center;
+    
+    /* Standard CSS */
+    
+    border-radius: 10px;
+    padding: 20px;
+    max-width: 600px;
+    box-shadow: 0 0 8px rgba(0,0,0,0.1);
+    text-align: center;
 }
 .post-card:hover {
+    /* JavaFX specific */
     -fx-background-color: #fdfdfd !important;
     -fx-cursor: hand;
+    
+    /* Standard CSS */
+    background-color: #fdfdfd !important;
+    cursor: pointer;
 }
 
 /* ----------------------------- */
@@ -258,7 +397,7 @@
 }
 .post-time {
     -fx-font-size: 12px;
-    -fx-text-fill: #7f8c8d;
+    -fx-text-fill: #0c3032;
 }
 
 /* ----------------------------- */
@@ -267,62 +406,12 @@
 .post-title {
     -fx-font-size: 18px;
     -fx-font-weight: bold;
-    -fx-text-fill: #2c3e50;
-    -fx-text-alignment: center;
-}
-.post-content {
-    -fx-font-size: 14px;
-    -fx-text-fill: #333333;
-    -fx-wrap-text: true;
-}
-
-/* ----------------------------- */
-/*    Bouton de Suppression      */
-/* ----------------------------- */
-.delete-btn {
-    -fx-background-color: -danger-color;
-    -fx-text-fill: white;
-    -fx-background-radius: 5;
-    -fx-padding: 8px 20px;
-    -fx-cursor: hand;
-}
-
-/* ----------------------------- */
-/*    Boutons d'Interaction      */
-/* ----------------------------- */
-.interaction-btn {
-    -fx-background-color: transparent;
-    -fx-text-fill: -primary-color;
-    -fx-font-size: 15px;
-    -fx-cursor: hand;
-}
-.interaction-btn:hover {
-    -fx-text-fill: -secondary-color;
-    -fx-scale-x: 1.1;
-    -fx-scale-y: 1.1;
-}
-
-/* Tooltip */
-.tooltip {
-    -fx-background-color: white;
-    -fx-text-fill: -primary-color;
-    -fx-border-color: -secondary-color;
-    -fx-border-width: 1px;
-}
-
-/* ============================= */
-/*   TitledPane pour Commentaires  */
-/* ============================= */
-.titled-pane {
-    -fx-background-radius: 10;
-    -fx-border-radius: 10;
-    -fx-padding: 10px;
-    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 5, 0, 0, 2);
+    -fx-text-fill:#000;
 }
 .titled-pane > .title {
     -fx-font-size: 15px;
     -fx-font-weight: bold;
-    -fx-text-fill: -primary-color;
+    -fx-text-fill:#000;
 }
 .titled-pane > .content {
     -fx-padding: 10px;
@@ -334,26 +423,34 @@
 .comments-container {
     -fx-spacing: 10px;
     -fx-padding: 10px;
+    -fx-background-color: #f8f9fa;
+    -fx-background-radius: 5px;
 }
 .comment-box {
     -fx-background-color: #ffffff;
-    -fx-background-radius: 5;
-    -fx-padding: 10px;
-    -fx-spacing: 5px;
+    -fx-background-radius: 5px;
+    -fx-border-radius: 5px;
     -fx-border-color: #0574ec;
     -fx-border-width: 1px;
+    -fx-padding: 10px;
+    -fx-spacing: 5px;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 2, 0, 0, 1);
 }
 .comment-box .label {
     -fx-font-size: 13px;
-    -fx-text-fill:#0574ec ;
-
-
+    font-size: 13px;
+    -fx-text-fill: -text-primary;
+    color: #2c3e50;
 }
 .comment-box .button {
     -fx-background-color: transparent;
+    background-color: transparent;
     -fx-text-fill: -secondary-color;
+    color: #0574ec;
     -fx-font-size: 13px;
+    font-size: 13px;
     -fx-cursor: hand;
+    cursor: pointer;
 }
 
 /* ============================= */
@@ -395,18 +492,8 @@
 /* ============================= */
 /*         Autres Styles         */
 /* ============================= */
-.icon-btn, .icon-btn-active {
-    -fx-background-color: transparent;
-    -fx-text-fill: white;
-    -fx-font-size: 14px;
-    -fx-padding: 10px 15px;
-    -fx-cursor: hand;
-}
-.icon-btn-active {
-    -fx-background-color: #34495e;
-}
 .post-card {
-    -fx-background-color: linear-gradient;
+    -fx-background-color: linear-gradient(to bottom, #ffffff, #f8f9fa);
     -fx-background-radius: 10px;
     -fx-padding: 20px;
     -fx-spacing: 15px;
@@ -445,8 +532,8 @@
     -fx-text-alignment: center;
 }
 .post-content {
-    -fx-font-size: 15px;
-    -fx-text-fill: #333333;
+    -fx-font-size: 14px;
+    -fx-text-fill: -text-primary;
     -fx-wrap-text: true;
 }
 
@@ -466,7 +553,8 @@
 /* Bouton de Suppression */
 .delete-btn {
     -fx-background-color: -danger-color;
-    -fx-text-fill: white;
+    -fx-text-fill: #ffffff;
+    -fx-font-weight: bold;
     -fx-background-radius: 5px;
     -fx-padding: 10px 20px;
     -fx-cursor: hand;
@@ -496,7 +584,7 @@
 .titled-pane > .title {
     -fx-font-size: 16px;
     -fx-font-weight: bold;
-    -fx-text-fill: -primary-color;
+    -fx-text-fill:#000;
 }
 .titled-pane > .content {
     -fx-padding: 10px;
@@ -508,46 +596,32 @@
 .comments-container {
     -fx-spacing: 15px;
     -fx-padding: 15px;
+    -fx-background-color: #f8f9fa;
+    -fx-background-radius: 5px;
 }
 .comment-box {
-    -fx-background-color: -light-background;
+    -fx-background-color: #000000;
     -fx-background-radius: 5px;
+    -fx-border-radius: 5px;
+    -fx-border-color: #0574ec;
+    -fx-border-width: 1px;
     -fx-padding: 10px;
     -fx-spacing: 8px;
-    -fx-border-color: #041319;
-    -fx-border-width: 1px;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 2, 0, 0, 1);
 }
 
-/* ============================= */
-/*         Tooltips              */
-/* ============================= */
-.tooltip {
-    -fx-background-color: white;
-    -fx-text-fill: -primary-color;
-    -fx-border-color: -secondary-color;
-    -fx-border-width: 1px;
-}
-.invoice-item {
-    -fx-padding: 16;
-    -fx-spacing: 24;
-    -fx-border-color: #e0e7f1;
-    -fx-border-width: 0 0 1 0;
+/* === Fix for invisible/white text: force dark text for all main labels and subtitles === */
+.blog-title, .blog-subtitle, .create-post-label, .create-post-subtitle, .section-title, .section-subtitle, .author-name, .post-title, .titled-pane > .title, .comment-box .label, .recent-posts-header Label, .blog-header Label {
+    -fx-text-fill: #222 !important;
+    color: #222 !important;
 }
 
-.invoice-field {
-    -fx-font-size: 14px;
-    -fx-text-fill: -text-primary;
+/* For any light backgrounds, ensure text is dark */
+.create-post-box Label, .feed-container Label, .search-section Label, .search-container Label {
+    -fx-text-fill: #222 !important;
+    color: #222 !important;
 }
 
-.status-paid {
-    -fx-text-fill: -accent-color;
-    -fx-font-weight: 600;
-}
-
-.status-unpaid {
-    -fx-text-fill: -danger-color;
-    -fx-font-weight: 600;
-}
 /* ================= Responsive Design ================= */
 @media (max-width: 768px) {
     .drawer {

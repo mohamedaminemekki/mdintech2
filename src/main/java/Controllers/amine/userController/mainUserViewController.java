@@ -1,4 +1,4 @@
-package controllers.amine.userController;
+package Controllers.amine.userController;
 
 
 import javafx.event.ActionEvent;
@@ -62,7 +62,7 @@ public class mainUserViewController {
     }
     @FXML
     private void goToUserInterface(ActionEvent event) {
-        loadView("/rahim/UserInterface.fxml", event);
+        loadView("/rahim/blog_posts.fxml", event);
     }
     @FXML
     private void goToMarketInterface(ActionEvent event) {

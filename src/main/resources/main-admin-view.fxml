@@ -8,7 +8,7 @@
 
 <AnchorPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
-            fx:controller="controllers.amine.userController.mainAdminViewController"
+            fx:controller="Controllers.amine.userController.mainAdminViewController"
             prefHeight="400.0" prefWidth="600.0">
     <MenuBar fx:id="menuBar" AnchorPane.topAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0">
         <Menu text="Parking">
@@ -34,9 +34,9 @@
             <!-- Added fx:id attributes -->
             <MenuItem fx:id="goToTransportView" text="Home" onAction="#goToTransportView" />
         </Menu>
-        <Menu text="FactureAndBlog">
+        <Menu text="Blog">
             <!-- Added fx:id attributes -->
-            <MenuItem fx:id="goToFactureView" text="Home" onAction="#goToFactureView" />
+            <MenuItem fx:id="goToBlogView" text="Home" onAction="#goToBlogView" />
         </Menu>
         <Menu text="Reclamation">
             <!-- Added fx:id attributes -->

@@ -1,4 +1,4 @@
-package controllers.amine.userController;
+package Controllers.amine.userController;
 
 
 import javafx.event.ActionEvent;
@@ -73,8 +73,8 @@ public class mainAdminViewController {
         loadView("/views/admin_dashboard/.fxml");
     }
     @FXML
-    private void goToFactureView() {
-        loadView("/Rahim/Facture.fxml");
+    private void goToBlogView() {
+        loadView("/Rahim/admin_blog.fxml");
     }
     @FXML
     private void goToReclamationView() {

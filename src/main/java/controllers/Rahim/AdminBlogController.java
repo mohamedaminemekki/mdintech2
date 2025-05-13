@@ -10,6 +10,9 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import entities.Rahim.BlogPost;
+import entities.Rahim.Comments;
+import entities.Rahim.PostLike;
+import entities.amine.User;
 import services.Rahim.BlogServices;
 
 import java.io.File;
@@ -61,7 +64,8 @@ public class AdminBlogController {
         header.getStyleClass().add("post-header");
 
         VBox authorInfo = new VBox(4);
-        Label authorLabel = new Label("Auteur: " + post.getAuthor());
+        User author = post.getUser();
+        Label authorLabel = new Label("Auteur: " + (author != null ? author.getName() : "Inconnu"));
         authorLabel.getStyleClass().add("post-author");
         Label dateLabel = new Label(formatDate(post.getCreatedAt()));
         dateLabel.getStyleClass().add("post-date");
@@ -92,6 +96,13 @@ public class AdminBlogController {
             }
         }
 
+        // Category and Stats
+        HBox statsContainer = new HBox(10);
+        Label categoryLabel = new Label("Catégorie: " + post.getCategory());
+        Label commentsLabel = new Label("Commentaires: " + post.getCommentCount());
+        Label likesLabel = new Label("J'aime: " + post.getLikeCount());
+        statsContainer.getChildren().addAll(categoryLabel, commentsLabel, likesLabel);
+
         // Delete Button
         Button deleteBtn = new Button("Supprimer l'article");
         deleteBtn.getStyleClass().add("delete-btn");
@@ -102,6 +113,7 @@ public class AdminBlogController {
                 title,
                 content,
                 imageContainer,
+                statsContainer,
                 deleteBtn
         );
 
