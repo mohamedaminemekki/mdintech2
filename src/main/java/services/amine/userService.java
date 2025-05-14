@@ -261,13 +261,14 @@ public class userService implements Iservice<User> {
     }
 
 
-    public void updateUserStatus(String cin, boolean newStatus) {
+    public void updateUserStatus(User user) {
+
         String query = "UPDATE user SET is_active=? WHERE CIN=?";
         try (Connection conn = dbConnection.getInstance().getConn();
              PreparedStatement stmt = conn.prepareStatement(query)) {
 
-            stmt.setBoolean(1, newStatus);
-            stmt.setString(2, cin);
+            stmt.setBoolean(1, !user.isActive());
+            stmt.setString(2, user.getCIN());
             stmt.executeUpdate();
             System.out.println("User status updated successfully.");
         } catch (SQLException e) {
