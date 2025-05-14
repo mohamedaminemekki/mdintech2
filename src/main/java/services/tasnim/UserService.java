@@ -1,9 +1,9 @@
 package services.tasnim;
 
-import entities.tasnim.User;
+import entities.amine.User;
 import utils.db;
 
-import entities.tasnim.UserRole;
+import utils.UserRole;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -13,8 +13,8 @@ import java.sql.SQLException;
 public class UserService {
 
     public User getUserById(int userId) {
-        String query = "SELECT * FROM users WHERE CIN = ?"; // Adjust query as needed
-        User user = null;
+        String query = "SELECT * FROM user WHERE id = ?";
+        entities.amine.User user = null;
 
         Connection con = null;
         PreparedStatement pstmt = null;
@@ -27,10 +27,10 @@ public class UserService {
             rs = pstmt.executeQuery();
 
             if (rs.next()) {
-                user = new User();
-                user.setCIN(rs.getInt("CIN"));
-                user.setName(rs.getString("Name"));
-                user.setEmail(rs.getString("Email"));
+                user = new entities.amine.User();
+                user.setCIN(rs.getString("cin"));
+                user.setName(rs.getString("name"));
+                user.setEmail(rs.getString("email"));
                 // Set other fields as needed
             }
         } catch (SQLException e) {
@@ -41,24 +41,22 @@ public class UserService {
     }
 
     // Method to get user role by CIN
-    public UserRole getUserRole(int CIN) {
-        String query = "SELECT Role FROM users WHERE CIN = ?"; // Adjust table and column names as needed
-        UserRole role = UserRole.Citizen; // Default role if user not found
+    public UserRole getUserRole(int userId) {
+        String query = "SELECT roles FROM user WHERE id = ?";
+        UserRole role = UserRole.USER; // Default role if user not found
 
         Connection con = null;
         PreparedStatement pstmt = null;
         ResultSet rs = null;
 
         try {
-            // Get the database connection instance
             con = db.getCon();
             pstmt = con.prepareStatement(query);
-            pstmt.setInt(1, CIN); // Set the CIN parameter
+            pstmt.setInt(1, userId);
             rs = pstmt.executeQuery();
 
             if (rs.next()) {
-                // Fetch the role from the database and convert it to UserRole enum
-                String roleStr = rs.getString("Role");
+                String roleStr = rs.getString("roles");
                 try {
                     role = UserRole.valueOf(roleStr); // Convert the role string to UserRole enum
                 } catch (IllegalArgumentException e) {
@@ -70,5 +68,34 @@ public class UserService {
             System.err.println("Error fetching user role: " + e.getMessage());
         }
         return role;
+    }
+
+    public entities.amine.User getUserByCIN(String cin) {
+        String query = "SELECT * FROM user WHERE cin=?";
+        entities.amine.User user = null;
+        try (Connection con = db.getCon();
+             PreparedStatement stmt = con.prepareStatement(query)) {
+            stmt.setString(1, cin);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                // Defensive: Ensure no nulls for required fields
+                int id = rs.getInt("id");
+                String dbCin = rs.getString("cin");
+                String name = rs.getString("name");
+                if (name == null || name.trim().isEmpty()) name = "Unnamed User";
+                String email = rs.getString("email");
+                if (email == null) email = "";
+                user = new entities.amine.User(
+                        id,
+                        dbCin,
+                        name,
+                        email
+                        // ...other fields as needed
+                );
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return user;
     }
 }

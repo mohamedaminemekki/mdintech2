@@ -8,7 +8,7 @@
 <?import javafx.scene.chart.NumberAxis?>
 <?import javafx.scene.chart.XYChart?>
 
-<VBox xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" spacing="20" fx:controller="controllers.tasnim.HomeController" stylesheets="@home.css">
+<VBox xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" spacing="20" fx:controller="Controllers.tasnim.HomeController" stylesheets="@home.css">
     <Label text="Home" styleClass="home-label" />
 
     <!-- Cards Section -->

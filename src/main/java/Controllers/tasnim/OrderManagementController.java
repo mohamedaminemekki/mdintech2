@@ -1,4 +1,4 @@
-package controllers.tasnim;
+package Controllers.tasnim;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -8,7 +8,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.layout.HBox;
 import entities.tasnim.Order;
 import entities.tasnim.OrderItem;
-import entities.tasnim.User;
+import entities.amine.User;
 import services.tasnim.OrderService;
 import services.tasnim.ProductService;
 import services.tasnim.EmailService;
@@ -61,7 +61,7 @@ public class OrderManagementController {
         VBox productList = new VBox();
         productList.getStyleClass().add("product-list");
         for (OrderItem item : order.getOrderItems()) {
-            String productName = productService.getProductNameById(item.getProductId());
+            String productName = item.getProduct() != null ? item.getProduct().getName() : "Unknown";
             Label productLabel = new Label(productName + " x " + item.getQuantity());
             productList.getChildren().add(productLabel);
         }
@@ -92,8 +92,8 @@ public class OrderManagementController {
     }
 
     private void handleConfirm(Order order) {
-        orderService.updateOrderStatus(order.getUserCIN(), "Confirmed");
-        String userEmail = getUserEmail(order.getUserCIN());
+        orderService.updateOrderStatus(order.getId(), "Confirmed");
+        String userEmail = getUserEmail(order.getUser() != null ? order.getUser().getCIN() : null);
         if (userEmail != null) {
             emailService.sendEmail(userEmail, "Order Confirmed", "Your order has been confirmed.");
         }
@@ -101,18 +101,18 @@ public class OrderManagementController {
     }
 
     private void handleReject(Order order) {
-        orderService.updateOrderStatus(order.getUserCIN(), "Rejected");
-        String userEmail = getUserEmail(order.getUserCIN());
+        orderService.updateOrderStatus(order.getId(), "Rejected");
+        String userEmail = getUserEmail(order.getUser() != null ? order.getUser().getCIN() : null);
         if (userEmail != null) {
             emailService.sendEmail(userEmail, "Order Rejected", "Your order has been rejected due to storage issues.");
         }
         handleRefresh();
     }
 
-    private String getUserEmail(int UserCIN) {
+    private String getUserEmail(String userCIN) {
         // Fetch user email from the database using UserService
-        // Assuming you have a method in UserService to get user by ID
-        User user = userService.getUserById(UserCIN);
+        // Assuming you have a method in UserService to get user by CIN (String)
+        User user = userService.getUserByCIN(userCIN);
         return user != null ? user.getEmail() : null;
     }
 }

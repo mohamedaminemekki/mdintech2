@@ -9,7 +9,7 @@
 
 <BorderPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
-            fx:controller="controllers.amine.userController.mainUserViewController"
+            fx:controller="Controllers.amine.userController.mainUserViewController"
             prefHeight="700.0" prefWidth="1000.0"
             styleClass="main-container">
 

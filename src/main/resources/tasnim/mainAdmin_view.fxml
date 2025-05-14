@@ -6,7 +6,7 @@
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.layout.StackPane?>
 
-<BorderPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" stylesheets="@main.css" fx:controller="controllers.tasnim.MainAdminController">
+<BorderPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" stylesheets="@main.css" fx:controller="Controllers.tasnim.MainAdminController">
     <!-- Left Sidebar -->
     <left>
         <VBox fx:id="sidebar" styleClass="sidebar" spacing="10" prefWidth="220">

@@ -4,7 +4,7 @@
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.ListView?>
-<VBox xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" spacing="10" fx:controller="controllers.tasnim.ProductManagementController" stylesheets="@product_management.css">
+<VBox xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" spacing="10" fx:controller="Controllers.tasnim.ProductManagementController" stylesheets="@product_management.css">
     <MenuBar>
         <Menu text="Manage">
             <MenuItem text="Add Product" onAction="#handleAddProduct" />

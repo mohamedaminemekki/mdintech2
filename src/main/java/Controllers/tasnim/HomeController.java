@@ -1,4 +1,4 @@
-package controllers.tasnim;
+package Controllers.tasnim;
 
 import javafx.fxml.FXML;
 import javafx.scene.chart.BarChart;

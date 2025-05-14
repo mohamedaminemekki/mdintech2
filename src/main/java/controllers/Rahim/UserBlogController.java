@@ -1,7 +1,8 @@
 package Controllers.Rahim;
 
 import Singleton.loggedInUser;
-import entities.Rahim.Comment;
+import entities.Rahim.Comments;
+import entities.Rahim.PostLike;
 import entities.amine.User;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -130,8 +131,22 @@ public class UserBlogController {
         }
     }
 
-    private void setupCategoryCombo() {
-        categoryCombo.getItems().addAll("Actualité", "Événement", "Astuce", "Question", "Autre");
+    private void loadDefaultAvatar(ImageView avatar) {
+        try {
+            InputStream is = getClass().getResourceAsStream("/images/logo_plus.png");
+            if (is != null) {
+                Image image = new Image(is);
+                avatar.setImage(image);
+            } else {
+                System.err.println("Avatar par défaut non trouvé !");
+                Image backupImage = new Image(new File("/images/logo_plus.png").toURI().toString());
+                avatar.setImage(backupImage);
+            }
+        } catch (Exception e) {
+            System.err.println("Erreur de chargement de l'avatar : " + e.getMessage());
+        }
+    }    private void setupCategoryCombo() {
+        categoryCombo.getItems().addAll(BlogPost.VALID_CATEGORIES);
     }
 
     @FXML
@@ -161,17 +176,17 @@ public class UserBlogController {
             showAlert("Champs requis", "Le titre et le contenu sont obligatoires");
             return;
         }
-        BlogPost post = new BlogPost();
-        // Utilisation du singleton loggedInUser
+
         User currentUser = loggedInUser.getInstance().getLoggedUser();
-        post.setAuthorAvatarUrl(currentUser.getPathtopic());
-        post.setTitle(postTitle.getText());
-        post.setContent(postContent.getText());
-        post.setAuthor(currentUser.getName());
-        post.setAuthor_cin(currentUser.getCIN()) ;
+        BlogPost post = new BlogPost(
+            postTitle.getText(),
+            postContent.getText(),
+            categoryCombo.getValue(),
+            currentUser
+        );
         post.setImageUrl(imagePath);
-        post.setCategory(categoryCombo.getValue());
         post.setCreatedAt(LocalDateTime.now());
+
         try {
             blogService.createPost(post);
             clearForm();
@@ -221,37 +236,40 @@ public class UserBlogController {
         card.setMaxWidth(600);
         card.setUserData(post.getId());
 
-        // ---------------------------
-        // Header
-        // ---------------------------
+        // Header with user info
         HBox header = new HBox(10);
         header.getStyleClass().add("header");
         header.setAlignment(Pos.CENTER_LEFT);
 
+        // User avatar
         ImageView avatar = new ImageView();
+        User postUser = post.getUser();
         try {
-            Image avatarImage = new Image(new File(post.getAuthorAvatarUrl()).toURI().toString());
-            avatar.setImage(avatarImage);
+            if (postUser != null && postUser.getPathtopic() != null) {
+                Image avatarImage = new Image(new File(postUser.getPathtopic()).toURI().toString());
+                avatar.setImage(avatarImage);
+            } else {
+                loadDefaultAvatar(avatar);
+            }
         } catch (Exception e) {
-            avatar.setImage(new Image("https://fr.vecteezy.com/art-vectoriel/1840618-image-profil-icon-male-icon-human-or-people-sign-and-symbol-vector"));
+            loadDefaultAvatar(avatar);
         }
         avatar.setFitHeight(40);
         avatar.setFitWidth(40);
         Circle clip = new Circle(20, 20, 20);
         avatar.setClip(clip);
 
+        // User info
         VBox userInfo = new VBox(2);
         userInfo.getStyleClass().add("author-info");
-        Label authorName = new Label(post.getAuthor());
+        Label authorName = new Label(postUser != null ? postUser.getName() : "Utilisateur inconnu");
         authorName.setStyle("-fx-font-weight: bold; -fx-text-fill: #2c3e50;");
         Label postTime = new Label(formatDateTime(post.getCreatedAt()));
         postTime.setStyle("-fx-text-fill: #606770; -fx-font-size: 12;");
-        userInfo.getChildren().addAll(authorName, postTime);
-
-        // Bouton options si l'utilisateur est l'auteur
+        userInfo.getChildren().addAll(authorName, postTime);        // Options button for post author
         Node optionsButton = null;
-        // Remplacement de SessionManager par loggedInUser
-        if (loggedInUser.getInstance().getLoggedUser().getCIN().equals(post.getAuthorCin())) {
+        User currentUser = loggedInUser.getInstance().getLoggedUser();
+        if (currentUser != null && postUser != null && currentUser.getId() == postUser.getId()) {
             Button btnOptions = new Button("⋮");
             btnOptions.getStyleClass().add("options-button");
             ContextMenu contextMenu = new ContextMenu();
@@ -264,6 +282,7 @@ public class UserBlogController {
             optionsButton = btnOptions;
         }
 
+        // Assemble header
         HBox headerLeft = new HBox(10, avatar, userInfo);
         header.getChildren().add(headerLeft);
         if (optionsButton != null) {
@@ -272,24 +291,64 @@ public class UserBlogController {
             header.getChildren().addAll(spacer, optionsButton);
         }
 
-        // ---------------------------
-        // Titre et Contenu
-        // ---------------------------
+        // Content
         Label title = new Label(post.getTitle());
         title.setStyle("-fx-font-weight: bold; -fx-font-size: 16;");
         Label content = new Label(post.getContent());
         content.setWrapText(true);
         content.setStyle("-fx-font-size: 14; -fx-text-fill: #050505;");
 
-        // ---------------------------
-        // Boutons d'interaction
-        // ---------------------------
+        // Interaction buttons
         HBox interactions = new HBox(15);
         Button likeBtn = new Button("❤ " + post.getLikeCount());
         likeBtn.getStyleClass().add("interaction-btn");
         likeBtn.setOnAction(e -> handleLike(post));
+
+        // Like tooltip
+        setupLikeTooltip(likeBtn, post);
+
+        Button commentBtn = new Button("💬 " + post.getCommentCount());
+        commentBtn.getStyleClass().add("interaction-btn");
+
+        // Comment input
+        HBox commentInputContainer = createCommentInputContainer(post);
+        commentBtn.setOnAction(e -> {
+            commentInputContainer.setVisible(!commentInputContainer.isVisible());
+            commentInputContainer.setManaged(!commentInputContainer.isManaged());
+        });
+
+        interactions.getChildren().addAll(likeBtn, commentBtn);
+
+        // Image
+        Node imageNode = createImageContainer(post.getImageUrl());
+
+        // Comments section
+        VBox commentsContainer = new VBox(5);
+        commentsContainer.getStyleClass().add("comments-container");
+        List<Comments> comments = post.getComments();
+        if (comments != null) {
+            comments.forEach(comment -> commentsContainer.getChildren().add(createCommentCard(comment)));
+        }
+
+        // Assemble card
+        card.getChildren().addAll(
+            header, 
+            title, 
+            content, 
+            imageNode, 
+            new Separator(), 
+            interactions, 
+            commentInputContainer, 
+            commentsContainer
+        );
+
+        return card;
+    }
+
+    private void setupLikeTooltip(Button likeBtn, BlogPost post) {
         Tooltip likeTooltip = new Tooltip();
         likeBtn.setTooltip(likeTooltip);
+        
         likeBtn.hoverProperty().addListener((obs, oldVal, newVal) -> {
             if (newVal) {
                 try {
@@ -308,39 +367,195 @@ public class UserBlogController {
                 }
             }
         });
-        // Clic droit pour afficher la liste des utilisateurs ayant liké
+
         likeBtn.setOnMouseClicked(e -> {
             if (e.isSecondaryButtonDown()) {
+                showLikedUsersMenu(post, likeBtn);
+            }
+        });
+    }
+
+    private void showLikedUsersMenu(BlogPost post, Button likeBtn) {
+        try {
+            List<User> likedUsers = likeService.getUsersWhoLikedPost(post.getId());
+            ContextMenu usersMenu = new ContextMenu();
+            
+            for (User u : likedUsers) {
+                HBox userItem = new HBox(5);
+                ImageView userAvatar = new ImageView();
                 try {
-                    List<User> likedUsers = likeService.getUsersWhoLikedPost(post.getId());
-                    ContextMenu usersMenu = new ContextMenu();
-                    for (User u : likedUsers) {
-                        HBox userItem = new HBox(5);
-                        ImageView userAvatar = new ImageView();
-                        try {
-                            userAvatar.setImage(new Image(new File(u.getPathtopic()).toURI().toString()));
-                        } catch (Exception ex) {
-                            userAvatar.setImage(new Image("https://fr.vecteezy.com/art-vectoriel/1840618-image-profil-icon-male-icon-human-or-people-sign-and-symbol-vector"));
-                        }
-                        userAvatar.setFitWidth(20);
-                        userAvatar.setFitHeight(20);
-                        Label nameLabel = new Label(u.getName());
-                        userItem.getChildren().addAll(userAvatar, nameLabel);
-                        CustomMenuItem menuItem = new CustomMenuItem(userItem, false);
-                        usersMenu.getItems().add(menuItem);
+                    if (u.getPathtopic() != null) {
+                        userAvatar.setImage(new Image(new File(u.getPathtopic()).toURI().toString()));
+                    } else {
+                        loadDefaultAvatar(userAvatar);
                     }
-                    usersMenu.show(likeBtn, Side.TOP, 0, 0);
                 } catch (Exception ex) {
-                    showAlert("Erreur", "Impossible de récupérer la liste des likes");
+                    loadDefaultAvatar(userAvatar);
+                }
+                userAvatar.setFitWidth(20);
+                userAvatar.setFitHeight(20);
+                Label nameLabel = new Label(u.getName());
+                userItem.getChildren().addAll(userAvatar, nameLabel);
+                CustomMenuItem menuItem = new CustomMenuItem(userItem, false);
+                usersMenu.getItems().add(menuItem);
+            }
+            usersMenu.show(likeBtn, Side.TOP, 0, 0);
+        } catch (Exception ex) {
+            showAlert("Erreur", "Impossible de récupérer la liste des likes");
+        }
+    }    private void handleLike(BlogPost post) {
+        try {
+            User currentUser = loggedInUser.getInstance().getLoggedUser();
+            likeService.toggleLike(currentUser.getId(), post.getId());
+            refreshPost(post.getId());
+        } catch (Exception e) {
+            showAlert("Erreur", "Échec de l'action : " + e.getMessage());
+        }
+    }
+
+    private void refreshPost(int postId) {
+        try {
+            BlogPost updatedPost = blogService.getPostById(postId);
+            feedContainer.getChildren().replaceAll(node -> {
+                if (node.getUserData() != null && (int) node.getUserData() == postId) {
+                    return createPostCard(updatedPost);
+                }
+                return node;
+            });
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void showCommentDialog(BlogPost post) {
+        Dialog<String> dialog = new Dialog<>();
+        dialog.setTitle("Nouveau commentaire");
+        TextArea commentArea = new TextArea();
+        commentArea.setPromptText("Écrivez votre commentaire...");
+        commentArea.setWrapText(true);
+        dialog.getDialogPane().setContent(commentArea);
+        dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
+        dialog.setResultConverter(buttonType -> {
+            if (buttonType == ButtonType.OK) {
+                return commentArea.getText();
+            }
+            return null;
+        });        Optional<String> result = dialog.showAndWait();
+        result.ifPresent(commentText -> {
+            try {
+                Comments comment = new Comments();
+                comment.setContent(commentText);
+                comment.setBlogPostId(post.getId());
+                comment.setUserId(loggedInUser.getInstance().getLoggedUser().getId());
+                comment.setCreatedAt(LocalDateTime.now());
+                commentService.addComment(comment);
+                refreshPost(post.getId());
+            } catch (Exception e) {
+                showAlert("Erreur", "Impossible d'ajouter le commentaire");
+            }
+        });
+    }
+
+    private void addCommentIfAppropriate(BlogPost post, String commentText) {
+        ContentFilterService filterService = new ContentFilterService();
+        try {
+            String filteredJson = filterService.filterText(commentText);
+            if (filterService.isTextToxic(commentText, filteredJson)) {
+                showAlert("Commentaire refusé", "Votre commentaire contient des termes inappropriés.");
+            } else {                // Create new comment object
+                Comments newComment = new Comments();
+                newComment.setContent(commentText);
+                newComment.setBlogPostId(post.getId());
+                newComment.setUserId(loggedInUser.getInstance().getLoggedUser().getId());
+                commentService.addComment(newComment);
+                refreshPost(post.getId());
+            }
+        } catch (Exception e) {
+            showAlert("Erreur", "Impossible de vérifier le commentaire pour contenu inapproprié.");
+            e.printStackTrace();
+        }
+    }
+
+    private VBox createCommentCard(Comments comment) {
+        VBox commentBox = new VBox(5);
+        commentBox.getStyleClass().add("comment-box");
+
+        // Comment header
+        HBox header = new HBox(10);
+        User commentUser = comment.getUser();
+        Label authorLabel = new Label(commentUser != null ? commentUser.getName() : "Utilisateur inconnu");
+        authorLabel.setStyle("-fx-font-weight: bold;");
+        Label timeLabel = new Label(formatDateTime(comment.getCreatedAt()));
+        timeLabel.setStyle("-fx-text-fill: #040000; -fx-font-size: 10;");
+        header.getChildren().addAll(authorLabel, timeLabel);
+
+        // Comment content and edit controls
+        Label contentLabel = new Label(comment.getContent());
+        contentLabel.setWrapText(true);
+        contentLabel.setStyle("-fx-font-size: 12;");
+
+        HBox editContainer = createCommentEditContainer(comment, contentLabel);
+
+        // Comment actions
+        HBox actions = new HBox(10);
+        User currentUser = loggedInUser.getInstance().getLoggedUser();        if (currentUser != null && commentUser != null && currentUser.getId() == commentUser.getId()) {
+            Button editBtn = new Button("Modifier");
+            Button deleteBtn = new Button("Supprimer");
+            
+            editBtn.setOnAction(e -> {
+                contentLabel.setVisible(false);
+                contentLabel.setManaged(false);
+                editContainer.setVisible(true);
+                editContainer.setManaged(true);
+            });
+            
+            deleteBtn.setOnAction(e -> handleDeleteComment(comment));
+            actions.getChildren().addAll(editBtn, deleteBtn);
+        }
+
+        commentBox.getChildren().addAll(header, contentLabel, editContainer, actions);
+        return commentBox;
+    }
+
+    private HBox createCommentEditContainer(Comments comment, Label contentLabel) {
+        HBox editContainer = new HBox(10);
+        editContainer.setAlignment(Pos.CENTER_LEFT);
+        editContainer.setVisible(false);
+        editContainer.setManaged(false);
+        TextField editField = new TextField(comment.getContent());
+        Button saveEditBtn = new Button("Valider");
+        Button cancelEditBtn = new Button("Annuler");
+        editContainer.getChildren().addAll(editField, saveEditBtn, cancelEditBtn);
+
+        saveEditBtn.setOnAction(e -> {
+            String newContent = editField.getText().trim();
+            if (!newContent.isEmpty()) {                try {
+                    comment.setContent(newContent);
+                    commentService.updateComment(comment);
+                    contentLabel.setText(newContent);
+                    editContainer.setVisible(false);
+                    editContainer.setManaged(false);
+                    contentLabel.setVisible(true);
+                    contentLabel.setManaged(true);
+                } catch (SQLException ex) {
+                    showAlert("Erreur", "Impossible de modifier le commentaire");
+                    ex.printStackTrace();
                 }
             }
         });
-        Button commentBtn = new Button("💬 " + post.getCommentCount());
-        commentBtn.getStyleClass().add("interaction-btn");
 
-        // ---------------------------
-        // Zone de saisie inline pour commentaire
-        // ---------------------------
+        cancelEditBtn.setOnAction(e -> {
+            editField.setText(comment.getContent());
+            editContainer.setVisible(false);
+            editContainer.setManaged(false);
+            contentLabel.setVisible(true);
+            contentLabel.setManaged(true);
+        });
+
+        return editContainer;
+    }
+
+    private HBox createCommentInputContainer(BlogPost post) {
         HBox commentInputContainer = new HBox(10);
         commentInputContainer.setAlignment(Pos.CENTER_LEFT);
         commentInputContainer.setVisible(false);
@@ -357,34 +572,7 @@ public class UserBlogController {
         });
 
         commentInputContainer.getChildren().addAll(newCommentField, publishCommentBtn);
-
-        // Le bouton "commenter" bascule l'affichage de la zone de saisie inline
-        commentBtn.setOnAction(e -> {
-            commentInputContainer.setVisible(!commentInputContainer.isVisible());
-            commentInputContainer.setManaged(!commentInputContainer.isManaged());
-        });
-
-        interactions.getChildren().addAll(likeBtn, commentBtn);
-
-        // ---------------------------
-        // Affichage de l'image associée
-        // ---------------------------
-        Node imageNode = createImageContainer(post.getImageUrl());
-
-        // ---------------------------
-        // Conteneur des commentaires existants
-        // ---------------------------
-        VBox commentsContainer = new VBox(5);
-        commentsContainer.getStyleClass().add("comments-container");
-        if (post.getComments() != null) {
-            for (Comment comment : post.getComments()) {
-                commentsContainer.getChildren().add(createCommentCard(comment));
-            }
-        }
-
-        // Assemblage final de la carte
-        card.getChildren().addAll(header, title, content, imageNode, new Separator(), interactions, commentInputContainer, commentsContainer);
-        return card;
+        return commentInputContainer;
     }
 
     private void handleDeletePost(BlogPost post) {
@@ -405,20 +593,20 @@ public class UserBlogController {
     }
 
     private void showEditPostDialog(BlogPost post) {
-        Dialog<BlogPost> dialog = new Dialog<>();
-        dialog.setTitle("Modifier le post");
+        Dialog<BlogPost> dialog = new Dialog<>();        dialog.setTitle("Modifier le post");
         TextField titleField = new TextField(post.getTitle());
         TextArea contentArea = new TextArea(post.getContent());
-        TextField categoryField = new TextField(post.getCategory());
+        ComboBox<String> categoryCombo = new ComboBox<>();
+        categoryCombo.getItems().addAll(BlogPost.VALID_CATEGORIES);
+        categoryCombo.setValue(post.getCategory());
         VBox vbox = new VBox(10);
-        vbox.getChildren().addAll(new Label("Titre:"), titleField, new Label("Contenu:"), contentArea, new Label("Catégorie:"), categoryField);
+        vbox.getChildren().addAll(new Label("Titre:"), titleField, new Label("Contenu:"), contentArea, new Label("Catégorie:"), categoryCombo);
         dialog.getDialogPane().setContent(vbox);
         dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
         dialog.setResultConverter(buttonType -> {
-            if (buttonType == ButtonType.OK) {
-                post.setTitle(titleField.getText());
+            if (buttonType == ButtonType.OK) {                post.setTitle(titleField.getText());
                 post.setContent(contentArea.getText());
-                post.setCategory(categoryField.getText());
+                post.setCategory(categoryCombo.getValue());
                 return post;
             }
             return null;
@@ -456,149 +644,7 @@ public class UserBlogController {
         return container;
     }
 
-    private void handleLike(BlogPost post) {
-        try {
-            // Remplacement de SessionManager par loggedInUser
-            likeService.toggleLike(loggedInUser.getInstance().getLoggedUser().getCIN(), post.getId());
-            refreshPost(post.getId());
-        } catch (Exception e) {
-            showAlert("Erreur", "Échec de l'action : " + e.getMessage());
-        }
-    }
-
-    private void refreshPost(int postId) {
-        try {
-            BlogPost updatedPost = blogService.getPostById(postId);
-            feedContainer.getChildren().replaceAll(node -> {
-                if (node.getUserData() != null && (int) node.getUserData() == postId) {
-                    return createPostCard(updatedPost);
-                }
-                return node;
-            });
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void showCommentDialog(BlogPost post) {
-        Dialog<String> dialog = new Dialog<>();
-        dialog.setTitle("Nouveau commentaire");
-        TextArea commentArea = new TextArea();
-        commentArea.setPromptText("Écrivez votre commentaire...");
-        commentArea.setWrapText(true);
-        dialog.getDialogPane().setContent(commentArea);
-        dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
-        dialog.setResultConverter(buttonType -> {
-            if (buttonType == ButtonType.OK) {
-                return commentArea.getText();
-            }
-            return null;
-        });
-        Optional<String> result = dialog.showAndWait();
-        result.ifPresent(comment -> {
-            try {
-                // Remplacement de SessionManager par loggedInUser
-                commentService.addComment(post.getId(), loggedInUser.getInstance().getLoggedUser().getCIN(), comment);
-                refreshPost(post.getId());
-            } catch (Exception e) {
-                showAlert("Erreur", "Impossible d'ajouter le commentaire");
-            }
-        });
-    }
-
-    private void addCommentIfAppropriate(BlogPost post, String commentText) {
-        ContentFilterService filterService = new ContentFilterService();
-        try {
-            String filteredJson = filterService.filterText(commentText);
-            if (filterService.isTextToxic(commentText, filteredJson)) {
-                showAlert("Commentaire refusé", "Votre commentaire contient des termes inappropriés.");
-            } else {
-                // Remplacement de SessionManager par loggedInUser
-                commentService.addComment(post.getId(), loggedInUser.getInstance().getLoggedUser().getCIN(), commentText);
-                refreshPost(post.getId());
-            }
-        } catch (Exception e) {
-            showAlert("Erreur", "Impossible de vérifier le commentaire pour contenu inapproprié.");
-            e.printStackTrace();
-        }
-    }
-
-    private VBox createCommentCard(Comment comment) {
-        VBox commentBox = new VBox(5);
-        commentBox.getStyleClass().add("comment-box");
-
-        // Header du commentaire
-        HBox header = new HBox(10);
-        Label authorLabel = new Label(comment.getAuthorCin());
-        authorLabel.setStyle("-fx-font-weight: bold;");
-        Label timeLabel = new Label(formatDateTime(comment.getCreatedAt()));
-        timeLabel.setStyle("-fx-text-fill: #040000; -fx-font-size: 10;");
-        header.getChildren().addAll(authorLabel, timeLabel);
-
-        // Contenu en mode lecture
-        Label contentLabel = new Label(comment.getContent());
-        contentLabel.setWrapText(true);
-        contentLabel.setStyle("-fx-font-size: 12;");
-
-        // Zone d'édition inline (initialement masquée)
-        HBox editContainer = new HBox(10);
-        editContainer.setAlignment(Pos.CENTER_LEFT);
-        editContainer.setVisible(false);
-        editContainer.setManaged(false);
-        TextField editField = new TextField(comment.getContent());
-        Button saveEditBtn = new Button("Valider");
-        Button cancelEditBtn = new Button("Annuler");
-        editContainer.getChildren().addAll(editField, saveEditBtn, cancelEditBtn);
-
-        saveEditBtn.setOnAction(e -> {
-            String newContent = editField.getText().trim();
-            if (!newContent.isEmpty()) {
-                try {
-                    commentService.updateComment(comment.getId(), newContent);
-                    comment.setContent(newContent);
-                    contentLabel.setText(newContent);
-                    editContainer.setVisible(false);
-                    editContainer.setManaged(false);
-                    contentLabel.setVisible(true);
-                    contentLabel.setManaged(true);
-                } catch (SQLException ex) {
-                    showAlert("Erreur", "Impossible de modifier le commentaire");
-                    ex.printStackTrace();
-                }
-            }
-        });
-
-        cancelEditBtn.setOnAction(e -> {
-            editField.setText(comment.getContent());
-            editContainer.setVisible(false);
-            editContainer.setManaged(false);
-            contentLabel.setVisible(true);
-            contentLabel.setManaged(true);
-        });
-
-        // Actions du commentaire
-        HBox actions = new HBox(10);
-        Button editBtn = new Button("Modifier");
-        editBtn.setOnAction(e -> {
-            contentLabel.setVisible(false);
-            contentLabel.setManaged(false);
-            editContainer.setVisible(true);
-            editContainer.setManaged(true);
-        });
-        Button deleteBtn = new Button("Supprimer");
-        deleteBtn.setOnAction(e -> handleDeleteComment(comment));
-        actions.getChildren().addAll(editBtn, deleteBtn);
-
-        commentBox.getChildren().addAll(header, contentLabel, editContainer, actions);
-        return commentBox;
-    }
-
-    private void showEditCommentDialog(Comment comment) {
-        // Optionnel si vous souhaitez aussi ouvrir une fenêtre de dialogue,
-        // mais ici l'édition inline est déjà gérée dans createCommentCard.
-    }
-
-    private void handleDeleteComment(Comment comment) {
+    private void handleDeleteComment(Comments comment) {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Confirmation");
         alert.setHeaderText("Supprimer le commentaire ?");
@@ -615,8 +661,7 @@ public class UserBlogController {
         }
     }
 
-    private void showAlert(String title, String message) {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
+    private void showAlert(String title, String message) {        Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle(title);
         alert.setContentText(message);
         alert.showAndWait();

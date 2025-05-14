@@ -4,47 +4,77 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.*?>
-
+<?import javafx.scene.shape.Circle?>
 <?import org.kordamp.ikonli.javafx.FontIcon?>
+<?import javafx.scene.image.Image?>
+
 <BorderPane xmlns="http://javafx.com/javafx/17"
             xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="controllers.Rahim.UserBlogController"
-            stylesheets="@style.css">
-
+            fx:controller="Controllers.Rahim.UserBlogController"
+            stylesheets="@style.css, @../styles/medintechstyle.css"
+            styleClass="main-container">    <top>
+        <fx:include source="../navbar.fxml" />
+    </top>
+    
     <center>
-        <ScrollPane fitToWidth="true" style="-fx-background-color: transparent;">
-            <VBox spacing="20" alignment="CENTER" style="-fx-padding: 20;">
-
-                <!-- Zone de création de post (compacte) -->
-                <VBox fx:id="createPostBox" spacing="10" styleClass="create-post-box">
-                    <HBox spacing="10" alignment="CENTER_LEFT">
-                        <ImageView fx:id="userAvatar" fitWidth="40" fitHeight="40"/>
-                        <Label text="Créer un post" style="-fx-font-weight: bold; -fx-font-size: 16;"/>
-                    </HBox>
-                    <TextField fx:id="postTitle" promptText="Titre de votre post" styleClass="rounded-textfield"/>
-                    <!-- Bouton pour générer le texte du post -->
-                    <Button fx:id="generatePostTextButton" text="Générer le texte du post" styleClass="generate-btn"/>
-                    <TextArea fx:id="postContent" promptText="Quoi de neuf ?" styleClass="post-content-area" prefRowCount="4"/>
-                    <ImageView fx:id="imagePreview" fitWidth="300" preserveRatio="true" visible="false" managed="false"/>
-                    <HBox spacing="10" alignment="CENTER_LEFT">
-                        <Button text="Photo/Video" styleClass="secondary-btn" onAction="#handleAddImage"/>
-                        <ComboBox fx:id="categoryCombo" promptText="Catégorie" styleClass="rounded-combo"/>
-                        <Button text="Émotion/Activite" styleClass="secondary-btn"/>
-                    </HBox>
-                    <Button text="Publier" styleClass="publish-btn" onAction="#handleNewPost"/>
+        <ScrollPane fitToWidth="true" styleClass="modern-scrollpane">
+            <VBox spacing="30" alignment="CENTER" style="-fx-padding: 40 20;">
+                <!-- En-tête de la page blog -->
+                <VBox styleClass="blog-header" alignment="CENTER" spacing="15">
+                    <Label text="Blog Communautaire" styleClass="blog-title"/>
+                    <Label text="Partagez vos expériences et idées avec la communauté" styleClass="blog-subtitle"/>
                 </VBox>
 
-                <!-- Barre de recherche (centrée sous la zone de création) -->
-                <HBox spacing="10" alignment="CENTER" style="-fx-background-color: transparent;">
-                    <TextField fx:id="searchField" promptText="Rechercher un post par titre..." styleClass="search-field"/>
-                    <Button text="Rechercher" onAction="#handleSearch" styleClass="search-btn"/>
-                </HBox>
+                <!-- Zone de création de post (compacte) -->
+                <VBox fx:id="createPostBox" spacing="15" styleClass="create-post-box">
+                    <HBox spacing="15" alignment="CENTER_LEFT">
+                        <StackPane>
+                            <ImageView fx:id="userAvatar" fitWidth="50" fitHeight="50"/>
+                            <Circle fx:id="avatarClip" radius="25" visible="false"/>
+                        </StackPane>
+                        <VBox spacing="5">
+                            <Label text="Créer un post" styleClass="create-post-label"/>
+                            <Label text="Partagez vos pensées avec la communauté" styleClass="create-post-subtitle"/>
+                        </VBox>
+                    </HBox>
+                    
+                    <TextField fx:id="postTitle" promptText="Un titre captivant pour votre post" styleClass="rounded-textfield"/>
+                    
+                    <HBox spacing="10" alignment="CENTER">
+                        <Button fx:id="generatePostTextButton" text="Générer le contenu ✨" styleClass="generate-btn"/>
+                        <Region HBox.hgrow="ALWAYS" />
+                        <ComboBox fx:id="categoryCombo" promptText="Sélectionner une catégorie" styleClass="rounded-combo"/>
+                    </HBox>
 
-                <!-- Titre de la section des posts -->
-                <Label text="Actualités récentes" styleClass="section-title"/>
+                    <TextArea fx:id="postContent" promptText="Partagez votre histoire..." styleClass="post-content-area" prefRowCount="4"/>
+                    
+                    <ImageView fx:id="imagePreview" fitWidth="300" preserveRatio="true" visible="false" managed="false"/>
+                    
+                    <HBox spacing="15" alignment="CENTER">
+                        <Button text="Ajouter une photo 📸" styleClass="secondary-btn" onAction="#handleAddImage"/>
+                        <Button text="Ajouter une activité 🎯" styleClass="secondary-btn"/>
+                        <Region HBox.hgrow="ALWAYS" />
+                        <Button text="Publier le post" styleClass="publish-btn" onAction="#handleNewPost"/>
+                    </HBox>
+                </VBox>
 
-                <!-- Conteneur pour les posts -->
-                <VBox fx:id="feedContainer" spacing="20" style="-fx-alignment: center; -fx-padding: 10;"/>
+                <!-- Barre de recherche avec style amélioré -->
+                <VBox spacing="10" alignment="CENTER" styleClass="search-section">
+                    <HBox spacing="15" alignment="CENTER" styleClass="search-container">
+                        <FontIcon iconLiteral="fas-search" iconSize="16"/>
+                        <TextField fx:id="searchField" promptText="Rechercher des posts par titre..." styleClass="search-field"/>
+                        <Button text="Rechercher" onAction="#handleSearch" styleClass="search-btn"/>
+                    </HBox>
+                </VBox>
+
+                <!-- En-tête des posts récents -->
+                <VBox spacing="10" alignment="CENTER" styleClass="recent-posts-header">
+                    <Label text="Actualités Récentes" styleClass="section-title"/>
+                    <Label text="Découvrez les dernières publications de la communauté" styleClass="section-subtitle"/>
+                </VBox>
+
+                <!-- Conteneur pour les posts avec style amélioré -->
+                <VBox fx:id="feedContainer" spacing="25" styleClass="feed-container"/>
             </VBox>
         </ScrollPane>
     </center>

@@ -1,11 +1,12 @@
 package test;
 
+import utils.UserRole;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import entities.tasnim.UserRole;
+
 import services.tasnim.UserService;
 
 
@@ -24,7 +25,7 @@ public class Main extends Application {
 
         // Load the appropriate FXML based on the user role
         Parent root;
-        if (userRole == UserRole.Admin) {
+        if (userRole == UserRole.ADMIN) {
             root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/tasnim/mainAdmin_view.fxml")));
         } else {
             root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/tasnim/main_view.fxml")));
