@@ -40,7 +40,7 @@ import java.util.concurrent.Executors;
 
 public class GoogleCallbackServer {
     static Dotenv dotenv = Dotenv.load();
-    private static final String REDIRECT_URI = "http://localhost:8081/callback";
+    private static final String REDIRECT_URI = "http://localhost:8082/callback";
     private static final HttpTransport HTTP_TRANSPORT = new NetHttpTransport();
     private static final JsonFactory JSON_FACTORY = GsonFactory.getDefaultInstance();
     static userService us = new userService();
@@ -80,7 +80,6 @@ public class GoogleCallbackServer {
                     // Fetch user info using access token
                     String rawResponse = getUserInfo(accessToken);
                     String userInfo = rawResponse.trim(); // Trim the response
-                    System.out.println("Raw User Info: " + userInfo);
 
                     // Parse the user info JSON
                     JSONObject userInfoJson = new JSONObject(userInfo); // Use the correct variable
@@ -161,7 +160,12 @@ public class GoogleCallbackServer {
             phoneField.setPromptText("Phone");
             TextField addressField = new TextField();
             addressField.setPromptText("Address");
-
+            PasswordField passwordField = new PasswordField();
+            passwordField.setPromptText("Password");
+            TextArea bioField = new TextArea();
+            bioField.setPromptText("Tell us a bit about yourself...");
+            bioField.setWrapText(true);
+            bioField.setPrefRowCount(3);
 
 
             grid.add(new Label("CIN:"), 0, 0);
@@ -170,6 +174,10 @@ public class GoogleCallbackServer {
             grid.add(phoneField, 1, 1);
             grid.add(new Label("Address:"), 0, 2);
             grid.add(addressField, 1, 2);
+            grid.add(new Label("Password:"), 0, 3);
+            grid.add(passwordField, 1, 3);
+            grid.add(new Label("Bio:"), 0, 4);
+            grid.add(bioField, 1, 4);
 
 
 
@@ -192,7 +200,8 @@ public class GoogleCallbackServer {
                 int cin = Integer.parseInt(cinPhonePair.getKey());
                 String phone = cinPhonePair.getValue();
                 String address = addressField.getText();
-
+                String password = passwordField.getText();
+                String bio = bioField.getText();
 
 
                 // Create a new User object
@@ -200,13 +209,13 @@ public class GoogleCallbackServer {
                         name,
                         Integer.toString(cin),
                         email,
-                        "defaultPassword", // You can generate a random password or leave it empty
+                        password.isEmpty() ? "defaultPassword" : password,
                         "ROLE_USER", // Default role
                         phone,
                         address,
                         userInfo.getString("picture"),
                         new Date(),
-                        ""
+                        bio
                 );
 
                 // Save the new user to the database

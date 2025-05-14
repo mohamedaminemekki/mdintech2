@@ -73,7 +73,7 @@ public class userService implements Iservice<User> {
 
 
         String query = "INSERT INTO user (CIN, Name, Email, Password,roles, Phone, Address, is_active, pathtopic, birthday, is_verified, account_creation_date, last_login_date, failed_login_attempts, bio, created_at, updated_at, google_id, avatar, google_authenticator_secret, is_google_authenticator_enabled) " +
-                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         try (Connection conn = dbConnection.getInstance().getConn();
              PreparedStatement stmt = conn.prepareStatement(query)) {
@@ -94,7 +94,7 @@ public class userService implements Iservice<User> {
             stmt.setInt(14, obj.getFailedLoginAttempts());
             stmt.setString(15, obj.getBio());
             stmt.setDate(16, new java.sql.Date(obj.getCreatedAt().getTime()));
-            stmt.setDate(17, new java.sql.Date(obj.getUpdatedAt().getTime()));
+            stmt.setDate(17, new java.sql.Date(obj.getCreatedAt().getTime()));
             stmt.setString(18, obj.getGoogleId());
             stmt.setString(19, obj.getAvatar());
             stmt.setString(20, obj.getGoogleAuthenticatorSecret());

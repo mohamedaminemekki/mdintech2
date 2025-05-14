@@ -76,6 +76,7 @@ public class loginController {
                 goToDashboard(event, "/user-blocked-view.fxml");
                 return;
             }
+
             if (user.getRoles().contains("ROLE_ADMIN")) {
                 goToDashboard(event, "/main-admin-view.fxml");
             } else if (user.getRoles().contains("ROLE_USER")) {
@@ -83,6 +84,7 @@ public class loginController {
             } else {
                 showAlert("Access Denied", "You do not have permission to access this application.");
             }
+
         }else{
             showAlert("User Not Found ","no credentials are matching the ones you gave us !!!!! .????");
         }
