@@ -51,7 +51,7 @@ public class loginController {
     public void gotoSignIn(ActionEvent event) {
         try {
             // Load the FXML file
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/amine/userModule/sign-in-view.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/amine/userModule/signin.fxml"));
             Parent signInRoot = loader.load();
 
             // Get the current stage (window)
@@ -59,6 +59,8 @@ public class loginController {
 
             // Set the new scene
             Scene scene = new Scene(signInRoot);
+            scene.getStylesheets().add(getClass().getResource("/amine/userModule/prof.css").toExternalForm());
+
             stage.setScene(scene);
             stage.show();
         } catch (IOException e) {

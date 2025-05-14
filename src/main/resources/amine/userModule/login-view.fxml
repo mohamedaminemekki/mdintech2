@@ -1,48 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Hyperlink?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.PasswordField?>
-<?import javafx.scene.control.Separator?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
-<AnchorPane prefHeight="471.0" prefWidth="600.0" stylesheets="@style.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.amine.loginController">
+<StackPane xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.amine.loginController" styleClass="root">
+    <VBox alignment="CENTER" spacing="30" styleClass="form-container" maxWidth="400">
 
-    <children>
-        <!-- Title -->
-        <Label layoutX="166.0" layoutY="39.0" styleClass="title-label" text="Welcome to MDINTECH" />
+        <Label text="Welcome to MDINTECH" styleClass="title-label" />
+        <Label text="A platform providing diverse city services, from your desktop" wrapText="true" textAlignment="CENTER" styleClass="subtitle-label" maxWidth="300" />
 
-        <!-- Subtitle -->
-        <Label layoutX="151.0" layoutY="101.0" styleClass="subtitle-label" text="A Platform that provide you with a variety of services around your city, from your desktop" textAlignment="CENTER" />
-
-        <!-- Input Fields -->
-        <VBox layoutX="151.0" layoutY="168.0" spacing="15.0">
-            <children>
-                <TextField fx:id="emailField" promptText="Email" />
-                <PasswordField fx:id="passwordField" promptText="Password" />
-            </children>
+        <VBox spacing="15" alignment="CENTER">
+            <TextField fx:id="emailField" promptText="Email" styleClass="text-field" />
+            <PasswordField fx:id="passwordField" promptText="Password" styleClass="password-field" />
         </VBox>
 
-        <!-- Login Buttons -->
-        <VBox layoutX="150.0" layoutY="283.0" spacing="10.0">
-            <children>
-                <Button fx:id="loginButton" onAction="#login" text="Login" />
-                <Separator prefWidth="200.0" />
-                <Button fx:id="googleLoginButton" onAction="#handleGoogleLogin" styleClass="google-button" text="Login with Google" />
-            </children>
+        <VBox spacing="10" alignment="CENTER">
+            <Button fx:id="loginButton" onAction="#login" text="Login" styleClass="button" />
+            <Separator prefWidth="200" />
+            <Button fx:id="googleLoginButton" onAction="#handleGoogleLogin" text="Login with Google" styleClass="button google-button" />
         </VBox>
 
-        <!-- Hyperlinks -->
-        <HBox layoutX="189.0" layoutY="399.0" spacing="20.0">
-            <children>
-                <Hyperlink onAction="#gotoSignIn" text="Create account?" />
-                <Hyperlink onAction="#forgotPassword" text="Forgot Password?" />
-            </children>
+        <HBox spacing="20" alignment="CENTER">
+            <Hyperlink onAction="#gotoSignIn" text="Create account?" styleClass="hyperlink" />
+            <Hyperlink onAction="#forgotPassword" text="Forgot Password?" styleClass="hyperlink" />
         </HBox>
 
-    </children>
-</AnchorPane>
+    </VBox>
+</StackPane>

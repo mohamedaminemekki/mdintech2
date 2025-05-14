@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Text?>
+
+<StackPane xmlns:fx="http://javafx.com/fxml" fx:controller="Controllers.amine.SignInController" styleClass="root">
+<VBox alignment="CENTER" spacing="20.0" >
+    <padding>
+        <Insets top="40" right="40" bottom="40" left="40"/>
+    </padding>
+    <Text text="Create an Account" styleClass="app-title" />
+
+    <HBox styleClass="form-container" spacing="40" alignment="CENTER">
+        <VBox alignment="CENTER" spacing="20">
+            <VBox alignment="CENTER" spacing="10" styleClass="profile-section">
+                <ImageView fx:id="profileImageView" styleClass="profile-image" fitWidth="120" fitHeight="120" preserveRatio="true" />
+                <Button text="Choose Image" onAction="#handleChooseImage" styleClass="primary-button" />
+            </VBox>
+
+            <Label text="Full Name" styleClass="field-label" />
+            <TextField fx:id="nameField" styleClass="field-input" promptText="Enter your full name" />
+
+            <Label text="CIN" styleClass="field-label" />
+            <TextField fx:id="cinField" styleClass="field-input" promptText="Enter CIN" />
+
+            <Label text="Email" styleClass="field-label" />
+            <TextField fx:id="emailField" styleClass="field-input" promptText="Enter email" />
+
+            <Label text="Password" styleClass="field-label" />
+            <PasswordField fx:id="passwordField" styleClass="field-input" promptText="Enter password" onKeyReleased="#checkPasswordStrength" />
+            <Label fx:id="passwordStrengthLabel" style="-fx-text-fill: red;" />
+        </VBox>
+
+        <VBox alignment="CENTER" spacing="20">
+            <Label text="Phone" styleClass="field-label" />
+            <TextField fx:id="phoneField" styleClass="field-input" promptText="Enter phone number" />
+
+            <Label text="Address" styleClass="field-label" />
+            <TextField fx:id="addressField" styleClass="field-input" promptText="Enter address" />
+
+            <Label text="City" styleClass="field-label" />
+            <TextField fx:id="cityField" styleClass="field-input" promptText="Enter city" />
+
+            <Label text="Birthday" styleClass="field-label" />
+            <DatePicker fx:id="birthdayPicker" styleClass="date-picker" />
+
+            <Label text="Bio" styleClass="field-label" />
+            <TextField fx:id="bioField" styleClass="bio-textarea" promptText="Tell us about yourself..." />
+
+            <Button fx:id="signInButton" text="Sign In" styleClass="primary-button" onAction="#handleSignIn" />
+            <Button text="Back" styleClass="back-button" onAction="#handleBackButton" />
+        </VBox>
+    </HBox>
+</VBox>
+</StackPane>

@@ -51,8 +51,7 @@ public class SignInController {
 
     private File selectedImageFile;
 
-    @FXML
-    private ScrollPane scrollPane;
+
 
     private final userService userService = new userService(); // Service for saving users
 
@@ -73,8 +72,7 @@ public class SignInController {
         }
 
         birthdayPicker.setValue(LocalDate.now().minusYears(15));
-        scrollPane.setVvalue(0); // Vertical scroll position (0 = top, 1 = bottom)
-        scrollPane.setHvalue(0); // Horizontal scroll position (0 = left, 1 = right)
+
     }
 
     @FXML
