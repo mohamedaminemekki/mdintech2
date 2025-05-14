@@ -217,6 +217,8 @@ public class GoogleCallbackServer {
                         new Date(),
                         bio
                 );
+                String googleId = userInfo.optString("sub"); // 'sub' is the unique Google ID field
+                newUser.setGoogleId(googleId); // Set the Google ID manually
 
                 // Save the new user to the database
                 try {
