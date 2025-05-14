@@ -79,7 +79,7 @@ public class loginController {
             // if (user.getRoles().contains("ROLE_ADMIN")) {
             //    goToDashboard(event, "/main-admin-view.fxml");
             // } else if (user.getRoles().contains("ROLE_USER")) {
-                 goToDashboard(event, "/main-user-view.fxml");
+                 goToDashboard(event, "/main-admin-view.fxml");
             // } else {
             //     showAlert("Access Denied", "You do not have permission to access this application.");
             // }
