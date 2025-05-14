@@ -1,0 +1,137 @@
+/* Base Styles */
+.root {
+    -fx-font-family: 'Segoe UI', Arial, sans-serif;
+    -fx-background-color: transparent;
+}
+
+/* ScrollPane */
+.scroll-pane, .scroll-pane .viewport {
+    -fx-background-color: transparent;
+}
+
+/* App Title */
+.app-title {
+    -fx-font-size: 32px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #ffffff;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 5, 0, 0, 2);
+}
+
+/* Form Container */
+.form-container {
+    -fx-background-color: #ffffff;
+    -fx-background-radius: 15;
+    -fx-padding: 30px;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 15, 0, 0, 5);
+    -fx-max-width: 600px;
+}
+
+.form-title {
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #2c3e50;
+    -fx-padding: 0 0 20px 0;
+}
+
+/* Profile Section */
+.profile-section {
+    -fx-alignment: center;
+    -fx-padding: 0 0 20px 0;
+}
+
+.profile-image {
+    -fx-fit-width: 120px;
+    -fx-fit-height: 120px;
+    -fx-border-radius: 60px;
+    -fx-background-radius: 60px;
+    -fx-border-width: 2px;
+    -fx-border-color: linear-gradient(to bottom right, #00c6ff, #0072ff);
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 10, 0, 0, 5);
+}
+
+.hover-overlay {
+    -fx-fill: rgba(0,0,0,0.5);
+    -fx-arc-width: 10px;
+    -fx-arc-height: 10px;
+}
+
+.hint-text {
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-font-size: 14px;
+}
+
+/* Form Fields */
+.field-label {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #555555;
+}
+
+.field-input {
+    -fx-pref-width: 300px;
+    -fx-pref-height: 40px;
+    -fx-background-color: #f5f5f5;
+    -fx-background-radius: 8px;
+    -fx-border-radius: 8px;
+    -fx-border-color: #dddddd;
+    -fx-border-width: 1px;
+    -fx-padding: 0 15px;
+    -fx-font-size: 14px;
+}
+
+.field-input:focused {
+    -fx-border-color: #3498db;
+    -fx-background-color: #ffffff;
+}
+
+/* Date Picker */
+.date-picker {
+    -fx-pref-width: 300px;
+    -fx-pref-height: 40px;
+    -fx-background-color: #f5f5f5;
+    -fx-background-radius: 8px;
+}
+
+.date-picker .arrow-button {
+    -fx-background-color: #3498db;
+    -fx-background-radius: 0 8px 8px 0;
+}
+
+.date-picker .arrow {
+    -fx-background-color: white;
+}
+
+/* Text Area */
+.bio-textarea {
+    -fx-pref-width: 300px;
+    -fx-pref-height: 80px;
+    -fx-background-color: #f5f5f5;
+    -fx-background-radius: 8px;
+    -fx-border-radius: 8px;
+    -fx-border-color: #dddddd;
+    -fx-padding: 10px 15px;
+    -fx-font-size: 14px;
+}
+
+/* Buttons */
+.primary-button {
+    -fx-pref-width: 300px;
+    -fx-pref-height: 45px;
+    -fx-background-color: linear-gradient(to right, #00c6ff, #0072ff);
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-font-size: 16px;
+    -fx-background-radius: 8px;
+    -fx-effect: dropshadow(gaussian, rgba(0,198,255,0.4), 10, 0, 0, 0);
+}
+
+.primary-button:hover {
+    -fx-background-color: linear-gradient(to right, #00b4e6, #0066e6);
+}
+
+.back-button {
+    -fx-background-color: transparent;
+    -fx-padding: 5px;
+    -fx-cursor: hand;
+}
