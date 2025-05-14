@@ -1,6 +1,8 @@
 package Controllers.amine;
 
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.api.client.googleapis.auth.oauth2.GoogleAuthorizationCodeFlow;
 import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.gson.GsonFactory;
@@ -65,24 +67,46 @@ public class loginController {
     }
 
     @FXML
-    private void login(ActionEvent event) {
+    private void login(ActionEvent event) throws JsonProcessingException {
         String email = emailField.getText();
         String password = passwordField.getText();
         User user=us.login(email, password);
         if (user != null) {
             loggedInUser.initializeSession((user));
 
-            // if (!user.isActive()) {
-            //     goToDashboard(event, "/user-blocked-view.fxml");
-            //     return;
-            // }
-            // if (user.getRoles().contains("ROLE_ADMIN")) {
-            //    goToDashboard(event, "/main-admin-view.fxml");
-            // } else if (user.getRoles().contains("ROLE_USER")) {
-                 goToDashboard(event, "/main-admin-view.fxml");
-            // } else {
-            //     showAlert("Access Denied", "You do not have permission to access this application.");
-            // }
+             if (!user.isActive()) {
+                 goToDashboard(event, "/user-blocked-view.fxml");
+                 return;
+             }
+            ObjectMapper mapper = new ObjectMapper();
+
+            List<String> flatRoles = new ArrayList<>();
+            for (String role : user.getRoles()) {
+                if (role.startsWith("[") && role.endsWith("]")) {
+                    // Parse JSON string
+                    try {
+                        List<String> parsedRoles = mapper.readValue(role, List.class);
+                        flatRoles.addAll(parsedRoles);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                } else {
+                    flatRoles.add(role);
+                }
+            }
+// Print the roles for debugging
+            System.out.println("User  roles: " + flatRoles);
+
+// Check for roles and navigate accordingly
+            if (flatRoles.contains("ROLE_ADMIN")) {
+                goToDashboard(event, "/main-admin-view.fxml");
+            } else if (flatRoles.contains("ROLE_USER")) {
+                goToDashboard(event, "/main-user-view.fxml");
+            } else {
+                showAlert("Access Denied", "You do not have permission to access this application.");
+            }
+
+
         }else{
             showAlert("User Not Found ","no credentials are matching the ones you gave us !!!!! .????");
         }

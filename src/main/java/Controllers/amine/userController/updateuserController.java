@@ -1,12 +1,9 @@
 package Controllers.amine.userController;
 
-
+import com.fasterxml.jackson.core.JsonProcessingException;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import Singleton.loggedInUser;
 import entities.amine.User;
 import services.amine.userService;
@@ -15,32 +12,32 @@ import utils.amine.navigation;
 
 import java.io.IOException;
 
-
 public class updateuserController {
     @FXML
-    private TextField nameField, emailField, phoneField, addressField, cityField, stateField;
+    private TextField nameField, emailField, phoneField, addressField;
     @FXML
     private PasswordField passwordField;
     @FXML
-    private Label statusLabel;
+    private Label statusLabel, cinLabel;
     @FXML
-    private Button updateButton;
+    private TextArea bioField;
+    @FXML
+    private DatePicker birthdayPicker;
 
     private userService userService = new userService();
     private User currentUser;
-    private User originalUser;  // Store original values for comparison
+    private User originalUser;
 
     @FXML
-    public void initialize() {
+    public void initialize() throws JsonProcessingException {
         currentUser = loggedInUser.getInstance().getLoggedUser();
         if (currentUser != null) {
-            // Create a copy of the original user data
             originalUser = new User(
                     currentUser.getName(),
                     currentUser.getCIN(),
                     currentUser.getEmail(),
                     currentUser.getPassword(),
-                    currentUser.getRoles().get(0),  // Include role
+                    currentUser.getRoles().get(0),
                     currentUser.getPhone(),
                     currentUser.getAddress(),
                     currentUser.getPathtopic(),
@@ -53,7 +50,11 @@ public class updateuserController {
             emailField.setText(originalUser.getEmail());
             phoneField.setText(originalUser.getPhone());
             addressField.setText(originalUser.getAddress());
+            cinLabel.setText(originalUser.getCIN());
+            bioField.setText(originalUser.getBio());
 
+            // You'll need to parse the birthday string to LocalDate for the DatePicker
+            // birthdayPicker.setValue(parseBirthday(originalUser.getBirthday()));
         }
     }
 
@@ -64,18 +65,16 @@ public class updateuserController {
             return;
         }
 
-        // Get field values with trim()
         String newName = nameField.getText().trim();
         String newEmail = emailField.getText().trim();
         String newPhone = phoneField.getText().trim();
         String newAddress = addressField.getText().trim();
-        String newCity = cityField.getText().trim();
-        String newState = stateField.getText().trim();
-        String newPassword = passwordField.getText().trim(); // New password input
+        String newPassword = passwordField.getText().trim();
+        String newBio = bioField.getText().trim();
+        // String newBirthday = birthdayPicker.getValue().toString(); // Format as needed
 
         boolean changesDetected = false;
 
-        // Check each field for changes
         if (!newName.equals(originalUser.getName())) {
             currentUser.setName(newName);
             changesDetected = true;
@@ -96,6 +95,10 @@ public class updateuserController {
             changesDetected = true;
         }
 
+        if (!newBio.equals(originalUser.getBio())) {
+            currentUser.setBio(newBio);
+            changesDetected = true;
+        }
 
         boolean passwordChanged = false;
         if (!newPassword.isEmpty()) {
@@ -103,7 +106,7 @@ public class updateuserController {
                 passwordChanged = true;
                 changesDetected = true;
             } else {
-                passwordField.clear(); // Clear field if password is unchanged
+                passwordField.clear();
             }
         }
 
@@ -119,19 +122,6 @@ public class updateuserController {
                 userService.updateUserWithoutPassword(currentUser);
             }
 
-            originalUser = new User(
-                    currentUser.getName(),
-                    currentUser.getCIN(),
-                    currentUser.getEmail(),
-                    originalUser.getPassword(), // Use original password if not changed
-                    currentUser.getRoles().get(0),
-                    currentUser.getPhone(),
-                    currentUser.getAddress(),
-                    currentUser.getPathtopic(),
-                    currentUser.getBirthday(),
-                    currentUser.getBio()
-            );
-
             statusLabel.setText("User updated successfully!");
             passwordField.clear();
             navigation.switchScene(event, "/main-user-view.fxml");
@@ -143,5 +133,15 @@ public class updateuserController {
     public void handleBackButton(ActionEvent event) throws IOException {
         navigation.switchScene(event, "/main-user-view.fxml");
     }
-}
 
+    // Add this method to handle birthday parsing if needed
+    /*
+    private LocalDate parseBirthday(String birthday) {
+        try {
+            return LocalDate.parse(birthday, DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+        } catch (Exception e) {
+            return null;
+        }
+    }
+    */
+}

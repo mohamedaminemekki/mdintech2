@@ -1,7 +1,13 @@
 package entities.amine;
 
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import utils.UserRole;
 
+import java.io.IOException;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -165,9 +171,20 @@ public class User {
         this.id = id;
     }
 
-    public List<String> getRoles() {
-        return roles;
-    }
+//    public List<String> getRoles() throws JsonProcessingException {
+//        ObjectMapper objectMapper = new ObjectMapper();
+//        String rolesJson = objectMapper.writeValueAsString(this.roles); // rolesList is a List<String>
+//
+//        try {
+//            return objectMapper.readValue(rolesJson, new TypeReference<List<String>>() {});
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//            return Collections.emptyList(); // Return an empty list in case of error
+//        }
+//    }
+        public List<String> getRoles() {
+            return this.roles; // Directly return the roles list
+        }
 
     public void setRoles(List<String> roles) {
         this.roles = roles;

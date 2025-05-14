@@ -43,6 +43,11 @@ public class mainUserViewController {
     }
 
     @FXML
+    private void goToUpdateProfile(ActionEvent event) {
+        loadView("/amine/userModule/update-user-view.fxml", event);
+    }
+
+    @FXML
     private void goToParkings(ActionEvent event) {
         loadView("/amine/userModule/parking/display-parkings.fxml", event);
     }

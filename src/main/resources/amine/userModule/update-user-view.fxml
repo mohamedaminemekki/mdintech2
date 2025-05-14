@@ -2,70 +2,108 @@
 
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.image.*?>
 <?import javafx.geometry.*?>
+<?import javafx.scene.shape.*?>
+<?import javafx.scene.paint.LinearGradient?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
+<?import javafx.scene.paint.Stop?>
+<AnchorPane xmlns="http://javafx.com/javafx/11.0.1"
+            xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="Controllers.amine.userController.updateuserController"
-            prefWidth="450" prefHeight="600"
-            style="-fx-background-color: #f4f4f4;">
+            stylesheets="@profile.css"
+            prefWidth="800" prefHeight="700">
 
-    <!-- Back Button -->
-    <Button layoutX="20" layoutY="20" text="← Back"
-            style="-fx-background-color: transparent; -fx-font-size: 14px; -fx-text-fill: #555; -fx-underline: true;"
-            onAction="#handleBackButton" />
+    <fx:include fx:id="navBar" source="../../navbar.fxml"
+                AnchorPane.topAnchor="0"
+                AnchorPane.leftAnchor="0"
+                AnchorPane.rightAnchor="0"/>
+    <!-- Background Gradient -->
+    <Rectangle width="800" height="700">
+        <fill>
+            <LinearGradient startX="0" startY="0" endX="1" endY="1">
+                <stops>
+                    <Stop offset="0" color="#0f2027"/>
+                    <Stop offset="1" color="#203a43"/>
+                </stops>
+            </LinearGradient>
+        </fill>
+    </Rectangle>
 
-    <VBox spacing="15" alignment="CENTER"
-          AnchorPane.topAnchor="50" AnchorPane.leftAnchor="30" AnchorPane.rightAnchor="30">
+    <!-- Main Content Card -->
+    <VBox styleClass="main-card" alignment="TOP_CENTER"
+          AnchorPane.topAnchor="40" AnchorPane.bottomAnchor="40"
+          AnchorPane.leftAnchor="100" AnchorPane.rightAnchor="100">
 
-        <!-- Header -->
-        <Label text="Update Your Profile"
-               style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;"/>
+        <!-- Header with Back Button -->
+        <HBox alignment="CENTER_LEFT" styleClass="header-box">
+            <Button text="←" styleClass="back-button" onAction="#handleBackButton"/>
+            <Label text="PROFILE SETTINGS" styleClass="header-title"/>
+        </HBox>
 
-        <!-- Profile Form -->
-        <GridPane vgap="12" hgap="10" alignment="CENTER">
-            <columnConstraints>
-                <ColumnConstraints halignment="RIGHT" minWidth="100"/>
-                <ColumnConstraints halignment="LEFT" minWidth="200" hgrow="ALWAYS"/>
-            </columnConstraints>
+        <!-- Profile Content -->
+        <ScrollPane fitToWidth="true" styleClass="scroll-pane">
+            <VBox spacing="30" styleClass="content-box">
 
-            <Label text="Full Name:" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
-            <TextField fx:id="nameField" GridPane.columnIndex="1" GridPane.rowIndex="0"
-                       style="-fx-pref-height: 35px; -fx-background-radius: 8px;"/>
+                <!-- Profile Picture Section -->
+                <VBox spacing="15" alignment="CENTER" styleClass="profile-section">
+                    <ImageView fx:id="profileImageView" fitWidth="120" fitHeight="120" styleClass="profile-image"/>
+                    <Button text="Change Avatar" styleClass="avatar-button"/>
+                    <Label text="PNG, JPG up to 5MB" styleClass="hint-text"/>
+                </VBox>
 
-            <Label text="Email:" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
-            <TextField fx:id="emailField" GridPane.columnIndex="1" GridPane.rowIndex="1"
-                       style="-fx-pref-height: 35px; -fx-background-radius: 8px;"/>
+                <!-- User Information Sections -->
+                <GridPane hgap="20" vgap="20" styleClass="info-grid">
+                    <columnConstraints>
+                        <ColumnConstraints percentWidth="50"/>
+                        <ColumnConstraints percentWidth="50"/>
+                    </columnConstraints>
 
-            <Label text="Phone:" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
-            <TextField fx:id="phoneField" GridPane.columnIndex="1" GridPane.rowIndex="2"
-                       style="-fx-pref-height: 35px; -fx-background-radius: 8px;"/>
+                    <!-- Row 0 -->
+                    <Label text="CIN" styleClass="field-label" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+                    <Label fx:id="cinLabel" styleClass="field-value" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
 
-            <Label text="Address:" GridPane.columnIndex="0" GridPane.rowIndex="3"/>
-            <TextField fx:id="addressField" GridPane.columnIndex="1" GridPane.rowIndex="3"
-                       style="-fx-pref-height: 35px; -fx-background-radius: 8px;"/>
+                    <!-- Row 1 -->
+                    <Label text="Full Name" styleClass="field-label" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+                    <TextField fx:id="nameField" styleClass="field-input" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
 
-            <Label text="City:" GridPane.columnIndex="0" GridPane.rowIndex="4"/>
-            <TextField fx:id="cityField" GridPane.columnIndex="1" GridPane.rowIndex="4"
-                       style="-fx-pref-height: 35px; -fx-background-radius: 8px;"/>
+                    <!-- Row 2 -->
+                    <Label text="Email" styleClass="field-label" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+                    <TextField fx:id="emailField" styleClass="field-input" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
 
-            <Label text="State:" GridPane.columnIndex="0" GridPane.rowIndex="5"/>
-            <TextField fx:id="stateField" GridPane.columnIndex="1" GridPane.rowIndex="5"
-                       style="-fx-pref-height: 35px; -fx-background-radius: 8px;"/>
+                    <!-- Row 3 -->
+                    <Label text="Phone" styleClass="field-label" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
+                    <TextField fx:id="phoneField" styleClass="field-input" GridPane.rowIndex="3" GridPane.columnIndex="1"/>
 
-            <Label text="New Password:" GridPane.columnIndex="0" GridPane.rowIndex="6"/>
-            <PasswordField fx:id="passwordField" GridPane.columnIndex="1" GridPane.rowIndex="6"
-                           style="-fx-pref-height: 35px; -fx-background-radius: 8px;"/>
-        </GridPane>
+                    <!-- Row 4 -->
+                    <Label text="Address" styleClass="field-label" GridPane.rowIndex="4" GridPane.columnIndex="0"/>
+                    <TextField fx:id="addressField" styleClass="field-input" GridPane.rowIndex="4" GridPane.columnIndex="1"/>
 
-        <!-- Status Message -->
-        <Label fx:id="statusLabel" text=""
-               style="-fx-text-fill: #27ae60; -fx-font-size: 14px;"/>
+                    <!-- Row 5 -->
+                    <Label text="Birthday" styleClass="field-label" GridPane.rowIndex="5" GridPane.columnIndex="0"/>
+                    <DatePicker fx:id="birthdayPicker" styleClass="date-picker" GridPane.rowIndex="5" GridPane.columnIndex="1"/>
 
-        <!-- Update Button -->
-        <Button fx:id="updateButton" text="Update Profile" onAction="#handleUpdate"
-                style="-fx-background-color: #2980b9; -fx-text-fill: white; -fx-font-size: 16px;
-                       -fx-padding: 10px 20px; -fx-background-radius: 12px; -fx-font-weight: bold;"/>
+                    <Label text="New Password" styleClass="field-label" GridPane.rowIndex="6" GridPane.columnIndex="0"/>
+                    <PasswordField fx:id="passwordField" styleClass="field-input" GridPane.rowIndex="6" GridPane.columnIndex="1"/>
+                    <!-- Row 6 -->
+                    <Label text="Bio" styleClass="field-label" GridPane.rowIndex="7" GridPane.columnIndex="0"/>
+                    <TextArea fx:id="bioField" styleClass="bio-textarea" GridPane.rowIndex="7" GridPane.columnIndex="1"
+                              GridPane.rowSpan="2"/>
 
+                    <!-- Row 7 -->
+
+                </GridPane>
+
+                <!-- Action Buttons -->
+                <HBox spacing="30" alignment="CENTER" styleClass="actions-box">
+                    <Button text="CANCEL" styleClass="cancel-button" onAction="#handleBackButton"/>
+                    <Button text="SAVE CHANGES" styleClass="save-button" onAction="#handleUpdate"/>
+                </HBox>
+
+                <!-- Status Message -->
+                <Label fx:id="statusLabel" styleClass="status-message"/>
+            </VBox>
+        </ScrollPane>
     </VBox>
 </AnchorPane>

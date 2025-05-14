@@ -23,6 +23,7 @@
         <Button fx:id="blogBtn" styleClass="nav-button" text="Blog" onAction="#goToUserInterface"/>
         <Button fx:id="reclamationBtn" styleClass="nav-button" text="Contact" onAction="#goToReclamationInterface"/>
         <Region HBox.hgrow="ALWAYS" />
+        <Button fx:id="Profile" styleClass="nav-button" text="Profile" onAction="#goToUpdateProfile"/>
         <Button fx:id="logoutBtn" styleClass="nav-button" text="Logout" onAction="#logout"/>
         <padding>
             <Insets top="10" right="15" bottom="10" left="15"/>
