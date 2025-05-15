@@ -170,10 +170,58 @@
     -fx-border-color: #1a2980;
 }
 
-/* Password Strength Label */
+/* Password Strength Styles */
 .password-strength-label {
     -fx-font-size: 12px;
-    -fx-padding: 4 0 0 0;
+    -fx-padding: 0 0 0 10;
+}
+
+.password-strength-label.weak {
+    -fx-text-fill: #dc3545;
+}
+
+.password-strength-label.medium {
+    -fx-text-fill: #ffc107;
+}
+
+.password-strength-label.strong {
+    -fx-text-fill: #28a745;
+}
+
+.progress-bar {
+    -fx-pref-height: 8px;
+    -fx-background-radius: 4px;
+}
+
+.progress-bar .track {
+    -fx-background-color: #f8f9fa;
+    -fx-background-radius: 4px;
+}
+
+.progress-bar .bar {
+    -fx-background-radius: 4px;
+    -fx-background-insets: 0;
+}
+
+.progress-bar.weak .bar {
+    -fx-background-color: #dc3545;
+}
+
+.progress-bar.medium .bar {
+    -fx-background-color: #ffc107;
+}
+
+.progress-bar.strong .bar {
+    -fx-background-color: #28a745;
+}
+
+.requirement-label {
+    -fx-font-size: 12px;
+    -fx-text-fill: #6c757d;
+}
+
+.requirement-label.met {
+    -fx-text-fill: #28a745;
 }
 
 /* Buttons */

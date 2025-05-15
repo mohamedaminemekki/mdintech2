@@ -17,6 +17,7 @@
         <ImageView fitWidth="1550" fitHeight="650" preserveRatio="false">
             <Image url="/images/section_bg02.jpg" />
         </ImageView>
+        
         <!-- Overlay for content -->
         <VBox alignment="CENTER" spacing="40">
             <Label text="Welcome Admin" style="-fx-font-size: 36px; -fx-font-weight: bold; -fx-text-fill: #ffffff; -fx-effect: dropshadow(gaussian, #222, 8, 0.5, 0, 2);" />
@@ -69,6 +70,18 @@
                     <Button text="Go to Reclamation" onAction="#goToReclamationView" style="-fx-background-color: #8e44ad; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 8; -fx-padding: 6 18; -fx-cursor: hand;" />
                 </VBox>
             </FlowPane>
+            
+            <!-- Logout Button -->
+            <Button text="Logout" 
+                    onAction="#logout"
+                    style="-fx-background-color: #e74c3c;
+                           -fx-text-fill: white;
+                           -fx-font-weight: bold;
+                           -fx-font-size: 16px;
+                           -fx-background-radius: 8;
+                           -fx-padding: 12 40;
+                           -fx-cursor: hand;
+                           -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 8, 0, 0, 2);" />
         </VBox>
     </StackPane>
 </AnchorPane>

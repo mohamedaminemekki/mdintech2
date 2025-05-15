@@ -4,6 +4,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.layout.VBox;
+import javafx.scene.Node;
 import Singleton.loggedInUser;
 import entities.amine.User;
 import services.amine.NotificationModule.mailNotificationService;
@@ -14,6 +16,7 @@ import utils.amine.navigation;
 import java.io.IOException;
 import java.util.Optional;
 import java.util.Random;
+import java.util.regex.Pattern;
 
 public class updateuserController {
     @FXML
@@ -26,10 +29,22 @@ public class updateuserController {
     private TextArea bioField;
     @FXML
     private DatePicker birthdayPicker;
+    @FXML
+    private ProgressBar passwordStrengthBar;
+    @FXML
+    private Label passwordStrengthLabel;
+    @FXML
+    private VBox passwordRequirements;
 
     private userService userService = new userService();
     private User currentUser;
     private User originalUser;
+
+    // Password requirement patterns
+    private static final Pattern HAS_LOWERCASE = Pattern.compile("[a-z]");
+    private static final Pattern HAS_UPPERCASE = Pattern.compile("[A-Z]");
+    private static final Pattern HAS_NUMBER = Pattern.compile("\\d");
+    private static final Pattern HAS_SPECIAL = Pattern.compile("[!@#$%^&*(),.?\":{}|<>]");
 
     @FXML
     public void initialize() throws JsonProcessingException {
@@ -62,9 +77,92 @@ public class updateuserController {
                 emailField.setDisable(true);
             }
 
+            // Initialize password strength elements
+            passwordStrengthBar.setProgress(0);
+            passwordStrengthLabel.setText("");
+            updatePasswordRequirements("");
+        }
+    }
 
-            // You'll need to parse the birthday string to LocalDate for the DatePicker
-            // birthdayPicker.setValue(parseBirthday(originalUser.getBirthday()));
+    @FXML
+    private void handlePasswordChange() {
+        String password = passwordField.getText();
+        updatePasswordStrength(password);
+        updatePasswordRequirements(password);
+    }
+
+    private void updatePasswordStrength(String password) {
+        if (password.isEmpty()) {
+            passwordStrengthBar.setProgress(0);
+            passwordStrengthLabel.setText("");
+            return;
+        }
+
+        int strength = calculatePasswordStrength(password);
+        double progress = strength / 5.0;
+        passwordStrengthBar.setProgress(progress);
+
+        // Update progress bar and label styles
+        passwordStrengthBar.getStyleClass().removeAll("weak", "medium", "strong");
+        passwordStrengthLabel.getStyleClass().removeAll("weak", "medium", "strong");
+
+        if (progress < 0.5) {
+            passwordStrengthBar.getStyleClass().add("weak");
+            passwordStrengthLabel.getStyleClass().add("weak");
+            passwordStrengthLabel.setText("Weak");
+        } else if (progress < 0.8) {
+            passwordStrengthBar.getStyleClass().add("medium");
+            passwordStrengthLabel.getStyleClass().add("medium");
+            passwordStrengthLabel.setText("Medium");
+        } else {
+            passwordStrengthBar.getStyleClass().add("strong");
+            passwordStrengthLabel.getStyleClass().add("strong");
+            passwordStrengthLabel.setText("Strong");
+        }
+    }
+
+    private int calculatePasswordStrength(String password) {
+        int score = 0;
+        
+        if (password.length() >= 8) score++;
+        if (HAS_LOWERCASE.matcher(password).find()) score++;
+        if (HAS_UPPERCASE.matcher(password).find()) score++;
+        if (HAS_NUMBER.matcher(password).find()) score++;
+        if (HAS_SPECIAL.matcher(password).find()) score++;
+
+        return score;
+    }
+
+    private void updatePasswordRequirements(String password) {
+        for (Node node : passwordRequirements.getChildren()) {
+            if (node instanceof Label) {
+                Label label = (Label) node;
+                String requirement = label.getText().substring(2); // Remove bullet point
+                boolean isMet = false;
+
+                switch (requirement) {
+                    case "At least 8 characters":
+                        isMet = password.length() >= 8;
+                        break;
+                    case "At least one uppercase letter":
+                        isMet = HAS_UPPERCASE.matcher(password).find();
+                        break;
+                    case "At least one lowercase letter":
+                        isMet = HAS_LOWERCASE.matcher(password).find();
+                        break;
+                    case "At least one number":
+                        isMet = HAS_NUMBER.matcher(password).find();
+                        break;
+                    case "At least one special character":
+                        isMet = HAS_SPECIAL.matcher(password).find();
+                        break;
+                }
+
+                label.getStyleClass().remove("met");
+                if (isMet) {
+                    label.getStyleClass().add("met");
+                }
+            }
         }
     }
 
@@ -112,12 +210,18 @@ public class updateuserController {
 
         boolean passwordChanged = false;
         if (!newPassword.isEmpty()) {
+            // Check password strength before allowing update
+            if (calculatePasswordStrength(newPassword) < 3) {
+                statusLabel.setText("Password is too weak. Please make it stronger.");
+                return;
+            }
+
             if (!PasswordVerification.verifyPassword(newPassword, originalUser.getPassword())) {
                 currentUser.setPassword(newPassword);
                 passwordChanged = true;
                 changesDetected = true;
             } else {
-                passwordField.clear(); // Same password, no change
+                passwordField.clear();
             }
         }
 
@@ -138,7 +242,7 @@ public class updateuserController {
                 return;
             }
 
-            currentUser.setEmail(newEmail); // Only set if verified
+            currentUser.setEmail(newEmail);
         }
 
         try {
@@ -158,15 +262,16 @@ public class updateuserController {
         }
     }
 
-
     public void handleBackButton(ActionEvent event) throws IOException {
         navigation.switchScene(event, "/main-user-view.fxml");
     }
+
     private String generateVerificationCode() {
         Random random = new Random();
-        int code = 100000 + random.nextInt(900000); // Generates a 6-digit number
+        int code = 100000 + random.nextInt(900000);
         return String.valueOf(code);
     }
+
     private String showVerificationPopup() {
         TextInputDialog dialog = new TextInputDialog();
         dialog.setTitle("Email Verification");
@@ -176,15 +281,4 @@ public class updateuserController {
         Optional<String> result = dialog.showAndWait();
         return result.orElse(null);
     }
-
-    // Add this method to handle birthday parsing if needed
-    /*
-    private LocalDate parseBirthday(String birthday) {
-        try {
-            return LocalDate.parse(birthday, DateTimeFormatter.ofPattern("dd/MM/yyyy"));
-        } catch (Exception e) {
-            return null;
-        }
-    }
-    */
 }
