@@ -4,7 +4,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<StackPane xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.amine.loginController" styleClass="root">
+<StackPane xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.amine.loginController" styleClass="root">
     <VBox alignment="CENTER" spacing="30" styleClass="form-container" maxWidth="400">
 
         <Label text="Welcome to MDINTECH" styleClass="title-label" />

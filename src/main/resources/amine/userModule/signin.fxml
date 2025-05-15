@@ -5,7 +5,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Text?>
 
-<StackPane xmlns:fx="http://javafx.com/fxml" fx:controller="Controllers.amine.SignInController" styleClass="root">
+<StackPane xmlns:fx="http://javafx.com/fxml" fx:controller="controllers.amine.SignInController" styleClass="root">
 <VBox alignment="CENTER" spacing="20.0" >
     <padding>
         <Insets top="40" right="40" bottom="40" left="40"/>

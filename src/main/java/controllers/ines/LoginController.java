@@ -31,15 +31,15 @@ public class LoginController {
             showAlert("Erreur", "Veuillez remplir tous les champs.");
         } else {
             try {
-                String query = "SELECT idUser, role FROM user WHERE identifiant = ? AND mdp = SHA2(?, 256)";
+                String query = "SELECT id, roles FROM user WHERE identifiant = ? AND mdp = SHA2(?, 256)";
                 try (PreparedStatement statement = MyDataBase.getInstance().getCon().prepareStatement(query)) {
                     statement.setString(1, identifiant);
                     statement.setString(2, password);
 
                     try (ResultSet resultSet = statement.executeQuery()) {
                         if (resultSet.next()) {
-                            String role = resultSet.getString("role");
-                            int userId = resultSet.getInt("idUser");
+                            String role = resultSet.getString("roles");
+                            int userId = resultSet.getInt("id");
 
                             if (role.equals("user")) {
                                 mainApp.showServiceView(); // Rediriger vers la vue des services

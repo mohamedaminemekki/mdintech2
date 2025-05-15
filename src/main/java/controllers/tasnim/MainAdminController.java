@@ -1,4 +1,4 @@
-package Controllers.tasnim;
+package controllers.tasnim;
 
 import javafx.fxml.FXML;
 import javafx.scene.layout.StackPane;

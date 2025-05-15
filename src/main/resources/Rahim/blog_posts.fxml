@@ -10,7 +10,7 @@
 
 <BorderPane xmlns="http://javafx.com/javafx/17"
             xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="Controllers.Rahim.UserBlogController"
+            fx:controller="controllers.Rahim.UserBlogController"
             stylesheets="@style.css, @../styles/medintechstyle.css"
             styleClass="main-container">    <top>
         <fx:include source="../navbar.fxml" />

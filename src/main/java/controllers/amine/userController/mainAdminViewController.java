@@ -1,4 +1,4 @@
-package Controllers.amine.userController;
+package controllers.amine.userController;
 
 
 import javafx.event.ActionEvent;

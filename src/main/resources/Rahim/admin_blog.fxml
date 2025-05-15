@@ -8,7 +8,7 @@
 
 <BorderPane xmlns="http://javafx.com/javafx/17"
             xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="Controllers.Rahim.AdminBlogController"
+            fx:controller="controllers.Rahim.AdminBlogController"
             stylesheets="@style.css">
 
     <!-- Menu de gauche -->

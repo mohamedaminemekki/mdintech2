@@ -1,4 +1,4 @@
-package Controllers.Rahim;
+package controllers.Rahim;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -10,8 +10,6 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import entities.Rahim.BlogPost;
-import entities.Rahim.Comments;
-import entities.Rahim.PostLike;
 import entities.amine.User;
 import services.Rahim.BlogServices;
 

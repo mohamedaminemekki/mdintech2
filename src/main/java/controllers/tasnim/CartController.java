@@ -1,4 +1,4 @@
-package Controllers.tasnim;
+package controllers.tasnim;
 
 import Singleton.loggedInUser;
 import entities.amine.User;

@@ -1,4 +1,4 @@
-package Controllers.amine.userController;
+package controllers.amine.userController;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import javafx.event.ActionEvent;

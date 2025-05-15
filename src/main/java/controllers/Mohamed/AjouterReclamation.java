@@ -1,4 +1,4 @@
-package Controllers.Mohamed;
+package controllers.Mohamed;
 
 import Singleton.loggedInUser;
 import com.sendgrid.*;

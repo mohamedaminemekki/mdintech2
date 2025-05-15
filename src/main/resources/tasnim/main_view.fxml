@@ -5,7 +5,7 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.fxml.FXMLLoader?>
 
-<BorderPane xmlns:fx="http://javafx.com/fxml/1" stylesheets="@styles.css,@/styles/medintechstyle.css" fx:controller="Controllers.tasnim.MainController">
+<BorderPane xmlns:fx="http://javafx.com/fxml/1" stylesheets="@styles.css,@/styles/medintechstyle.css" fx:controller="controllers.tasnim.MainController">
     <top>
         <VBox spacing="0" styleClass="main-top-bar">
             <fx:include source="/navbar.fxml" />

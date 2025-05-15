@@ -10,7 +10,7 @@
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.Separator?>
 
-<VBox xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" spacing="20" stylesheets="@order_management.css" fx:controller="Controllers.tasnim.OrderManagementController">
+<VBox xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" spacing="20" stylesheets="@order_management.css" fx:controller="controllers.tasnim.OrderManagementController">
     <!-- Title -->
     <Label text="Order Management" styleClass="title-label" />
 
