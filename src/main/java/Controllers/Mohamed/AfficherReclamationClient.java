@@ -1,4 +1,4 @@
-package controllers.Mohamed;
+package Controllers.Mohamed;
 
 import Singleton.loggedInUser;
 import javafx.event.ActionEvent;
@@ -25,7 +25,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.logging.Level;
 import java.util.stream.Collectors;
 
 public class AfficherReclamationClient {

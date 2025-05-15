@@ -1,25 +1,51 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
 
 <VBox xmlns="http://javafx.com/javafx/16"
       xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="Controllers.mariem.ChatController"
       spacing="10"
       style="-fx-padding: 20px; -fx-background-color: #f0f8ff;">
+<?import javafx.geometry.Insets?>
+<?import javafx.geometry.Pos?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.ProgressIndicator?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
 
-    <ListView fx:id="chatHistory"
-              style="-fx-background-color: white; -fx-border-color: #4682b4;"
-              VBox.vgrow="ALWAYS"/>
+<BorderPane xmlns:fx="http://javafx.com/fxml" fx:controller="Controllers.mariem.ChatController">
+    <!-- Zone centrale contenant la zone de chat avec superposition de l'indicateur de chargement -->
+    <center>
+        <StackPane>
+            <VBox fx:id="chatContainer" spacing="10" alignment="TOP_CENTER" style="-fx-background-color: #F5F5F5; -fx-padding: 15;">
+                <!-- Liste des messages -->
+                <ListView fx:id="chatHistory" prefHeight="500" style="-fx-background-color: transparent;"/>
+            </VBox>
+            <!-- Indicateur de chargement (invisible par défaut) -->
+            <ProgressIndicator fx:id="loadingIndicator" visible="false" maxWidth="50" maxHeight="50" StackPane.alignment="CENTER"/>
+        </StackPane>
+    </center>
 
-    <HBox spacing="10">
-        <TextField fx:id="messageInput"
-                   HBox.hgrow="ALWAYS"
-                   promptText="Posez votre question..."
-                   style="-fx-background-radius: 15; -fx-padding: 8px;"/>
-
-        <Button text="Envoyer"
-                style="-fx-background-color: #4682b4; -fx-text-fill: white; -fx-background-radius: 15;"
-                onAction="#envoyerMessage"/>
-    </HBox>
-</VBox>
+    <!-- Zone inférieure pour la saisie du message et le bouton d'envoi -->
+    <bottom>
+        <HBox spacing="10" alignment="CENTER" style="-fx-background-color: #FFFFFF; -fx-padding: 10; -fx-border-color: #DDD;">
+            <TextField fx:id="messageInput" HBox.hgrow="ALWAYS" promptText="Tapez votre message..."
+                       style="-fx-font-size: 18px; -fx-background-radius: 20; -fx-padding: 10;"/>
+            <Button fx:id="sendButton" onAction="#envoyerMessage" style="-fx-background-color: transparent;">
+                <graphic>
+                    <ImageView fitWidth="24" fitHeight="24" preserveRatio="true" pickOnBounds="true">
+                        <image>
+                            <!-- Assurez-vous que send.png se trouve dans src/main/resources/images/ -->
+                            <Image url="@/images/send.png"/>
+                        </image>
+                    </ImageView>
+                </graphic>
+            </Button>
+        </HBox>
+    </bottom>
+</BorderPane>

@@ -1,4 +1,4 @@
-package controllers.Mohamed;
+package Controllers.Mohamed;
 
 import javafx.application.Platform;
 import javafx.embed.swing.SwingFXUtils;

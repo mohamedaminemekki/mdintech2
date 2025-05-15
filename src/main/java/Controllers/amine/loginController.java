@@ -1,6 +1,7 @@
 package Controllers.amine;
 
 
+import Controllers.amine.VerificationController;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.api.client.googleapis.auth.oauth2.GoogleAuthorizationCodeFlow;
@@ -76,10 +77,7 @@ public class loginController {
         if (user != null) {
             loggedInUser.initializeSession((user));
 
-//             if (!user.isActive()) {
-//                 goToDashboard(event, "/user-blocked-view.fxml");
-//                 return;
-//             }
+
             ObjectMapper mapper = new ObjectMapper();
 
             List<String> flatRoles = new ArrayList<>();
@@ -103,6 +101,10 @@ public class loginController {
             if (flatRoles.contains("ROLE_ADMIN")) {
                 goToDashboard(event, "/main-admin-view.fxml");
             } else if (flatRoles.contains("ROLE_USER")) {
+                if (!user.isActive()) {
+                    goToDashboard(event, "/user-blocked-view.fxml");
+                    return;
+                }
                 goToDashboard(event, "/main-user-view.fxml");
             } else {
                 showAlert("Access Denied", "You do not have permission to access this application.");

@@ -2,7 +2,6 @@ package Controllers.Rahim;
 
 import Singleton.loggedInUser;
 import entities.Rahim.Comments;
-import entities.Rahim.PostLike;
 import entities.amine.User;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;

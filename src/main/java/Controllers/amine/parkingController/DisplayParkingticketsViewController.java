@@ -1,4 +1,4 @@
-package controllers.amine.parkingController;
+package Controllers.amine.parkingController;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;

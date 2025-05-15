@@ -1,5 +1,6 @@
 package Controllers.mariem;
 
+import Singleton.dbConnection;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.WriterException;
 import com.google.zxing.client.j2se.MatrixToImageWriter;
@@ -50,7 +51,7 @@ public class ReservationListController {
 
     public ReservationListController() {
         try {
-            Connection connection = DatabaseConnection.getInstance().getConnection();
+            Connection connection = dbConnection.getInstance().getConn();
             tripService = new TripService(connection);
             reservationService = new ReservationService(connection);
         } catch (Exception e) {

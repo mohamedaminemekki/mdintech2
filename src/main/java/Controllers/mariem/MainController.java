@@ -1,5 +1,6 @@
 package Controllers.mariem;
 
+import Singleton.dbConnection;
 import javafx.animation.*;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
@@ -8,6 +9,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
+
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -58,7 +60,7 @@ public class MainController {
 
     public MainController() {
         try {
-            tripService = new TripService(DatabaseConnection.getInstance().getConnection());
+            tripService = new TripService(dbConnection.getInstance().getConn());
         } catch (Exception e) {
             e.printStackTrace();
         }

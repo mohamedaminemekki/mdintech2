@@ -1,5 +1,6 @@
 package Controllers.mariem;
 
+import Singleton.dbConnection;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -32,7 +33,7 @@ public class ReservationSummaryController {
 
     public ReservationSummaryController() {
         try {
-            Connection connection = DatabaseConnection.getInstance().getConnection();
+            Connection connection = dbConnection.getInstance().getConn();
             reservationService = new ReservationService(connection);
         } catch (Exception e) {
             e.printStackTrace();

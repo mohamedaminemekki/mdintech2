@@ -1,4 +1,4 @@
-package controllers.amine.parkingController;
+package Controllers.amine.parkingController;
 
 
 import javafx.event.ActionEvent;
@@ -12,7 +12,6 @@ import entities.amine.ParkingModule.ParkingTicket;
 import services.amine.ParkingModule.ParkingTicketService;
 import utils.amine.navigation;
 
-import java.awt.event.MouseEvent;
 import java.io.IOException;
 import java.net.URL;
 import java.util.List;

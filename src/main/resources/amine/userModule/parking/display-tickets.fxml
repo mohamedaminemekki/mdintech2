@@ -5,7 +5,7 @@
 <?import javafx.geometry.*?>
 
 <AnchorPane xmlns:fx="http://javafx.com/fxml"
-            fx:controller="controllers.amine.userController.parking.displayParkingTicketsController"
+            fx:controller="Controllers.amine.userController.parking.displayParkingTicketsController"
             style="-fx-background-color: #f4f4f4;"
             stylesheets="@style.css"
 >

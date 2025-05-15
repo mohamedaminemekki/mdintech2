@@ -8,7 +8,7 @@
 
 <AnchorPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
-            fx:controller="controllers.amine.parkingController.DisplayParkingticketsViewController"
+            fx:controller="Controllers.amine.parkingController.DisplayParkingticketsViewController"
             prefHeight="600.0" prefWidth="800.0"
             style="-fx-background-color: #f0f4f8;">
 

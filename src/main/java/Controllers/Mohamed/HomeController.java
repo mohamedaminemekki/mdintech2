@@ -1,4 +1,4 @@
-package controllers.Mohamed;
+package Controllers.Mohamed;
 
 import javafx.fxml.FXML;
 import javafx.scene.image.Image;

@@ -17,7 +17,7 @@
 
 <?import java.lang.String?>
 <AnchorPane prefHeight="500.0" prefWidth="650.0" stylesheets="@/Mohamed/css/styles.css" xmlns="http://javafx.com/javafx/17.0.6"
-            xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.Mohamed.AfficherReclamation">
+            xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.Mohamed.AfficherReclamation">
     <Button fx:id="btnRetour"
             style="-fx-background-color: transparent; -fx-padding: 5px;"
             onAction="#retournerPagePrecedente">

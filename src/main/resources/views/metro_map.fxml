@@ -2,6 +2,21 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.web.WebView?>
 
+<<<<<<< HEAD
 <AnchorPane fx:id="mapContainer" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.mariem.MetroMapController">
     <WebView fx:id="webView" AnchorPane.topAnchor="0" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" />
 </AnchorPane>
+=======
+<AnchorPane xmlns="http://javafx.com/javafx/8.0.2"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:id="mapContainer"
+            style="-fx-background-color: transparent;"
+            fx:controller="Controllers.mariem.MetroMapController">
+
+    <WebView fx:id="webView"
+             AnchorPane.topAnchor="0"
+             AnchorPane.bottomAnchor="0"
+             AnchorPane.leftAnchor="0"
+             AnchorPane.rightAnchor="0"/>
+</AnchorPane>
+>>>>>>> 101d46ff6dfa4a8ba029e5d8350f5472028c89ce

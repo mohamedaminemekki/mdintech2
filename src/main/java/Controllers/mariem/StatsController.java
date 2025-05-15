@@ -1,5 +1,6 @@
 package Controllers.mariem;
 
+import Singleton.dbConnection;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -64,7 +65,7 @@ public class StatsController {
     private final MysteryReward mysteryReward = new MysteryReward("reward1", "Bon de réduction", 10);
 
     public StatsController() throws SQLException {
-        Connection connection = DatabaseConnection.getInstance().getConnection();
+        Connection connection = dbConnection.getInstance().getConn();
         this.reservationService = new ReservationService(connection);
         this.tripService = new TripService(connection);
     }
