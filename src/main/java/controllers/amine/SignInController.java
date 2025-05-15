@@ -124,8 +124,8 @@ public class SignInController {
             checkPasswordStrength();
 
             // Check if there are any validation errors
-            if (cinValidationLabel.isVisible() || phoneValidationLabel.isVisible() ||
-                    birthdayValidationLabel.isVisible() || passwordStrengthLabel.getText().startsWith("Weak")) {
+            if (cinValidationLabel.isVisible() || phoneValidationLabel.isVisible() || 
+                birthdayValidationLabel.isVisible() || passwordStrengthLabel.getText().startsWith("Weak")) {
                 showAlert("Validation Error", "Please fix all validation errors before proceeding.");
                 return;
             }
@@ -324,7 +324,7 @@ public class SignInController {
         if (!cin.isEmpty()) {
             cinField.getStyleClass().add(isValid ? "valid" : "invalid");
         }
-
+        
         cinValidationLabel.setText(message);
         cinValidationLabel.setVisible(!message.isEmpty());
     }
@@ -353,7 +353,7 @@ public class SignInController {
         if (!phone.isEmpty()) {
             phoneField.getStyleClass().add(isValid ? "valid" : "invalid");
         }
-
+        
         phoneValidationLabel.setText(message);
         phoneValidationLabel.setVisible(!message.isEmpty());
     }
@@ -388,7 +388,7 @@ public class SignInController {
         if (birthday != null) {
             birthdayPicker.getStyleClass().add(isValid ? "valid" : "invalid");
         }
-
+        
         birthdayValidationLabel.setText(message);
         birthdayValidationLabel.setVisible(!message.isEmpty());
     }
