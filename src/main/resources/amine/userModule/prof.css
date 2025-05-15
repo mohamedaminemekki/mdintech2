@@ -2,10 +2,14 @@
 .root {
     -fx-font-family: 'Segoe UI', Arial, sans-serif;
     -fx-background-color: linear-gradient(to bottom right, #1a2980, #26d0ce);
+    -fx-min-width: 100%;
+    -fx-min-height: 100%;
 }
 
 .main-container {
-    -fx-max-width: 1200px;
+    -fx-min-width: 100%;
+    -fx-min-height: 100%;
+    -fx-padding: 20;
 }
 
 /* ScrollPane Customization */
@@ -31,16 +35,16 @@
 
 /* App Title */
 .app-title {
-    -fx-font-size: 36px;
+    -fx-font-size: 42px;
     -fx-font-weight: bold;
     -fx-fill: white;
     -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 10, 0, 0, 2);
 }
 
-/* Section Titles */
+/* Section Title */
 .section-title {
-    -fx-font-size: 20px;
-    -fx-font-weight: bold;
+    -fx-font-size: 24px;
+    -fx-font-weight: normal;
     -fx-fill: #2c3e50;
 }
 
@@ -49,8 +53,10 @@
     -fx-background-color: rgba(255, 255, 255, 0.95);
     -fx-background-radius: 20;
     -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 20, 0, 0, 10);
-    -fx-padding: 30;
-    -fx-max-width: 1000px;
+    -fx-padding: 40;
+    -fx-min-width: 500px;
+    -fx-max-width: 800px;
+    -fx-alignment: center;
 }
 
 /* Profile Section */
