@@ -8,7 +8,7 @@
 <?import javafx.scene.image.Image?>
 <AnchorPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
-            fx:controller="controllers.Mohamed.AjouterReclamation"
+            fx:controller="Controllers.Mohamed.AjouterReclamation"
             prefHeight="600.0" prefWidth="650.0"
             style="-fx-background-color: linear-gradient(to bottom, #ffffff, #eeeee4);">
     <Button fx:id="btnRetour"

@@ -5,7 +5,7 @@
 <?import javafx.geometry.Insets?>
 
 <BorderPane xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="controllers.ines.ListeRendezVousController"
+            fx:controller="Controllers.ines.ListeRendezVousController"
             prefWidth="900" prefHeight="600"
             stylesheets="@styles.css">
 

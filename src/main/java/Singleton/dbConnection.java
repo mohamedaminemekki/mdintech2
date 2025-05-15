@@ -1,8 +1,12 @@
 package Singleton;
+import entities.mariem.Ville;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
+
+import static utils.UserRole.USER;
+import static utils.VilleBase.PASS;
 
 public class dbConnection {
     private static dbConnection instance;
@@ -50,4 +54,30 @@ public class dbConnection {
             System.err.println("Reconnection failed: " + e.getMessage());
         }
     }
+    public static List<Ville> loadCities() {
+        List<Ville> villes = new ArrayList<>();
+
+        // Récupère la connexion via votre singleton
+        try (Connection conn = dbConnection.getInstance().getConn();
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery("SELECT * FROM villes")) {
+
+            while (rs.next()) {
+                Ville ville = new Ville(
+                        rs.getString("nom"),
+                        rs.getString("histoire"),
+                        rs.getString("anecdotes"),
+                        rs.getString("activites"),
+                        rs.getString("gastronomie"),
+                        rs.getString("nature"),
+                        rs.getString("histoire_interactive")
+                );
+                villes.add(ville);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return villes;
+    }
+
 }

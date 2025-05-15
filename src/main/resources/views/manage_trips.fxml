@@ -13,7 +13,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.mariem.ManageTripsController" stylesheets="@styles.css">
+<BorderPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.mariem.ManageTripsController" stylesheets="@styles.css">
     <!-- En-tête -->
     <top>
         <HBox alignment="CENTER" styleClass="header">

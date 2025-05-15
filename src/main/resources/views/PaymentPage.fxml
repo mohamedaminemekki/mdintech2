@@ -4,7 +4,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.geometry.*?>
 
-<BorderPane xmlns:fx="http://javafx.com/fxml" fx:controller="controllers.mariem.PaymentController">
+<BorderPane xmlns:fx="http://javafx.com/fxml" fx:controller="Controllers.mariem.PaymentController">
     <top>
         <Label text="Paiement" style="-fx-font-size: 22px; -fx-font-weight: bold; -fx-padding: 15px;"/>
     </top>

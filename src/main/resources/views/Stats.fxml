@@ -11,7 +11,7 @@
 <?import javafx.scene.text.Font?>
 
 <StackPane fx:id="rootStack" xmlns:fx="http://javafx.com/fxml"
-           fx:controller="controllers.mariem.StatsController"
+           fx:controller="Controllers.mariem.StatsController"
            stylesheets="@styles.css"
            style="-fx-background-image: url('../images/game.jpg'); -fx-background-size: cover; -fx-background-position: center center;">
 

@@ -104,7 +104,7 @@ public class AjouterReclamation {
             String type = typeComboBox.getValue();
 
             // Determine priority using Hugging Face API
-            controllers.Mohamed.HuggingFaceAPI huggingFaceAPI = new controllers.Mohamed.HuggingFaceAPI();
+            Controllers.Mohamed.HuggingFaceAPI huggingFaceAPI = new Controllers.Mohamed.HuggingFaceAPI();
             String priorite = huggingFaceAPI.determinePriority(description);
 
             String photoPath = selectedImageFile != null ? selectedImageFile.getAbsolutePath() : "Aucune photo";

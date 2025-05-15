@@ -6,7 +6,7 @@
 <?import javafx.geometry.Pos?>
 
 <VBox xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="controllers.ines.StatsController"
+      fx:controller="Controllers.ines.StatsController"
       spacing="20" alignment="CENTER"
       style="-fx-padding: 30; -fx-background-color: #F5F5F5; -fx-border-radius: 15; -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.2), 10, 0.0, 0, 0);">
 

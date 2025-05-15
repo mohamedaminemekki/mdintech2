@@ -1,4 +1,4 @@
-    package controllers.Mohamed;
+    package Controllers.Mohamed;
     import com.sendgrid.*;
     import com.sendgrid.helpers.mail.Mail;
     import com.sendgrid.helpers.mail.objects.Content;

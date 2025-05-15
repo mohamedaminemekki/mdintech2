@@ -18,7 +18,7 @@
 <?import javafx.scene.shape.Circle?>
 
 <StackPane xmlns:fx="http://javafx.com/fxml"
-           fx:controller="controllers.mariem.MainController"
+           fx:controller="Controllers.mariem.MainController"
            fx:id="rootStack"
            stylesheets="@styles.css">
 

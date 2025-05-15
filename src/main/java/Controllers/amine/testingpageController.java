@@ -1,14 +1,10 @@
-package controllers.amine;
+package Controllers.amine;
 
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
-import entities.amine.User;
-import utils.UserRole;
 import services.amine.userService;
-
-import java.util.Date;
 
 public class testingpageController {
 

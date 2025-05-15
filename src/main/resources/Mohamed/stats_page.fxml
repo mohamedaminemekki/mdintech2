@@ -14,7 +14,7 @@
 <VBox xmlns="http://javafx.com/javafx"
       xmlns:fx="http://javafx.com/fxml"
       fx:id="statsPage"
-      fx:controller="controllers.Mohamed.StatsController"
+      fx:controller="Controllers.Mohamed.StatsController"
       stylesheets="@css/styles.css"
       spacing="20"
       styleClass="stats-page">
