@@ -7,7 +7,7 @@
 <!-- Navigation bar without notification bell or notification panel -->
 <VBox xmlns="http://javafx.com/javafx"
       xmlns:fx="http://javafx.com/fxml"
-      fx:controller="controllers.amine.userController.mainUserViewController">
+      fx:controller="Controllers.amine.userController.mainUserViewController">
     <MenuBar fx:id="menuBar" visible="false" managed="false" />
     <HBox styleClass="nav-bar" alignment="CENTER_LEFT" spacing="15">
         <StackPane styleClass="logo-container">

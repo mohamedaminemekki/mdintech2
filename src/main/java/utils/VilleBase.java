@@ -6,7 +6,7 @@ import java.sql.*;
 public class VilleBase {
     private static final String URL = "jdbc:mysql://localhost:3306/city_transport";
     private static final String USER = "root";
-    private static final String PASS = "";
+    public static final String PASS = "";
 
     public static Ville getVille(String nom) {
         String sql = "SELECT * FROM villes WHERE nom = ?";

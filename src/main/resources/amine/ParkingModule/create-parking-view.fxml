@@ -6,7 +6,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane prefHeight="500.0" prefWidth="368.0" style="-fx-background-color: #f5f5f5;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.amine.parkingController.AddParkingViewController">
+<AnchorPane prefHeight="500.0" prefWidth="368.0" style="-fx-background-color: #f5f5f5;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.amine.parkingController.AddParkingViewController">
 
     <!-- Back Button -->
     <Button layoutX="10" layoutY="10" onAction="#handleBackButton" style="-fx-background-color: #FF5733; -fx-text-fill: white; -fx-font-size: 14px; -fx-border-radius: 20px; -fx-padding: 10px 20px;" text="← Back">

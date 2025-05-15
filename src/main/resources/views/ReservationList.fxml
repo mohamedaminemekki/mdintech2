@@ -8,7 +8,7 @@
 <?import javafx.scene.effect.*?>
 <?import javafx.scene.paint.*?>
 
-<BorderPane xmlns:fx="http://javafx.com/fxml" fx:controller="controllers.mariem.ReservationListController">
+<BorderPane xmlns:fx="http://javafx.com/fxml" fx:controller="Controllers.mariem.ReservationListController">
     <top>
         <VBox spacing="10" style="-fx-padding: 15px; -fx-background-color: #2196F3;">
             <Label text="Mes Réservations" style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: white;"/>

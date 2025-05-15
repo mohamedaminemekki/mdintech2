@@ -4,7 +4,7 @@
 <?import javafx.geometry.*?>
 <?import javafx.scene.text.*?>
 
-<BorderPane xmlns:fx="http://javafx.com/fxml" fx:controller="controllers.mariem.ReservationSummaryController">
+<BorderPane xmlns:fx="http://javafx.com/fxml" fx:controller="Controllers.mariem.ReservationSummaryController">
     <top>
         <Label text="Récapitulatif de la Réservation" style="-fx-font-size: 22px; -fx-font-weight: bold; -fx-padding: 15px;"/>
     </top>

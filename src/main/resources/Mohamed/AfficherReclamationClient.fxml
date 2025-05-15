@@ -4,7 +4,7 @@
 <?import javafx.scene.image.*?>
 
 <AnchorPane prefHeight="500.0" prefWidth="650.0" style="-fx-background-color: linear-gradient(to bottom, #ffffff, #eeeee4);" xmlns="http://javafx.com/javafx/17.0.6"
-            xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.Mohamed.AfficherReclamationClient">
+            xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.Mohamed.AfficherReclamationClient">
 
     <VBox alignment="CENTER" spacing="20" AnchorPane.bottomAnchor="20" AnchorPane.leftAnchor="20" AnchorPane.rightAnchor="20" AnchorPane.topAnchor="20">
 

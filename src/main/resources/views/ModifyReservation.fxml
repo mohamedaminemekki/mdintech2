@@ -3,7 +3,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.geometry.*?>
 
-<BorderPane xmlns:fx="http://javafx.com/fxml" fx:controller="controllers.mariem.ModifyReservationController">
+<BorderPane xmlns:fx="http://javafx.com/fxml" fx:controller="Controllers.mariem.ModifyReservationController">
     <top>
         <Label text="Modifier la Réservation" style="-fx-font-size: 22px; -fx-font-weight: bold; -fx-padding: 15px;"/>
     </top>

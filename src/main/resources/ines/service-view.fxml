@@ -14,7 +14,7 @@
 
 <BorderPane xmlns:fx="http://javafx.com/fxml/1"
             xmlns="http://javafx.com/javafx/23.0.1"
-            fx:controller="controllers.ines.ServiceController"
+            fx:controller="Controllers.ines.ServiceController"
             style="-fx-font-family: 'Segoe UI', sans-serif;">
 
     <!-- En-tête : Dégradé, titre et image immersive -->

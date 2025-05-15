@@ -10,7 +10,7 @@
 <?import javafx.scene.effect.DropShadow?>
 
 <?import java.awt.Image?>
-<VBox xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.mariem.LoginController"
+<VBox xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.mariem.LoginController"
       alignment="CENTER" spacing="20" style="-fx-background-color: linear-gradient(to bottom, #ffffff, #f0f0f0); -fx-padding: 40;">
 
     <!-- Titre -->

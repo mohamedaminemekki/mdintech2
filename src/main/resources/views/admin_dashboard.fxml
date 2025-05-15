@@ -12,7 +12,7 @@
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.paint.Color?>
 
-<BorderPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.mariem.AdminDashboardController">
+<BorderPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.mariem.AdminDashboardController">
     <!-- Barre latérale -->
     <left>
         <VBox style="-fx-background-color: #34495e; -fx-padding: 20;" spacing="20">

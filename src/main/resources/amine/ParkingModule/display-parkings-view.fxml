@@ -5,7 +5,7 @@
 
 <AnchorPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
-            fx:controller="controllers.amine.parkingController.DisplayParkingsViewController"
+            fx:controller="Controllers.amine.parkingController.DisplayParkingsViewController"
             prefHeight="450.0" prefWidth="650.0"
             style="-fx-background-color: #f4f4f4; -fx-padding: 20px;">
 

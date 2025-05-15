@@ -13,7 +13,7 @@
 <?import javafx.scene.paint.Color?>
 <?import javafx.scene.text.Font?>
 
-<VBox xmlns:fx="http://javafx.com/fxml" fx:controller="controllers.ines.RendezVousController" spacing="20" style="-fx-padding: 30; -fx-background-color: linear-gradient(to bottom, #f4f4f4, #e0e0e0);">
+<VBox xmlns:fx="http://javafx.com/fxml" fx:controller="Controllers.ines.RendezVousController" spacing="20" style="-fx-padding: 30; -fx-background-color: linear-gradient(to bottom, #f4f4f4, #e0e0e0);">
 
     <!-- Titre de la page -->
     <Text text="Prendre un Rendez-vous" style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-fill: #007bff; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 10, 0, 2, 2);"/>

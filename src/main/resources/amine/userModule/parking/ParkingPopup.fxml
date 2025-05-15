@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane prefHeight="300.0" prefWidth="356.0" style="-fx-background-color: rgba(255, 255, 255, 0.85); -fx-background-radius: 15; -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 10, 0, 0, 4);" stylesheets="@style.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.amine.userController.parking.ParkingPopupController">
+<AnchorPane prefHeight="300.0" prefWidth="356.0" style="-fx-background-color: rgba(255, 255, 255, 0.85); -fx-background-radius: 15; -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 10, 0, 0, 4);" stylesheets="@style.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.amine.userController.parking.ParkingPopupController">
 
     <VBox alignment="CENTER" layoutX="63.0" layoutY="24.0" prefHeight="252.0" prefWidth="226.0" spacing="15">
         <!-- Title with close button -->

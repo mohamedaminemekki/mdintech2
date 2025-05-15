@@ -6,7 +6,7 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import controllers.amine.parkingController.DisplayParkingDetailsViewController;
+import Controllers.amine.parkingController.DisplayParkingDetailsViewController;
 import entities.amine.ParkingModule.Parking;
 
 import java.io.IOException;
