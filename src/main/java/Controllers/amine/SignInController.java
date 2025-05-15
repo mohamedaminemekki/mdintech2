@@ -49,6 +49,15 @@ public class SignInController {
     @FXML
     private Label passwordStrengthLabel;
 
+    @FXML
+    private Label cinValidationLabel;
+
+    @FXML
+    private Label phoneValidationLabel;
+
+    @FXML
+    private Label birthdayValidationLabel;
+
     private File selectedImageFile;
 
 
@@ -71,13 +80,56 @@ public class SignInController {
             System.err.println("Image file not found: " + imagePath);
         }
 
-        birthdayPicker.setValue(LocalDate.now().minusYears(15));
+        birthdayPicker.setValue(LocalDate.now().minusYears(18));
 
+        // Add listeners for real-time validation
+        cinField.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue.matches("\\d*")) {
+                cinField.setText(newValue.replaceAll("[^\\d]", ""));
+            }
+            if (newValue.length() > 8) {
+                cinField.setText(oldValue);
+            }
+            validateCIN();
+        });
+
+        phoneField.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue.matches("\\d*")) {
+                phoneField.setText(newValue.replaceAll("[^\\d]", ""));
+            }
+            if (newValue.length() > 8) {
+                phoneField.setText(oldValue);
+            }
+            validatePhone();
+        });
+
+        // Add listener for birthday picker
+        birthdayPicker.valueProperty().addListener((observable, oldValue, newValue) -> {
+            validateAge();
+        });
+
+        // Initial validation
+        validateCIN();
+        validatePhone();
+        validateAge();
     }
 
     @FXML
     private void handleSignIn(ActionEvent event) {
         try {
+            // Validate all fields first
+            validateCIN();
+            validatePhone();
+            validateAge();
+            checkPasswordStrength();
+
+            // Check if there are any validation errors
+            if (cinValidationLabel.isVisible() || phoneValidationLabel.isVisible() || 
+                birthdayValidationLabel.isVisible() || passwordStrengthLabel.getText().startsWith("Weak")) {
+                showAlert("Validation Error", "Please fix all validation errors before proceeding.");
+                return;
+            }
+
             String name = nameField.getText();
             String cin = cinField.getText();
             String email = emailField.getText();
@@ -87,10 +139,12 @@ public class SignInController {
             String bio = bioField.getText();
             LocalDate localDate = birthdayPicker.getValue();
 
-            if (localDate == null) {
-                showAlert("Error", "Please select a valid birthday.");
+            if (name.isEmpty() || cin.isEmpty() || email.isEmpty() || password.isEmpty() ||
+                    phone.isEmpty() || address.isEmpty() || bio.isEmpty() || localDate == null) {
+                showAlert("Validation Error", "Please fill in all fields and select a valid birthday.");
                 return;
             }
+
             Date birthday = Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
 
             if (!PasswordVerification.isStrongPassword(password)) {
@@ -176,8 +230,26 @@ public class SignInController {
         alert.setContentText(message);
         alert.showAndWait();
     }
-    public void handleBackButton(ActionEvent event) throws IOException {
-        navigation.switchScene(event, "/amine/userModule/login-view.fxml");
+
+    @FXML
+    public void handleBackButton(ActionEvent event) {
+        try {
+            // Load the FXML file
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/amine/userModule/login-view.fxml"));
+            Parent signInRoot = loader.load();
+
+            // Get the current stage (window)
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+
+            // Set the new scene
+            Scene scene = new Scene(signInRoot);
+            scene.getStylesheets().add(getClass().getResource("/amine/userModule/style.css").toExternalForm());
+
+            stage.setScene(scene);
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @FXML
@@ -226,5 +298,98 @@ public class SignInController {
         Random random = new Random();
         int code = 100000 + random.nextInt(900000); // Generates a 6-digit number
         return String.valueOf(code);
+    }
+
+    @FXML
+    public void validateCIN() {
+        String cin = cinField.getText();
+        boolean isValid = true;
+        String message = "";
+
+        // Remove any styling classes first
+        cinField.getStyleClass().removeAll("valid", "invalid");
+
+        if (cin.isEmpty()) {
+            message = "CIN is required";
+            isValid = false;
+        } else {
+            // Check if it's exactly 8 digits
+            if (!cin.matches("\\d{8}")) {
+                message = "CIN must be exactly 8 digits";
+                isValid = false;
+            }
+        }
+
+        // Apply appropriate styling
+        if (!cin.isEmpty()) {
+            cinField.getStyleClass().add(isValid ? "valid" : "invalid");
+        }
+        
+        cinValidationLabel.setText(message);
+        cinValidationLabel.setVisible(!message.isEmpty());
+    }
+
+    @FXML
+    public void validatePhone() {
+        String phone = phoneField.getText();
+        boolean isValid = true;
+        String message = "";
+
+        // Remove any styling classes first
+        phoneField.getStyleClass().removeAll("valid", "invalid");
+
+        if (phone.isEmpty()) {
+            message = "Phone number is required";
+            isValid = false;
+        } else {
+            // Check if it's exactly 8 digits
+            if (!phone.matches("\\d{8}")) {
+                message = "Phone number must be exactly 8 digits";
+                isValid = false;
+            }
+        }
+
+        // Apply appropriate styling
+        if (!phone.isEmpty()) {
+            phoneField.getStyleClass().add(isValid ? "valid" : "invalid");
+        }
+        
+        phoneValidationLabel.setText(message);
+        phoneValidationLabel.setVisible(!message.isEmpty());
+    }
+
+    @FXML
+    public void validateAge() {
+        LocalDate birthday = birthdayPicker.getValue();
+        boolean isValid = true;
+        String message = "";
+
+        // Remove any styling classes first
+        birthdayPicker.getStyleClass().removeAll("valid", "invalid");
+
+        if (birthday == null) {
+            message = "Birthday is required";
+            isValid = false;
+        } else {
+            // Calculate age
+            LocalDate now = LocalDate.now();
+            int age = now.getYear() - birthday.getYear();
+            if (birthday.plusYears(age).isAfter(now)) {
+                age--;
+            }
+
+            if (age < 18) {
+                message = "Must be at least 18 years old";
+                isValid = false;
+            }
+        }
+
+        // Apply appropriate styling
+        if (birthday != null) {
+            birthdayPicker.getStyleClass().add(isValid ? "valid" : "invalid");
+        }
+        
+        birthdayValidationLabel.setText(message);
+        birthdayValidationLabel.setVisible(!message.isEmpty());
     }
 }

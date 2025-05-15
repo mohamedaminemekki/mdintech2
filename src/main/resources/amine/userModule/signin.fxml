@@ -6,52 +6,99 @@
 <?import javafx.scene.text.Text?>
 
 <StackPane xmlns:fx="http://javafx.com/fxml" fx:controller="Controllers.amine.SignInController" styleClass="root">
-<VBox alignment="CENTER" spacing="20.0" >
-    <padding>
-        <Insets top="40" right="40" bottom="40" left="40"/>
-    </padding>
-    <Text text="Create an Account" styleClass="app-title" />
+    <VBox alignment="CENTER" spacing="30.0" styleClass="main-container">
+        <padding>
+            <Insets top="40" right="40" bottom="40" left="40"/>
+        </padding>
+        
+        <Text text="Create an Account" styleClass="app-title"/>
+        
+        <ScrollPane fitToWidth="true" styleClass="custom-scroll-pane">
+            <VBox alignment="CENTER" spacing="30" styleClass="form-container">
+                <padding>
+                    <Insets top="30" right="40" bottom="30" left="40"/>
+                </padding>
 
-    <HBox styleClass="form-container" spacing="40" alignment="CENTER">
-        <VBox alignment="CENTER" spacing="20">
-            <VBox alignment="CENTER" spacing="10" styleClass="profile-section">
-                <ImageView fx:id="profileImageView" styleClass="profile-image" fitWidth="120" fitHeight="120" preserveRatio="true" />
-                <Button text="Choose Image" onAction="#handleChooseImage" styleClass="primary-button" />
+                <!-- Profile Section -->
+                <VBox alignment="CENTER" spacing="15" styleClass="profile-section">
+                    <StackPane styleClass="image-container">
+                        <ImageView fx:id="profileImageView" styleClass="profile-image" fitWidth="150" fitHeight="150" preserveRatio="true"/>
+                    </StackPane>
+                    <Button text="Choose Profile Picture" onAction="#handleChooseImage" styleClass="secondary-button"/>
+                </VBox>
+
+                <!-- Personal Information Section -->
+                <VBox spacing="25">
+                    <Text text="Personal Information" styleClass="section-title"/>
+                    <HBox spacing="20" alignment="CENTER">
+                        <VBox spacing="20" HBox.hgrow="ALWAYS">
+                            <VBox spacing="8">
+                                <Label text="Full Name" styleClass="field-label"/>
+                                <TextField fx:id="nameField" styleClass="field-input" promptText="Enter your full name"/>
+                            </VBox>
+                            
+                            <VBox spacing="8">
+                                <Label text="CIN" styleClass="field-label"/>
+                                <TextField fx:id="cinField" styleClass="field-input" promptText="Enter CIN" onKeyReleased="#validateCIN"/>
+                                <Label fx:id="cinValidationLabel" styleClass="validation-label"/>
+                            </VBox>
+                            
+                            <VBox spacing="8">
+                                <Label text="Email" styleClass="field-label"/>
+                                <TextField fx:id="emailField" styleClass="field-input" promptText="Enter email"/>
+                            </VBox>
+                        </VBox>
+                        
+                        <VBox spacing="20" HBox.hgrow="ALWAYS">
+                            <VBox spacing="8">
+                                <Label text="Phone" styleClass="field-label"/>
+                                <TextField fx:id="phoneField" styleClass="field-input" promptText="Enter phone number" onKeyReleased="#validatePhone"/>
+                                <Label fx:id="phoneValidationLabel" styleClass="validation-label"/>
+                            </VBox>
+                            
+                            <VBox spacing="8">
+                                <Label text="Birthday" styleClass="field-label"/>
+                                <DatePicker fx:id="birthdayPicker" styleClass="date-picker" onAction="#validateAge"/>
+                                <Label fx:id="birthdayValidationLabel" styleClass="validation-label"/>
+                            </VBox>
+                            
+                            <VBox spacing="8">
+                                <Label text="Password" styleClass="field-label"/>
+                                <PasswordField fx:id="passwordField" styleClass="field-input" promptText="Enter password" onKeyReleased="#checkPasswordStrength"/>
+                                <Label fx:id="passwordStrengthLabel" styleClass="password-strength-label"/>
+                            </VBox>
+                        </VBox>
+                    </HBox>
+                </VBox>
+
+                <!-- Address Section -->
+                <VBox spacing="25">
+                    <Text text="Address Information" styleClass="section-title"/>
+                    <HBox spacing="20">
+                        <VBox spacing="8" HBox.hgrow="ALWAYS">
+                            <Label text="Address" styleClass="field-label"/>
+                            <TextField fx:id="addressField" styleClass="field-input" promptText="Enter address"/>
+                        </VBox>
+                        
+                        <VBox spacing="8" HBox.hgrow="ALWAYS">
+                            <Label text="City" styleClass="field-label"/>
+                            <TextField fx:id="cityField" styleClass="field-input" promptText="Enter city"/>
+                        </VBox>
+                    </HBox>
+                </VBox>
+
+                <!-- Bio Section -->
+                <VBox spacing="8">
+                    <Label text="Bio" styleClass="field-label"/>
+                    <TextField fx:id="bioField" styleClass="bio-textarea" promptText="Tell us about yourself..."/>
+                </VBox>
+
+                <!-- Action Buttons -->
+                <HBox spacing="15" alignment="CENTER">
+                    <Button text="Back" styleClass="back-button" onAction="#handleBackButton"/>
+                    <Button fx:id="signInButton" text="Create Account" styleClass="primary-button" onAction="#handleSignIn"/>
+                </HBox>
             </VBox>
-
-            <Label text="Full Name" styleClass="field-label" />
-            <TextField fx:id="nameField" styleClass="field-input" promptText="Enter your full name" />
-
-            <Label text="CIN" styleClass="field-label" />
-            <TextField fx:id="cinField" styleClass="field-input" promptText="Enter CIN" />
-
-            <Label text="Email" styleClass="field-label" />
-            <TextField fx:id="emailField" styleClass="field-input" promptText="Enter email" />
-
-            <Label text="Password" styleClass="field-label" />
-            <PasswordField fx:id="passwordField" styleClass="field-input" promptText="Enter password" onKeyReleased="#checkPasswordStrength" />
-            <Label fx:id="passwordStrengthLabel" style="-fx-text-fill: red;" />
-        </VBox>
-
-        <VBox alignment="CENTER" spacing="20">
-            <Label text="Phone" styleClass="field-label" />
-            <TextField fx:id="phoneField" styleClass="field-input" promptText="Enter phone number" />
-
-            <Label text="Address" styleClass="field-label" />
-            <TextField fx:id="addressField" styleClass="field-input" promptText="Enter address" />
-
-            <Label text="City" styleClass="field-label" />
-            <TextField fx:id="cityField" styleClass="field-input" promptText="Enter city" />
-
-            <Label text="Birthday" styleClass="field-label" />
-            <DatePicker fx:id="birthdayPicker" styleClass="date-picker" />
-
-            <Label text="Bio" styleClass="field-label" />
-            <TextField fx:id="bioField" styleClass="bio-textarea" promptText="Tell us about yourself..." />
-
-            <Button fx:id="signInButton" text="Sign In" styleClass="primary-button" onAction="#handleSignIn" />
-            <Button text="Back" styleClass="back-button" onAction="#handleBackButton" />
-        </VBox>
-    </HBox>
-</VBox>
+        </ScrollPane>
+    </VBox>
 </StackPane>
