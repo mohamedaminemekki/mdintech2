@@ -76,10 +76,10 @@ public class loginController {
         if (user != null) {
             loggedInUser.initializeSession((user));
 
-             if (!user.isActive()) {
-                 goToDashboard(event, "/user-blocked-view.fxml");
-                 return;
-             }
+//             if (!user.isActive()) {
+//                 goToDashboard(event, "/user-blocked-view.fxml");
+//                 return;
+//             }
             ObjectMapper mapper = new ObjectMapper();
 
             List<String> flatRoles = new ArrayList<>();

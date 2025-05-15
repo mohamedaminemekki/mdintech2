@@ -17,6 +17,13 @@ public class BlogServices {
     public void createPost(BlogPost post) throws SQLException {
         String query = "INSERT INTO blog_post (title, content, user_id, created_at, post_date, approved, image_url, category, updated_at) " +
                 "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        System.out.println("[DEBUG] Creating post with values:");
+        System.out.println("Title: " + post.getTitle());
+        System.out.println("Content: " + post.getContent());
+        System.out.println("UserId: " + post.getUserId());
+        System.out.println("CreatedAt: " + post.getCreatedAt());
+        System.out.println("ImageUrl: " + post.getImageUrl());
+        System.out.println("Category: " + post.getCategory());
         try (PreparedStatement ps = con.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
             ps.setString(1, post.getTitle());
             ps.setString(2, post.getContent());
@@ -24,11 +31,17 @@ public class BlogServices {
             Timestamp now = Timestamp.valueOf(post.getCreatedAt());
             ps.setTimestamp(4, now);
             ps.setTimestamp(5, now); // post_date defaults to created_at
-            ps.setBoolean(6, false); // default to unapproved
+            ps.setBoolean(6, true); // post is approved by default
             ps.setString(7, post.getImageUrl());
             ps.setString(8, post.getCategory());
             ps.setTimestamp(9, now); // updated_at initially same as created_at
-            ps.executeUpdate();
+            try {
+                ps.executeUpdate();
+            } catch (SQLException ex) {
+                System.err.println("[ERROR] SQL Exception during post insert: " + ex.getMessage());
+                ex.printStackTrace();
+                throw ex;
+            }
             try (ResultSet rs = ps.getGeneratedKeys()) {
                 if (rs.next()) {
                     post.setId(rs.getInt(1));

@@ -14,22 +14,29 @@
 
 <BorderPane xmlns:fx="http://javafx.com/fxml/1"
             xmlns="http://javafx.com/javafx/23.0.1"
-            fx:controller="controllers.ines.ServiceController"
+            fx:controller="Controllers.ines.ServiceController"
+            stylesheets="@../styles/medintechstyle.css"
             style="-fx-font-family: 'Segoe UI', sans-serif;">
 
-    <!-- En-tête : Dégradé, titre et image immersive -->
+    <!-- Top section containing navbar and header -->
     <top>
-        <StackPane prefHeight="320" style="-fx-background-color: linear-gradient(to right, #2c3e50, #3498db); -fx-padding: 15;">
-            <VBox alignment="CENTER" spacing="15">
-                <Label text="Choisissez le service hospitalier désiré"
-                       style="-fx-font-size: 32px; -fx-font-weight: bold; -fx-text-fill: white; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.6), 4,0.5,0,2);"/>
-                <ImageView fitWidth="900" fitHeight="250" preserveRatio="false">
-                    <image>
-                        <Image url="@/ines/images/img.jpg"/>
-                    </image>
-                </ImageView>
-            </VBox>
-        </StackPane>
+        <VBox>
+            <!-- Include the navbar -->
+            <fx:include source="../navbar.fxml"/>
+            
+            <!-- Original header content -->
+            <StackPane prefHeight="320" style="-fx-background-color: linear-gradient(to right, #2c3e50, #3498db); -fx-padding: 15;">
+                <VBox alignment="CENTER" spacing="15">
+                    <Label text="Choisissez le service hospitalier désiré"
+                           style="-fx-font-size: 32px; -fx-font-weight: bold; -fx-text-fill: white; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.6), 4,0.5,0,2);"/>
+                    <ImageView fitWidth="900" fitHeight="250" preserveRatio="false">
+                        <image>
+                            <Image url="@/ines/images/img.jpg"/>
+                        </image>
+                    </ImageView>
+                </VBox>
+            </StackPane>
+        </VBox>
     </top>
 
     <!-- Contenu central : Recherche, liste et boutons d'action -->

@@ -156,7 +156,8 @@ public class UserBlogController {
         File file = fileChooser.showOpenDialog(null);
         if (file != null) {
             try {
-                File uploadDir = new File("uploads");
+                // Save to C:\xampp\htdocs
+                File uploadDir = new File("C:/xampp/htdocs");
                 if (!uploadDir.exists()) uploadDir.mkdir();
                 File dest = new File(uploadDir, System.currentTimeMillis() + "_" + file.getName());
                 Files.copy(file.toPath(), dest.toPath(), StandardCopyOption.REPLACE_EXISTING);
@@ -231,6 +232,7 @@ public class UserBlogController {
     }
 
     private VBox createPostCard(BlogPost post) {
+        System.out.println("[DEBUG] Creating post card for post ID: " + post.getId() + ", Title: " + post.getTitle());
         VBox card = new VBox(10);
         card.getStyleClass().add("post-card");
         card.setMaxWidth(600);
@@ -498,9 +500,10 @@ public class UserBlogController {
 
         // Comment actions
         HBox actions = new HBox(10);
-        User currentUser = loggedInUser.getInstance().getLoggedUser();        if (currentUser != null && commentUser != null && currentUser.getId() == commentUser.getId()) {
-            Button editBtn = new Button("Modifier");
+        User currentUser = loggedInUser.getInstance().getLoggedUser();        if (currentUser != null && commentUser != null && currentUser.getId() == commentUser.getId()) {            Button editBtn = new Button("Modifier");
+            editBtn.getStyleClass().addAll("action-button", "modifier-button");
             Button deleteBtn = new Button("Supprimer");
+            deleteBtn.getStyleClass().addAll("action-button", "supprimer-button");
             
             editBtn.setOnAction(e -> {
                 contentLabel.setVisible(false);
@@ -522,9 +525,13 @@ public class UserBlogController {
         editContainer.setAlignment(Pos.CENTER_LEFT);
         editContainer.setVisible(false);
         editContainer.setManaged(false);
-        TextField editField = new TextField(comment.getContent());
-        Button saveEditBtn = new Button("Valider");
+        TextField editField = new TextField(comment.getContent());        Button saveEditBtn = new Button("Valider");
+        saveEditBtn.getStyleClass().addAll("action-button", "modifier-button");
         Button cancelEditBtn = new Button("Annuler");
+        cancelEditBtn.getStyleClass().addAll("action-button", "supprimer-button");
+        editContainer.getStyleClass().add("edit-container");
+        editContainer.setSpacing(10);
+        editField.getStyleClass().add("edit-field");
         editContainer.getChildren().addAll(editField, saveEditBtn, cancelEditBtn);
 
         saveEditBtn.setOnAction(e -> {

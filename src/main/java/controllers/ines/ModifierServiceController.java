@@ -1,4 +1,4 @@
-package controllers.ines;
+package Controllers.ines;
 
 import entities.ines.ServiceHospitalier;
 import javafx.fxml.FXML;

@@ -1,4 +1,4 @@
-package controllers.mariem;
+package Controllers.mariem;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;

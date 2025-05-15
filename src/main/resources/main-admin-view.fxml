@@ -4,46 +4,64 @@
 <?import java.util.*?>
 <?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
 
 <AnchorPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
             fx:controller="Controllers.amine.userController.mainAdminViewController"
-            prefHeight="400.0" prefWidth="600.0">
-    <MenuBar fx:id="menuBar" AnchorPane.topAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0">
-        <Menu text="Parking">
-            <!-- Added fx:id attributes -->
-            <MenuItem fx:id="goToHomeView" text="Home" onAction="#goToHomeView" />
-            <MenuItem fx:id="goToParkings" text="Parkings" onAction="#goToParkings" />
-            <MenuItem fx:id="goToParkingTickets" text="Parking Tickets" onAction="#goToParkingTickets" />
-            <MenuItem fx:id="goToUsers" text="Users" onAction="#goToUsers" />
-            <MenuItem fx:id="goToCreateParking" text="Createparking" onAction="#goToCreateParking" />
-            <MenuItem fx:id="Logout" text="logout" onAction="#logout" />
-        </Menu>
-        <Menu text="Market">
-            <!-- Added fx:id attributes -->
-            <MenuItem fx:id="goToMarketView" text="Home" onAction="#goToMarketView" />
-
-        </Menu>
-        <Menu text="Hopital">
-            <!-- Added fx:id attributes -->
-            <MenuItem fx:id="goToHospitalView" text="Home" onAction="#goToHospitalView" />
-
-        </Menu>
-        <Menu text="Transport">
-            <!-- Added fx:id attributes -->
-            <MenuItem fx:id="goToTransportView" text="Home" onAction="#goToTransportView" />
-        </Menu>
-        <Menu text="Blog">
-            <!-- Added fx:id attributes -->
-            <MenuItem fx:id="goToBlogView" text="Home" onAction="#goToBlogView" />
-        </Menu>
-        <Menu text="Reclamation">
-            <!-- Added fx:id attributes -->
-            <MenuItem fx:id="goToReclamationView" text="Home" onAction="#goToReclamationView" />
-        </Menu>
-    </MenuBar>
-
-
-
+            fx:id="rootPane"
+            prefHeight="650.0" prefWidth="1550.0">
+    <StackPane prefWidth="1550.0" prefHeight="650.0" AnchorPane.topAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.bottomAnchor="0">
+        <!-- Background Image -->
+        <ImageView fitWidth="1550" fitHeight="650" preserveRatio="false">
+            <Image url="/images/section_bg02.jpg" />
+        </ImageView>
+        <!-- Overlay for content -->
+        <VBox alignment="CENTER" spacing="40">
+            <Label text="Welcome Admin" style="-fx-font-size: 36px; -fx-font-weight: bold; -fx-text-fill: #ffffff; -fx-effect: dropshadow(gaussian, #222, 8, 0.5, 0, 2);" />
+            <FlowPane fx:id="cardsPane" hgap="40" vgap="40" alignment="CENTER">
+                <!-- Market Card -->
+                <VBox style="-fx-background-color: rgba(255,255,255,0.92); -fx-border-radius: 18; -fx-background-radius: 18; -fx-padding: 28; -fx-effect: dropshadow(gaussian, #888, 12, 0.2, 0, 4);" alignment="CENTER" prefWidth="220" prefHeight="240">
+                    <ImageView fitWidth="60" fitHeight="60">
+                        <Image url="/images/trolley.png" />
+                    </ImageView>
+                    <Label text="Market" style="-fx-font-size: 20; -fx-font-weight: bold; -fx-text-fill: #2d7cff; -fx-padding: 10 0 0 0;" />
+                    <Button text="Go to Market" onAction="#goToMarketView" style="-fx-background-color: #2d7cff; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 8; -fx-padding: 6 18; -fx-cursor: hand;" />
+                </VBox>
+                <!-- Hospital Card -->
+                <VBox style="-fx-background-color: rgba(255,255,255,0.92); -fx-border-radius: 18; -fx-background-radius: 18; -fx-padding: 28; -fx-effect: dropshadow(gaussian, #888, 12, 0.2, 0, 4);" alignment="CENTER" prefWidth="220" prefHeight="240">
+                    <ImageView fitWidth="60" fitHeight="60">
+                        <Image url="/images/hospital.png" />
+                    </ImageView>
+                    <Label text="Hospital" style="-fx-font-size: 20; -fx-font-weight: bold; -fx-text-fill: #e74c3c; -fx-padding: 10 0 0 0;" />
+                    <Button text="Go to Hospital" onAction="#goToHospitalView" style="-fx-background-color: #e74c3c; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 8; -fx-padding: 6 18; -fx-cursor: hand;" />
+                </VBox>
+                <!-- Transport Card -->
+                <VBox style="-fx-background-color: rgba(255,255,255,0.92); -fx-border-radius: 18; -fx-background-radius: 18; -fx-padding: 28; -fx-effect: dropshadow(gaussian, #888, 12, 0.2, 0, 4);" alignment="CENTER" prefWidth="220" prefHeight="240">
+                    <ImageView fitWidth="60" fitHeight="60">
+                        <Image url="/images/public-transport.png" />
+                    </ImageView>
+                    <Label text="Transport" style="-fx-font-size: 20; -fx-font-weight: bold; -fx-text-fill: #27ae60; -fx-padding: 10 0 0 0;" />
+                    <Button text="Go to Transport" onAction="#goToTransportView" style="-fx-background-color: #27ae60; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 8; -fx-padding: 6 18; -fx-cursor: hand;" />
+                </VBox>
+                <!-- Blog Card -->
+                <VBox style="-fx-background-color: rgba(255,255,255,0.92); -fx-border-radius: 18; -fx-background-radius: 18; -fx-padding: 28; -fx-effect: dropshadow(gaussian, #888, 12, 0.2, 0, 4);" alignment="CENTER" prefWidth="220" prefHeight="240">
+                    <ImageView fitWidth="60" fitHeight="60">
+                        <Image url="/images/blog.png" />
+                    </ImageView>
+                    <Label text="Blog" style="-fx-font-size: 20; -fx-font-weight: bold; -fx-text-fill: #f39c12; -fx-padding: 10 0 0 0;" />
+                    <Button text="Go to Blog" onAction="#goToBlogView" style="-fx-background-color: #f39c12; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 8; -fx-padding: 6 18; -fx-cursor: hand;" />
+                </VBox>
+                <!-- Reclamation Card -->
+                <VBox style="-fx-background-color: rgba(255,255,255,0.92); -fx-border-radius: 18; -fx-background-radius: 18; -fx-padding: 28; -fx-effect: dropshadow(gaussian, #888, 12, 0.2, 0, 4);" alignment="CENTER" prefWidth="220" prefHeight="240">
+                    <ImageView fitWidth="60" fitHeight="60">
+                        <Image url="/images/reclamation.png" />
+                    </ImageView>
+                    <Label text="Reclamation" style="-fx-font-size: 20; -fx-font-weight: bold; -fx-text-fill: #8e44ad; -fx-padding: 10 0 0 0;" />
+                    <Button text="Go to Reclamation" onAction="#goToReclamationView" style="-fx-background-color: #8e44ad; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 8; -fx-padding: 6 18; -fx-cursor: hand;" />
+                </VBox>
+            </FlowPane>
+        </VBox>
+    </StackPane>
 </AnchorPane>

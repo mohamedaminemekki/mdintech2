@@ -1,4 +1,4 @@
-package controllers.ines;
+package Controllers.ines;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;

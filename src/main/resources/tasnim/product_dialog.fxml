@@ -6,6 +6,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
+<?import javafx.collections.ObservableList?>
 <VBox xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" spacing="10" fx:controller="Controllers.tasnim.ProductDialogController" stylesheets="@product_dialog.css">
     <Label text="Name:" />
     <TextField fx:id="nameField" />
@@ -17,6 +18,17 @@
     <TextField fx:id="stockLimitField" />
     <Label text="Stock:" />
     <TextField fx:id="stockField" />
+    <Label text="Image Path:" />
+    <HBox spacing="10">
+        <TextField fx:id="imagePathField" editable="false" HBox.hgrow="ALWAYS" />
+        <Button text="Upload" onAction="#handleUploadImage" />
+    </HBox>
+    <Label text="Sold:" />
+    <TextField fx:id="soldField" />
+    <Label text="Description:" />
+    <TextField fx:id="descriptionField" />
+    <Label text="Category:" />
+    <ComboBox fx:id="categoryComboBox" />
     <HBox spacing="10">
         <Button text="OK" onAction="#handleOk" />
         <Button text="Cancel" onAction="#handleCancel" />

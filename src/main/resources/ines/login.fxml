@@ -2,7 +2,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<VBox xmlns:fx="http://javafx.com/fxml" fx:controller="controllers.ines.LoginController" spacing="20" alignment="CENTER">
+<VBox xmlns:fx="http://javafx.com/fxml" fx:controller="Controllers.ines.LoginController" spacing="20" alignment="CENTER">
     <!-- Titre de la page -->
     <Label text="Connexion à l'application" style="-fx-font-size: 24px; -fx-font-weight: bold;" />
 

@@ -1,4 +1,4 @@
-package controllers.ines;
+package Controllers.ines;
 
 import entities.ines.Medecin;
 import javafx.geometry.Insets;
@@ -124,8 +124,19 @@ public class MedecinController {
                 setGraphic(null);
             } else {
                 try {
-                    Image image = new Image(getClass().getResource(item.getImageUrl()).toExternalForm());
-                    imageView.setImage(image);
+                    java.net.URL imageUrl = getClass().getResource(item.getImageUrl());
+                    if (imageUrl != null) {
+                        Image image = new Image(imageUrl.toExternalForm());
+                        imageView.setImage(image);
+                    } else {
+                        // Fallback to default image if not found
+                        java.net.URL defaultUrl = getClass().getResource("/ines/images/user.jpg");
+                        if (defaultUrl != null) {
+                            imageView.setImage(new Image(defaultUrl.toExternalForm()));
+                        } else {
+                            imageView.setImage(null);
+                        }
+                    }
                 } catch (Exception e) {
                     System.err.println("Erreur de chargement de l'image : " + item.getImageUrl());
                     e.printStackTrace();

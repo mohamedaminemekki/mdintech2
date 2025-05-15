@@ -284,35 +284,26 @@ public class MainController {
         String imagePath = (product.getImagePath() != null && !product.getImagePath().isEmpty()) ? product.getImagePath() : "/images/default.png";
         String name = (product.getName() != null && !product.getName().trim().isEmpty()) ? product.getName() : "Unnamed Product";
 
-        // Defensive: Ensure imagePath is valid and resource exists
+        // --- Improved image loading logic ---
         Image image;
         try {
-            // If imagePath is a relative path from DB (e.g. /uploads/products/...), try to load from resources/images/products
-            if (imagePath.startsWith("/uploads/products/")) {
-                String fileName = imagePath.substring("/uploads/products/".length());
-                String resourcePath = "/images/products/" + fileName;
-                java.net.URL resourceUrl = getClass().getResource(resourcePath);
-                if (resourceUrl != null) {
-                    image = new Image(resourceUrl.toExternalForm());
-                } else {
-                    // Try loading from the file system as a fallback
-                    String fsPath = System.getProperty("user.dir") + "/src/main/resources/images/products/" + fileName;
-                    java.io.File file = new java.io.File(fsPath);
-                    if (file.exists()) {
-                        image = new Image(file.toURI().toString());
-                    } else {
-                        image = new Image(getClass().getResource("/images/default.png").toExternalForm());
-                    }
-                }
+            String resourcePath = imagePath.startsWith("/") ? imagePath : "/" + imagePath;
+            java.net.URL resourceUrl = getClass().getResource(resourcePath);
+            if (resourceUrl != null) {
+                image = new Image(resourceUrl.toExternalForm());
             } else {
-                java.net.URL resourceUrl = getClass().getResource(imagePath);
-                if (resourceUrl != null) {
-                    image = new Image(resourceUrl.toExternalForm());
+                // Try loading from the file system as a fallback (for dev mode)
+                String fsPath = System.getProperty("user.dir") + "/src/main/resources" + resourcePath;
+                java.io.File file = new java.io.File(fsPath);
+                if (file.exists()) {
+                    image = new Image(file.toURI().toString());
                 } else {
+                    System.out.println("[WARN] Product image not found: " + resourcePath + ", using default.");
                     image = new Image(getClass().getResource("/images/default.png").toExternalForm());
                 }
             }
         } catch (Exception e) {
+            System.out.println("[ERROR] Failed to load product image: " + imagePath + ", using default.");
             image = new Image(getClass().getResource("/images/default.png").toExternalForm());
         }
         ImageView imageView = new ImageView(image);

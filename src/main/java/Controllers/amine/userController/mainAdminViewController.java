@@ -1,13 +1,12 @@
 package Controllers.amine.userController;
 
-
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
+import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import Singleton.loggedInUser;
 
@@ -15,7 +14,7 @@ import java.io.IOException;
 
 public class mainAdminViewController {
     @FXML
-    private MenuBar menuBar;  // Add this line
+    private AnchorPane rootPane; // Use this as the root node to get the stage
 
     @FXML private MenuItem goToHomeView;
     @FXML private MenuItem goToParkings;
@@ -28,8 +27,8 @@ public class mainAdminViewController {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlFile));
             Parent root = loader.load();
 
-            // Get stage from the menuBar's scene
-            Stage stage = (Stage) menuBar.getScene().getWindow();
+            // Get stage from the rootPane's scene
+            Stage stage = (Stage) rootPane.getScene().getWindow();
             stage.setScene(new Scene(root));
             stage.show();
         } catch (IOException e) {
@@ -70,7 +69,7 @@ public class mainAdminViewController {
     }
     @FXML
     private void goToTransportView() {
-        loadView("/views/admin_dashboard/.fxml");
+        loadView("/views/admin_dashboard.fxml");
     }
     @FXML
     private void goToBlogView() {

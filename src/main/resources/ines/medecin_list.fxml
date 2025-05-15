@@ -9,7 +9,7 @@
 <?import javafx.scene.text.Font?>
 
 <AnchorPane xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="controllers.ines.MedecinController"
+            fx:controller="Controllers.ines.MedecinController"
             prefWidth="800" prefHeight="600"
             style="-fx-background-color: linear-gradient(to bottom, #f4f4f4, #e0e0e0);">
 

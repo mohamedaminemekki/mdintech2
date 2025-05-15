@@ -1,4 +1,4 @@
-package controllers.ines;
+package Controllers.ines;
 
 import javafx.application.Platform;
 import javafx.fxml.FXML;

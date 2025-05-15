@@ -2,9 +2,13 @@ package Controllers.tasnim;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import entities.tasnim.Product;
+
+import java.io.File;
 
 public class ProductDialogController {
 
@@ -18,6 +22,14 @@ public class ProductDialogController {
     private TextField stockLimitField;
     @FXML
     private TextField stockField;
+    @FXML
+    private TextField imagePathField;
+    @FXML
+    private TextField soldField;
+    @FXML
+    private TextField descriptionField;
+    @FXML
+    private ComboBox<String> categoryComboBox;
 
     private Stage dialogStage;
     private Product product;
@@ -25,7 +37,8 @@ public class ProductDialogController {
 
     @FXML
     public void initialize() {
-        // No need for KeyEvent filters anymore
+        // Populate categoryComboBox items programmatically
+        categoryComboBox.getItems().setAll("Food", "Drinks", "Household products");
     }
 
     public void setDialogStage(Stage dialogStage) {
@@ -41,6 +54,12 @@ public class ProductDialogController {
             priceField.setText(String.valueOf(product.getPrice()));
             stockLimitField.setText(String.valueOf(product.getStockLimit()));
             stockField.setText(String.valueOf(product.getStock()));
+            imagePathField.setText(product.getImagePath());
+            soldField.setText(String.valueOf(product.getSold()));
+            descriptionField.setText(product.getDescription());
+            categoryComboBox.setValue(product.getCategory());
+        } else {
+            categoryComboBox.getSelectionModel().clearSelection();
         }
     }
 
@@ -57,10 +76,10 @@ public class ProductDialogController {
             double price = parseDouble(priceField.getText());
             int stockLimit = parseInt(stockLimitField.getText());
             int stock = parseInt(stockField.getText());
-            String imagePath = "";
-            int sold = 0;
-            String description = "";
-            String category = "";
+            String imagePath = imagePathField.getText();
+            int sold = parseInt(soldField.getText());
+            String description = descriptionField.getText();
+            String category = categoryComboBox.getValue();
             java.time.LocalDateTime createdAt = java.time.LocalDateTime.now();
             product = new Product(id, name, reference, price, stockLimit, stock, imagePath, sold, description, category, createdAt);
         }
@@ -69,6 +88,10 @@ public class ProductDialogController {
         product.setPrice(parseDouble(priceField.getText()));
         product.setStockLimit(parseInt(stockLimitField.getText()));
         product.setStock(parseInt(stockField.getText()));
+        product.setImagePath(imagePathField.getText());
+        product.setSold(parseInt(soldField.getText()));
+        product.setDescription(descriptionField.getText());
+        product.setCategory(categoryComboBox.getValue());
         return product;
     }
 
@@ -83,6 +106,33 @@ public class ProductDialogController {
     @FXML
     private void handleCancel() {
         dialogStage.close();
+    }
+
+    @FXML
+    private void handleUploadImage() {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Select Product Image");
+        fileChooser.getExtensionFilters().addAll(
+            new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.jpeg", "*.gif")
+        );
+        File selectedFile = fileChooser.showOpenDialog(dialogStage);
+        if (selectedFile != null) {
+            try {
+                // Ensure images/products directory exists (relative to resources)
+                File uploadDir = new File("src/main/resources/images/products");
+                if (!uploadDir.exists()) {
+                    uploadDir.mkdirs();
+                }
+                // Copy file to images/products with a unique name
+                String uniqueName = System.currentTimeMillis() + "_" + selectedFile.getName();
+                File destFile = new File(uploadDir, uniqueName);
+                java.nio.file.Files.copy(selectedFile.toPath(), destFile.toPath(), java.nio.file.StandardCopyOption.REPLACE_EXISTING);
+                // Set the image path as images/products/filename (relative path)
+                imagePathField.setText("images/products/" + uniqueName);
+            } catch (Exception e) {
+                showAlert("Error", "Failed to upload image: " + e.getMessage());
+            }
+        }
     }
 
     private boolean isInputValid() {
@@ -119,6 +169,18 @@ public class ProductDialogController {
             errorMessage += "Stock is required!\n";
         } else if (!stockField.getText().matches("\\d*")) {
             errorMessage += "Stock must be a valid integer!\n";
+        }
+
+        // Validate imagePathField (optional, but can add checks if needed)
+        // Validate soldField (only integers, optional)
+        if (!soldField.getText().isEmpty() && !soldField.getText().matches("\\d*")) {
+            errorMessage += "Sold must be a valid integer!\n";
+        }
+
+        // Validate descriptionField (optional)
+        // Validate categoryComboBox (must be selected)
+        if (categoryComboBox.getValue() == null || categoryComboBox.getValue().isEmpty()) {
+            errorMessage += "Category is required!\n";
         }
 
         if (errorMessage.isEmpty()) {

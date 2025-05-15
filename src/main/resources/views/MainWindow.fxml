@@ -18,9 +18,9 @@
 <?import javafx.scene.shape.Circle?>
 
 <StackPane xmlns:fx="http://javafx.com/fxml"
-           fx:controller="controllers.mariem.MainController"
+           fx:controller="Controllers.mariem.MainController"
            fx:id="rootStack"
-           stylesheets="@styles.css">
+           stylesheets="@styles.css, @../styles/medintechstyle.css">
 
     <!-- Image de fond -->
     <StackPane fx:id="backgroundContainer" style="-fx-background-color: transparent;">
@@ -35,109 +35,114 @@
         </ImageView>
     </StackPane>
 
-    <!-- Contenu principal -->
-    <BorderPane fx:id="rootPane"
-                styleClass="main-container">
+    <!-- Main content container -->
+    <VBox>
+        <!-- Include the navbar -->
+        <fx:include source="../navbar.fxml"/>
+        
+        <!-- Existing content wrapped in VBox -->
+        <BorderPane fx:id="rootPane" VBox.vgrow="ALWAYS"
+                    styleClass="main-container">
 
-        <left>
-            <VBox styleClass="sidebar" spacing="20">
-                <Label text="Mdintech" styleClass="app-title"/>
-                <Button text=" Accueil" onAction="#goToHome" styleClass="button"/>
-                <Button text=" Réserver" onAction="#handleReserve" styleClass="button"/>
-                <Button text=" Mes réservations" onAction="#showReservations" styleClass="button"/>
-                <Button text=" Support" onAction="#contactSupport" styleClass="button"/>
-                <Button text=" Carte Train" onAction="#openTrainMap" styleClass="button"/>
-                <Button text=" Carte Bus" onAction="#openBusMap" styleClass="button"/>
-                <Button text=" Carte Métro" onAction="#openMetroMap" styleClass="button"/>
-                <Button text="️ Météo" onAction="#showWeatherWindow" styleClass="button"/>
-                <Button text="️ Chatbot" onAction="#showChatbot" styleClass="button"/>
+            <left>
+                <VBox styleClass="sidebar" spacing="20">
+                    <Label text="Mdintech" styleClass="app-title"/>
+                    <Button text=" Accueil" onAction="#goToHome" styleClass="button"/>
+                    <Button text=" Réserver" onAction="#handleReserve" styleClass="button"/>
+                    <Button text=" Mes réservations" onAction="#showReservations" styleClass="button"/>
+                    <Button text=" Support" onAction="#contactSupport" styleClass="button"/>
+                    <Button text=" Carte Train" onAction="#openTrainMap" styleClass="button"/>
+                    <Button text=" Carte Bus" onAction="#openBusMap" styleClass="button"/>
+                    <Button text=" Carte Métro" onAction="#openMetroMap" styleClass="button"/>
+                    <Button text="️ Météo" onAction="#showWeatherWindow" styleClass="button"/>
+                    <Button text="️ Chatbot" onAction="#showChatbot" styleClass="button"/>
 
-                <!-- Ajouter ce bouton dans la sidebar -->
-                <Button text="Mes Statistiques" onAction="#showStats" styleClass="button"/>
-            </VBox>
-        </left>
-
-        <center>
-            <ScrollPane fitToWidth="true"
-                        fitToHeight="true"
-                        style="-fx-background-color: transparent;">
-                <VBox spacing="20" alignment="CENTER" style="-fx-padding: 30; -fx-background-color: transparent;">
-
-                    <HBox styleClass="top-bar" spacing="20" alignment="CENTER">
-                        <Label text=" Bienvenue sur Mdintech !" styleClass="welcome-text"/>
-                        <Region HBox.hgrow="ALWAYS"/>
-                        <Button text=" Profil" onAction="#handleProfile" styleClass="button"/>
-                        <Button text="" onAction="#toggleTheme" styleClass="theme-toggle">
-                            <graphic>
-                                <ImageView fx:id="themeIcon" fitWidth="30" fitHeight="30">
-                                    <Image url="@/images/sun.png" />
-                                </ImageView>
-                                <ImageView fx:id="themIcon" fitWidth="30" fitHeight="30">
-                                    <Image url="@/images/moon.png" />
-                                </ImageView>
-                            </graphic>
-                        </Button>
-
-                    </HBox>
-
-                    <HBox styleClass="search-bar" spacing="12" alignment="CENTER">
-                        <ComboBox fx:id="departureField" promptText="Départ" styleClass="combo-box"/>
-                        <ComboBox fx:id="destinationField" promptText="Destination" styleClass="combo-box"/>
-                        <DatePicker fx:id="dateField" promptText="Date" styleClass="date-picker"/>
-                        <TextField fx:id="priceField" promptText="Prix Max (DT)" styleClass="text-field"/>
-
-                        <!-- Bouton de recherche avec icône -->
-                        <Button onAction="#quickSearch" styleClass="icon-button">
-                            <graphic>
-                                <ImageView fitWidth="20" fitHeight="20">
-                                    <Image url="@/images/search-icon.png" />
-                                </ImageView>
-                            </graphic>
-                        </Button>
-
-                        <!-- Bouton de suppression avec icône -->
-                        <Button fx:id="clearButton" onAction="#clearSearch" styleClass="icon-button" visible="false">
-                            <graphic>
-                                <ImageView fitWidth="16" fitHeight="16">
-                                    <Image url="@/images/clear-icon.png" />
-                                </ImageView>
-                            </graphic>
-                        </Button>
-
-                        <!-- Indicateur de progression -->
-                        <ProgressIndicator fx:id="searchProgress" visible="false" styleClass="search-progress"/>
-                    </HBox>
-
-                    <!-- Carrousel -->
-                    <StackPane styleClass="slider-container">
-                        <ImageView fx:id="carouselImage1"
-                                   fitWidth="800"
-                                   fitHeight="200"
-                                   preserveRatio="false"/>
-                        <ImageView fx:id="carouselImage2"
-                                   fitWidth="800"
-                                   fitHeight="200"
-                                   preserveRatio="false"
-                                   visible="false"/>
-                    </StackPane>
-                    <HBox fx:id="carouselIndicators" styleClass="carousel-indicators"/>
-
-                    <!-- Liste des trajets -->
-                    <HBox spacing="10" alignment="CENTER">
-                        <ListView fx:id="tripListView" styleClass="trip-list"/>
-                        <VBox fx:id="infoPanel" styleClass="info-panel" spacing="12">
-                            <Label fx:id="infoLabel" styleClass="info-title"/>
-                        </VBox>
-                    </HBox>
-
-                    <!-- Bouton Réserver -->
-                    <Button fx:id="reserveButton"
-                            text="️ Réserver"
-                            onAction="#handleReserve"
-                            styleClass="button primary"/>
+                    <!-- Ajouter ce bouton dans la sidebar -->
+                    <Button text="Mes Statistiques" onAction="#showStats" styleClass="button"/>
                 </VBox>
-            </ScrollPane>
-        </center>
-    </BorderPane>
+            </left>
 
+            <center>
+                <ScrollPane fitToWidth="true"
+                            fitToHeight="true"
+                            style="-fx-background-color: transparent;">
+                    <VBox spacing="20" alignment="CENTER" style="-fx-padding: 30; -fx-background-color: transparent;">
+
+                        <HBox styleClass="top-bar" spacing="20" alignment="CENTER">
+                            <Label text=" Bienvenue sur Mdintech !" styleClass="welcome-text"/>
+                            <Region HBox.hgrow="ALWAYS"/>
+                            <Button text=" Profil" onAction="#handleProfile" styleClass="button"/>
+                            <Button text="" onAction="#toggleTheme" styleClass="theme-toggle">
+                                <graphic>
+                                    <ImageView fx:id="themeIcon" fitWidth="30" fitHeight="30">
+                                        <Image url="@/images/sun.png" />
+                                    </ImageView>
+                                    <ImageView fx:id="themIcon" fitWidth="30" fitHeight="30">
+                                        <Image url="@/images/moon.png" />
+                                    </ImageView>
+                                </graphic>
+                            </Button>
+
+                        </HBox>
+
+                        <HBox styleClass="search-bar" spacing="12" alignment="CENTER">
+                            <ComboBox fx:id="departureField" promptText="Départ" styleClass="combo-box"/>
+                            <ComboBox fx:id="destinationField" promptText="Destination" styleClass="combo-box"/>
+                            <DatePicker fx:id="dateField" promptText="Date" styleClass="date-picker"/>
+                            <TextField fx:id="priceField" promptText="Prix Max (DT)" styleClass="text-field"/>
+
+                            <!-- Bouton de recherche avec icône -->
+                            <Button onAction="#quickSearch" styleClass="icon-button">
+                                <graphic>
+                                    <ImageView fitWidth="20" fitHeight="20">
+                                        <Image url="@/images/search-icon.png" />
+                                    </ImageView>
+                                </graphic>
+                            </Button>
+
+                            <!-- Bouton de suppression avec icône -->
+                            <Button fx:id="clearButton" onAction="#clearSearch" styleClass="icon-button" visible="false">
+                                <graphic>
+                                    <ImageView fitWidth="16" fitHeight="16">
+                                        <Image url="@/images/clear-icon.png" />
+                                    </ImageView>
+                                </graphic>
+                            </Button>
+
+                            <!-- Indicateur de progression -->
+                            <ProgressIndicator fx:id="searchProgress" visible="false" styleClass="search-progress"/>
+                        </HBox>
+
+                        <!-- Carrousel -->
+                        <StackPane styleClass="slider-container">
+                            <ImageView fx:id="carouselImage1"
+                                       fitWidth="800"
+                                       fitHeight="200"
+                                       preserveRatio="false"/>
+                            <ImageView fx:id="carouselImage2"
+                                       fitWidth="800"
+                                       fitHeight="200"
+                                       preserveRatio="false"
+                                       visible="false"/>
+                        </StackPane>
+                        <HBox fx:id="carouselIndicators" styleClass="carousel-indicators"/>
+
+                        <!-- Liste des trajets -->
+                        <HBox spacing="10" alignment="CENTER">
+                            <ListView fx:id="tripListView" styleClass="trip-list"/>
+                            <VBox fx:id="infoPanel" styleClass="info-panel" spacing="12">
+                                <Label fx:id="infoLabel" styleClass="info-title"/>
+                            </VBox>
+                        </HBox>
+
+                        <!-- Bouton Réserver -->
+                        <Button fx:id="reserveButton"
+                                text="️ Réserver"
+                                onAction="#handleReserve"
+                                styleClass="button primary"/>
+                    </VBox>
+                </ScrollPane>
+            </center>
+        </BorderPane>
+    </VBox>
 </StackPane>

@@ -74,7 +74,7 @@
                 </VBox>
 
                 <!-- Conteneur pour les posts avec style amélioré -->
-                <VBox fx:id="feedContainer" spacing="25" styleClass="feed-container"/>
+                <VBox fx:id="feedContainer" spacing="10" alignment="CENTER" styleClass="feed-container"/>
             </VBox>
         </ScrollPane>
     </center>

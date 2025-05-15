@@ -1,4 +1,4 @@
-package controllers.mariem;
+package Controllers.mariem;
 
 import entities.mariem.Trip;
 import javafx.fxml.FXML;

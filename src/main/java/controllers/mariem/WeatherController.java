@@ -1,4 +1,4 @@
-package controllers.mariem;
+package Controllers.mariem;
 
 import javafx.animation.FadeTransition;
 import javafx.animation.ScaleTransition;

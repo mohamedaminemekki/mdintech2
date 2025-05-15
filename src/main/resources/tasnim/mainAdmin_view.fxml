@@ -10,6 +10,7 @@
     <!-- Left Sidebar -->
     <left>
         <VBox fx:id="sidebar" styleClass="sidebar" spacing="10" prefWidth="220">
+            <Button text="Return to Dashboard" styleClass="sidebar-button" onAction="#returnToDashboard" />
             <Label text="Menu" styleClass="menu-label" />
             <Button text="Home" styleClass="sidebar-button" onAction="#loadHome" />
             <Button text="Product Management" styleClass="sidebar-button" onAction="#loadProductManagement" />

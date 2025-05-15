@@ -259,7 +259,8 @@ public class ProductService implements IService<Product> {
 
     public double getTotalRevenue() {
         double totalRevenue = 0;
-        String query = "SELECT SUM(priceTotal) AS total FROM orderitems";
+        // Fix: Use the correct column name 'price_total' instead of 'priceTotal'
+        String query = "SELECT SUM(price_total) AS total FROM order_item";
         try (Connection conn =db.getCon();
              PreparedStatement stmt = conn.prepareStatement(query);
              ResultSet rs = stmt.executeQuery()) {

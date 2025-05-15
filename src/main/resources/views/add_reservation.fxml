@@ -7,7 +7,7 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.mariem.AddReservationController" spacing="10" alignment="CENTER">
+<VBox xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.mariem.AddReservationController" spacing="10" alignment="CENTER">
     <GridPane hgap="10" vgap="10">
         <Label text="User ID:" GridPane.rowIndex="0" GridPane.columnIndex="0" />
         <TextField fx:id="userIdField" GridPane.rowIndex="0" GridPane.columnIndex="1" />

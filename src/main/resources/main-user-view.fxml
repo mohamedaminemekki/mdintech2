@@ -25,7 +25,7 @@
         <!-- Main Content Area with Background Image -->
         <StackPane>
             <!-- Background Image -->
-            <ImageView fitWidth="1000" fitHeight="650" preserveRatio="false">
+            <ImageView fitWidth="1550" fitHeight="650" preserveRatio="false">
                 <Image url="/images/section_bg02.jpg"/>
             </ImageView>
 

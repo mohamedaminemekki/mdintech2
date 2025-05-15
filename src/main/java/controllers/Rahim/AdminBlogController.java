@@ -168,4 +168,17 @@ public class AdminBlogController {
         stage.setTitle("Gestion du Blog");
         stage.show();
     }
+
+    @FXML
+    private void goToDashboard() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/main-admin-view.fxml"));
+            Parent root = loader.load();
+            Stage stage = (Stage) postsContainer.getScene().getWindow();
+            stage.setScene(new Scene(root));
+            stage.show();
+        } catch (IOException e) {
+            showAlert("Erreur", "Impossible d'ouvrir le dashboard: " + e.getMessage());
+        }
+    }
 }

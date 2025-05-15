@@ -5,7 +5,7 @@
 <?import javafx.scene.text.*?>
 
 <BorderPane xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="controllers.mariem.TripStatsController"
+            fx:controller="Controllers.mariem.TripStatsController"
             stylesheets="@styles.css" >
 
     <top>

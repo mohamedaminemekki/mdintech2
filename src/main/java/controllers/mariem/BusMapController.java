@@ -1,4 +1,4 @@
-package controllers.mariem;
+package Controllers.mariem;
 
 import javafx.concurrent.Worker;
 import javafx.fxml.FXML;

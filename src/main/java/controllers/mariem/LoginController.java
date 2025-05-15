@@ -1,4 +1,4 @@
-package controllers.mariem;
+package Controllers.mariem;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;

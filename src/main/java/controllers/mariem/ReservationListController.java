@@ -1,4 +1,4 @@
-package controllers.mariem;
+package Controllers.mariem;
 
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.WriterException;

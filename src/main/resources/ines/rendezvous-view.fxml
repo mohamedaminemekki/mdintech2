@@ -7,7 +7,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane xmlns:fx="http://javafx.com/fxml" fx:controller="controllers.ines.RendezvousViewController">
+<AnchorPane xmlns:fx="http://javafx.com/fxml" fx:controller="Controllers.ines.RendezvousViewController">
     <!-- Conteneur principal -->
     <VBox alignment="CENTER" spacing="20" style="-fx-background-color: #ECF0F1; -fx-padding: 30;"
           AnchorPane.topAnchor="0.0" AnchorPane.bottomAnchor="0.0"

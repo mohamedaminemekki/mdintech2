@@ -1,0 +1,74 @@
+/* Sidebar Styles */
+.sidebar {
+    -fx-background-color: linear-gradient(to bottom, #1B3A57 80%, #27496d 100%);
+    -fx-padding: 28 0 28 0;
+    -fx-pref-width: 220;
+    -fx-effect: dropshadow(gaussian, #1B3A57, 8, 0.2, 0, 2);
+    -fx-background-radius: 0 18 18 0;
+}
+.menu-label {
+    -fx-text-fill: #fff;
+    -fx-font-size: 22;
+    -fx-font-weight: bold;
+    -fx-padding: 0 0 18 28;
+    -fx-letter-spacing: 1.5px;
+}
+.sidebar-button {
+    -fx-text-fill: #fff;
+    -fx-background-color: transparent;
+    -fx-font-size: 16;
+    -fx-font-weight: 600;
+    -fx-alignment: CENTER_LEFT;
+    -fx-padding: 12 20 12 28;
+    -fx-border-radius: 8;
+    -fx-background-radius: 8;
+    -fx-cursor: hand;
+    -fx-effect: null;
+    -fx-graphic-text-gap: 14;
+    -fx-transition: background-color 0.2s;
+}
+.sidebar-button:hover {
+    -fx-background-color: #2D5678;
+    -fx-border-radius: 8;
+    -fx-effect: dropshadow(gaussian, #2D5678, 4, 0.1, 0, 1);
+}
+.sidebar-button:focused {
+    -fx-background-color: #2d7cff;
+    -fx-text-fill: #fff;
+    -fx-border-radius: 8;
+    -fx-effect: dropshadow(gaussian, #2d7cff, 6, 0.2, 0, 2);
+}
+.sidebar-button:selected, .sidebar-button.active {
+    -fx-background-color: #2d7cff;
+    -fx-text-fill: #fff;
+    -fx-border-radius: 8;
+    -fx-effect: dropshadow(gaussian, #2d7cff, 6, 0.2, 0, 2);
+}
+
+/* Optional: Divider for sidebar */
+.sidebar .divider {
+    -fx-background-color: #27496d;
+    -fx-min-height: 2;
+    -fx-max-height: 2;
+    -fx-pref-width: 80%;
+    -fx-background-radius: 1;
+    -fx-margin: 12 0 12 0;
+}
+
+/* Main content card style */
+.posts-card {
+    -fx-background-color: #fff;
+    -fx-background-radius: 18;
+    -fx-effect: dropshadow(gaussian, #888, 12, 0.2, 0, 4);
+    -fx-padding: 32;
+    -fx-spacing: 18;
+}
+
+/* Label for article section */
+.posts-title {
+    -fx-font-size: 28px;
+    -fx-text-fill: #1B3A57;
+    -fx-font-weight: bold;
+    -fx-padding: 0 0 20 0;
+    -fx-effect: dropshadow(gaussian, #222, 2, 0.2, 0, 1);
+}

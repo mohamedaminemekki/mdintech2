@@ -6,48 +6,43 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.SVGPath?>
 
+<?import java.net.URL?>
 <BorderPane xmlns="http://javafx.com/javafx/17"
             xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="Controllers.Rahim.AdminBlogController"
-            stylesheets="@style.css">
+            stylesheets="@admin_blog.css">
 
-    <!-- Menu de gauche -->
+    <!-- Sidebar -->
     <left>
-        <VBox prefWidth="220" spacing="20" style="-fx-background-color: -primary-color; -fx-padding: 30;">
-            <Label text="Admin Dashboard" style="-fx-text-fill: white; -fx-font-size: 26px; -fx-font-weight: bold;"/>
-
-            <!-- Bouton Dashboard -->
-            <Button fx:id="dashboardBtn" styleClass="nav-btn" onAction="#loadBlogManagement">
+        <VBox fx:id="sidebar" styleClass="sidebar" spacing="20">
+            <Label text="Admin Dashboard" styleClass="menu-label" />
+            <Button fx:id="dashboardBtn" styleClass="sidebar-button" onAction="#goToDashboard">
                 <graphic>
                     <SVGPath content="M12 2L2 12h3v8h6v-6h2v6h6v-8h3L12 2z" style="-fx-fill: white;"/>
                 </graphic>
-                <text>Dashboard</text>
+                Dashboard
             </Button>
-
-            <!-- Bouton Gestion Blog -->
-            <Button fx:id="gestionBlogBtn" styleClass="nav-btn active" onAction="#loadBlogManagement">
+            <Button fx:id="gestionBlogBtn" styleClass="sidebar-button active" onAction="#loadBlogManagement">
                 <graphic>
                     <SVGPath content="M4 9h16v2H4zm0 4h10v2H4z" style="-fx-fill: white;"/>
                 </graphic>
-                <text>Gestion Blog</text>
-            </Button>
-
-            <!-- Bouton Statistiques -->
-            <Button fx:id="statsBtn" styleClass="nav-btn" onAction="#loadBlogManagement">
-                <graphic>
-                    <SVGPath content="M2 20h20v-2H2v2zm2-3h2v-5H4v5zm5 0h2V4H9v13zm5 0h2V9h-2v8z" style="-fx-fill: white;"/>
-                </graphic>
-                <text>Statistiques</text>
+                Gestion Blog
             </Button>
         </VBox>
     </left>
 
-    <!-- Zone centrale : Liste des articles -->
+    <!-- Main Content -->
     <center>
         <ScrollPane fitToWidth="true" style="-fx-background-color: transparent;">
-            <VBox fx:id="postsContainer" spacing="25" style="-fx-padding: 30; -fx-alignment: center;">
-                <Label text="Tous les Articles" style="-fx-font-size: 28px; -fx-text-fill: -primary-color; -fx-font-weight: bold; -fx-padding: 0 0 20 0;"/>
-                <!-- Les cartes d'articles seront ajoutées ici dynamiquement -->
+            <VBox fx:id="postsContainer" styleClass="posts-card" spacing="25" alignment="CENTER">
+                <Label text="Tous les Articles" styleClass="posts-title" />
+                <!-- Example card for an article -->
+                <VBox style="-fx-background-color: #f5f8fa; -fx-background-radius: 12; -fx-padding: 18; -fx-spacing: 10; -fx-effect: dropshadow(gaussian, #bbb, 4, 0.1, 0, 2);" prefWidth="500">
+                    <Label text="Titre de l'article" style="-fx-font-size: 18; -fx-font-weight: bold; -fx-text-fill: #1B3A57;" />
+                    <Label text="Résumé de l'article ou contenu court..." style="-fx-font-size: 14; -fx-text-fill: #333;" />
+                    <Button text="Voir plus" style="-fx-background-color: #2d7cff; -fx-text-fill: white; -fx-background-radius: 6; -fx-padding: 4 18; -fx-cursor: hand; -fx-font-size: 13;" />
+                </VBox>
+                <!-- End example card -->
             </VBox>
         </ScrollPane>
     </center>

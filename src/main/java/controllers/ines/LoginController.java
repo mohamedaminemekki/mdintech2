@@ -1,4 +1,4 @@
-package controllers.ines;
+package Controllers.ines;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
