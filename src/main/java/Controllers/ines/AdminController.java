@@ -14,6 +14,7 @@ import javafx.stage.Stage;
 import services.ines.CalendarQuickstart;
 import services.ines.ServiceHospitalierServices;
 import entities.ines.ServiceHospitalier;
+import utils.amine.navigation;
 
 import java.io.IOException;
 import java.security.GeneralSecurityException;
@@ -332,5 +333,9 @@ public class AdminController {
                 setGraphic(gridPane);
             }
         }
+    }
+
+    public void handleBackButton(ActionEvent event) throws IOException {
+        navigation.switchScene(event, "/main-admin-view.fxml");
     }
 }

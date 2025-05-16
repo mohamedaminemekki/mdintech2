@@ -17,10 +17,18 @@
         <ImageView fitWidth="1550" fitHeight="650" preserveRatio="false">
             <Image url="/images/section_bg02.jpg" />
         </ImageView>
+        
         <!-- Overlay for content -->
         <VBox alignment="CENTER" spacing="40">
             <Label text="Welcome Admin" style="-fx-font-size: 36px; -fx-font-weight: bold; -fx-text-fill: #ffffff; -fx-effect: dropshadow(gaussian, #222, 8, 0.5, 0, 2);" />
             <FlowPane fx:id="cardsPane" hgap="40" vgap="40" alignment="CENTER">
+                <VBox style="-fx-background-color: rgba(255,255,255,0.92); -fx-border-radius: 18; -fx-background-radius: 18; -fx-padding: 28; -fx-effect: dropshadow(gaussian, #888, 12, 0.2, 0, 4);" alignment="CENTER" prefWidth="220" prefHeight="240">
+                    <ImageView fitWidth="60" fitHeight="60">
+                        <Image url="/images/admin.png" />
+                    </ImageView>
+                    <Label text="Market" style="-fx-font-size: 20; -fx-font-weight: bold; -fx-text-fill: #2d7cff; -fx-padding: 10 0 0 0;" />
+                    <Button text="Go to Users" onAction="#goToUsers" style="-fx-background-color: #036e6e; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 8; -fx-padding: 6 18; -fx-cursor: hand;" />
+                </VBox>
                 <!-- Market Card -->
                 <VBox style="-fx-background-color: rgba(255,255,255,0.92); -fx-border-radius: 18; -fx-background-radius: 18; -fx-padding: 28; -fx-effect: dropshadow(gaussian, #888, 12, 0.2, 0, 4);" alignment="CENTER" prefWidth="220" prefHeight="240">
                     <ImageView fitWidth="60" fitHeight="60">
@@ -62,6 +70,18 @@
                     <Button text="Go to Reclamation" onAction="#goToReclamationView" style="-fx-background-color: #8e44ad; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 8; -fx-padding: 6 18; -fx-cursor: hand;" />
                 </VBox>
             </FlowPane>
+            
+            <!-- Logout Button -->
+            <Button text="Logout" 
+                    onAction="#logout"
+                    style="-fx-background-color: #e74c3c;
+                           -fx-text-fill: white;
+                           -fx-font-weight: bold;
+                           -fx-font-size: 16px;
+                           -fx-background-radius: 8;
+                           -fx-padding: 12 40;
+                           -fx-cursor: hand;
+                           -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 8, 0, 0, 2);" />
         </VBox>
     </StackPane>
 </AnchorPane>
