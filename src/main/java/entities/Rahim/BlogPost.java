@@ -79,7 +79,7 @@ public class BlogPost {
 
     public String getCategory() { return category; }
     public void setCategory(String category) {
-        if (!VALID_CATEGORIES.contains(category)) {
+        if (category == null || category.isEmpty() || VALID_CATEGORIES == null || !VALID_CATEGORIES.contains(category)) {
             throw new IllegalArgumentException("Invalid category. Must be one of: " + VALID_CATEGORIES);
         }
         this.category = category;
